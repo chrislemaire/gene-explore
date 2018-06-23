@@ -1,16 +1,22 @@
-name := "genominator"
+name := "gexplore"
 version := "0.1"
 scalaVersion := "2.12.6"
 
 lazy val root = project.in(file("."))
-  .aggregate(core, ui)
+  .aggregate(core, ui, util)
 
 lazy val core = project
   .settings(
     name := "core",
     libraryDependencies ++= commonDependencies)
+  .dependsOn(util)
 
 lazy val ui = project
+  .settings(
+    name := "ui",
+    libraryDependencies ++= commonDependencies)
+
+lazy val util = project
   .settings(
     name := "ui",
     libraryDependencies ++= commonDependencies)
