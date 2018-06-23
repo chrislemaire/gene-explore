@@ -73,11 +73,27 @@ object Gfa1Parser {
 
 class Gfa1Parser(val cacheBuilder: ReferenceBuilder[_]) {
 
+  /**
+    * Parses a header string by splitting it and passing
+    * the parsed options onto the given [[ReferenceBuilder]].
+    *
+    * @param headerString The String representing a header
+    *                     that is to be parsed.
+    */
   protected def parseHeader(headerString: String): Unit = {
     val split = headerString.split(DELIM_MAIN)
     cacheBuilder.registerHeader(parseOptions(split, 1))
   }
 
+  /**
+    * Parses a segment string by splitting it and passing
+    * the relevant data onto the given [[ReferenceBuilder]].
+    *
+    * @param segString  The String representing a segment
+    *                   that is to be parsed.
+    * @param fileOffset The offset at which this line starts
+    *                   in the parsed file.
+    */
   protected def parseSegment(segString: String,
                              fileOffset: Long): Unit = {
     val split = segString.split(DELIM_MAIN)
@@ -97,6 +113,15 @@ class Gfa1Parser(val cacheBuilder: ReferenceBuilder[_]) {
     }
   }
 
+  /**
+    * Parses a link string by splitting it and passing
+    * the relevant data onto the given [[ReferenceBuilder]].
+    *
+    * @param linkString The String representing a link
+    *                   that is to be parsed.
+    * @param fileOffset The offset at which this line starts
+    *                   in the parsed file.
+    */
   protected def parseLink(linkString: String,
                           fileOffset: Long): Unit = {
     val split = linkString.split(DELIM_MAIN)
@@ -116,6 +141,14 @@ class Gfa1Parser(val cacheBuilder: ReferenceBuilder[_]) {
     }
   }
 
+  /**
+    * Parses a single line of some GFA file and passes the
+    * parsed element onto the given [[ReferenceBuilder]].
+    *
+    * @param line   The line to parse a GFA element from.
+    * @param offset The offset in the file at which this
+    *               line starts.
+    */
   protected def parseLine(line: String,
                           offset: Long): Unit = {
     line.trim.charAt(0) match {
@@ -125,9 +158,17 @@ class Gfa1Parser(val cacheBuilder: ReferenceBuilder[_]) {
     }
   }
 
+  /**
+    * Parses a all lines of some GFA file and passes the
+    * parsed element onto the given [[ReferenceBuilder]].
+    *
+    * @param input  The lines to parse GFA elements from.
+    * @param offset The offset in the file at which this
+    *               lines start.
+    */
   protected def parseAllIn(input: String,
-                           fileOffset: Long): Unit = {
-    input.lines.foldLeft(fileOffset)((offset, line) => {
+                           offset: Long): Unit = {
+    input.lines.foldLeft(offset)((offset, line) => {
       parseLine(line, offset)
       offset + line.length + 1
     })
