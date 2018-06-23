@@ -1,6 +1,7 @@
-package com.clemaire.genominator.core.gfa.reference
+package com.clemaire.gexplorer.core.gfa.reference.impl
 
-import com.clemaire.genominator.core.gfa.reference.io.SimpleReferenceWriter
+import com.clemaire.gexplorer.core.gfa.reference.{ReferenceBuilder, ReferenceNode}
+import com.clemaire.gexplorer.core.gfa.reference.io.SimpleReferenceWriter
 
 import scala.collection.mutable
 
@@ -119,8 +120,8 @@ abstract class SimpleReferenceBuilder
         .filterNot(gen => cache.genomeNames.contains(gen))
         .foreach(gen => {
           genomeIndex += 1
-          cache.genomeNames += gen -> genomeIndex
-          cache.genomes += genomeIndex -> gen
+          cache._genomeNames += gen -> genomeIndex
+          cache._genomes += genomeIndex -> gen
         }))
 
   override final def registerLink(atOffset: Long,

@@ -1,4 +1,4 @@
-package com.clemaire.genominator.core.gfa
+package com.clemaire.gexplorer.core.gfa
 
 import java.nio.file.{Files, Path, Paths}
 

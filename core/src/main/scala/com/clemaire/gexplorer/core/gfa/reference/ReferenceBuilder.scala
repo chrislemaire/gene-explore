@@ -1,6 +1,6 @@
-package com.clemaire.genominator.core.gfa.reference
+package com.clemaire.gexplorer.core.gfa.reference
 
-trait ReferenceBuilder[+T >: ReferenceCache] {
+trait ReferenceBuilder[+T <: ReferenceCache] {
 
   def registerHeader(options: Map[String, String]): Unit
 

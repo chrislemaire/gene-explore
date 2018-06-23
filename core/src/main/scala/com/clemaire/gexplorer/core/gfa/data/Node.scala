@@ -1,4 +1,4 @@
-package com.clemaire.genominator.core.gfa.data
+package com.clemaire.gexplorer.core.gfa.data
 
 case class Node(id: Int,
                 name: String,

@@ -1,12 +1,12 @@
-package com.clemaire.genominator.core.gfa.reference
+package com.clemaire.gexplorer.core.gfa.reference
 
-import com.clemaire.genominator.core.gfa.reference.Gfa1Parser._
 import com.clemaire.gexplore.util.SimpleCheck.checkThatOrThrow
+import com.clemaire.gexplorer.core.gfa.reference.Gfa1Parser._
 
-case class Gfa1ColumnLengthException(expected: Int,
-                                     forElement: String,
-                                     butWas: Int,
-                                     forLine: String)
+abstract class Gfa1ColumnLengthException(expected: Int,
+                                         forElement: String,
+                                         butWas: Int,
+                                         forLine: String)
   extends RuntimeException(s"Expected $expected columns in $forElement,\n" +
     s"but there were $butWas columns in line:\n$forLine")
 

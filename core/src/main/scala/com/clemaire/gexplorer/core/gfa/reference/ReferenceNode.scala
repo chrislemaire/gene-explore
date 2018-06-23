@@ -1,4 +1,4 @@
-package com.clemaire.genominator.core.gfa.reference
+package com.clemaire.gexplorer.core.gfa.reference
 
 import scala.collection.mutable
 
