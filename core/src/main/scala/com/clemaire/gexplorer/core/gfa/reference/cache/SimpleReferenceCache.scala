@@ -1,4 +1,4 @@
-package com.clemaire.gexplorer.core.gfa.reference.impl
+package com.clemaire.gexplorer.core.gfa.reference.cache
 
 import com.clemaire.gexplorer.core.gfa.data.{FullEdge, FullNode, Node}
 import com.clemaire.gexplorer.core.gfa.reference.ReferenceCache
@@ -7,10 +7,10 @@ import scala.collection.mutable
 
 class SimpleReferenceCache extends ReferenceCache {
 
-  private[impl] val _genomeNames: mutable.Map[String, Int] =
+  private[cache] val _genomeNames: mutable.Map[String, Int] =
     mutable.Map()
 
-  private[impl] val _genomes: mutable.Map[Int, String] =
+  private[cache] val _genomes: mutable.Map[Int, String] =
     mutable.Map()
 
   def genomeNames: Map[String, Int] = _genomeNames.toMap

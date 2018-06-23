@@ -1,4 +1,4 @@
-package com.clemaire.gexplorer.core.gfa.reference.impl
+package com.clemaire.gexplorer.core.gfa.reference.cache
 
 import com.clemaire.gexplorer.core.gfa.CachePathList
 import com.clemaire.gexplorer.core.gfa.reference.{ReferenceBuilder, ReferenceNode}
