@@ -9,7 +9,8 @@ import com.clemaire.gexplorer.core.gfa.reference.{ReferenceNode, ReferenceWriter
 import scala.collection.mutable
 
 class SimpleBufferedReferenceWriter(paths: CachePathList)
-  extends ReferenceWriter {
+  extends ReferenceWriter
+    with SimpleReferenceWriter {
 
   /**
     * Index at which the next [[ReferenceNode]]
@@ -31,41 +32,31 @@ class SimpleBufferedReferenceWriter(paths: CachePathList)
     * @param os The [[DataOutputStream]] to write
     *           the buffer to.
     */
-  private def writeBufferTo(os: DataOutputStream): Unit = {
-    nodeBuffer.take(index).foreach(node => {
-      os.writeInt(node.id)
-      os.writeLong(node.fileOffset)
-      os.writeInt(node.contentLength)
-      os.writeInt(node.outgoingEdges.length)
-      os.writeInt(node.incomingEdges.length)
-
-      node.outgoingEdges.foreach(kv => {
-        os.writeInt(kv._1)
-        os.writeLong(kv._2)
-      })
-      node.incomingEdges.foreach(kv => {
-        os.writeInt(kv._1)
-        os.writeLong(kv._2)
-      })
-    })
-  }
+  private def writeBufferTo(os: DataOutputStream): Unit =
+    nodeBuffer.take(index).foreach(node =>
+      write(node, os))
 
   /**
     * Writes the buffered nodes to a new buffered
     * output stream and resets the buffer.
     */
-  private def writeBuffer(): Unit = {
+  private def flushBuffer(): Unit = {
     val os = new DataOutputStream(
       Files.newOutputStream(paths.referenceFilePath))
 
-    writeBufferTo(os)
+    try {
+      writeBufferTo(os)
+      os.flush()
+    } finally {
+      os.close()
+    }
 
     index = 0
   }
 
   override def write(referenceNode: ReferenceNode): Unit = {
     if (index == nodeBuffer.length) {
-      writeBuffer()
+      flushBuffer()
     }
 
     nodeBuffer(index) = referenceNode
@@ -73,7 +64,7 @@ class SimpleBufferedReferenceWriter(paths: CachePathList)
   }
 
   override def flush(): Unit =
-    writeBuffer()
+    flushBuffer()
 
   override def close(): Unit = {}
 
