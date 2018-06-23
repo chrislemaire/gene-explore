@@ -10,3 +10,15 @@ case class ReferenceNode(name: String,
                          incomingEdges: mutable.Buffer[(Int, Long)],
                          outgoingEdges: mutable.Buffer[(Int, Long)],
                          genomeCoordinates: Array[(Int, Long)])
+
+object ReferenceNode {
+  val empty: ReferenceNode = ReferenceNode(
+    "",
+    -1,
+    -1,
+    -1,
+    -1,
+    mutable.Buffer.empty,
+    mutable.Buffer.empty,
+    Array.empty)
+}

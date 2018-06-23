@@ -1,11 +1,12 @@
 package com.clemaire.gexplorer.core.gfa.reference.impl
 
+import com.clemaire.gexplorer.core.gfa.CachePathList
 import com.clemaire.gexplorer.core.gfa.reference.{ReferenceBuilder, ReferenceNode}
-import com.clemaire.gexplorer.core.gfa.reference.io.SimpleReferenceWriter
+import com.clemaire.gexplorer.core.gfa.reference.io.SimpleBufferedReferenceWriter
 
 import scala.collection.mutable
 
-abstract class SimpleReferenceBuilder
+class SimpleReferenceBuilder(val paths: CachePathList)
   extends ReferenceBuilder[SimpleReferenceCache] {
 
   /**
@@ -59,7 +60,8 @@ abstract class SimpleReferenceBuilder
   /**
     * Writer to write the node-reference data to file.
     */
-  private val writer: SimpleReferenceWriter = new SimpleReferenceWriter()
+  private val writer: SimpleBufferedReferenceWriter =
+    new SimpleBufferedReferenceWriter(paths)
 
   /**
     * Searches the given mapping of options for an
