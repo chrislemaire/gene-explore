@@ -1,7 +1,6 @@
-package com.clemaire.genominator.core.gfa
+package com.clemaire.genominator.core.gfa.reference
 
-import com.clemaire.genominator.core.gfa.Gfa1Parser._
-import com.clemaire.genominator.core.gfa.reference.ReferenceBuilder
+import com.clemaire.genominator.core.gfa.reference.Gfa1Parser._
 import com.clemaire.gexplore.util.SimpleCheck.checkThatOrThrow
 
 case class Gfa1ColumnLengthException(expected: Int,
