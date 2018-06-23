@@ -7,7 +7,8 @@ import com.clemaire.gexplorer.core.gfa.reference.io.SimpleBufferedReferenceWrite
 import scala.collection.mutable
 
 class SimpleReferenceBuilder(val paths: CachePathList)
-  extends ReferenceBuilder[SimpleReferenceCache] {
+  extends ReferenceBuilder[SimpleReferenceCache]
+    with AutoCloseable {
 
   /**
     * The cache being built by this [[SimpleReferenceBuilder]].
@@ -172,8 +173,13 @@ class SimpleReferenceBuilder(val paths: CachePathList)
     nodeGenomes.foreach(gen => genomeCoordinates(gen) += content.length)
   }
 
-  override final def finish: SimpleReferenceCache = {
+  override final def finish(): SimpleReferenceCache = {
     writeCurrentNode()
+    writer.flush()
+
     cache
   }
+
+  override def close(): Unit =
+    writer.close()
 }

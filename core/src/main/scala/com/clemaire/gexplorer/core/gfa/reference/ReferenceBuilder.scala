@@ -14,6 +14,6 @@ trait ReferenceBuilder[+T <: ReferenceCache] {
                       content: String,
                       options: Map[String, String] = Map()): Unit
 
-  def finish: T
+  def finish(): T
 
 }

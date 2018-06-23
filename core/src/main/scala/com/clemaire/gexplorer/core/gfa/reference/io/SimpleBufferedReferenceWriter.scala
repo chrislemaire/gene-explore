@@ -13,6 +13,13 @@ class SimpleBufferedReferenceWriter(paths: CachePathList)
     with SimpleReferenceWriter {
 
   /**
+    * The output stream to which data is written
+    * in a buffered manner.
+    */
+  private val os = new DataOutputStream(
+    Files.newOutputStream(paths.referenceFilePath))
+
+  /**
     * Index at which the next [[ReferenceNode]]
     * should be stored to buffer.
     */
@@ -41,16 +48,7 @@ class SimpleBufferedReferenceWriter(paths: CachePathList)
     * output stream and resets the buffer.
     */
   private def flushBuffer(): Unit = {
-    val os = new DataOutputStream(
-      Files.newOutputStream(paths.referenceFilePath))
-
-    try {
-      writeBufferTo(os)
-      os.flush()
-    } finally {
-      os.close()
-    }
-
+    writeBufferTo(os)
     index = 0
   }
 
@@ -63,9 +61,12 @@ class SimpleBufferedReferenceWriter(paths: CachePathList)
     index += 1
   }
 
-  override def flush(): Unit =
+  override def flush(): Unit = {
     flushBuffer()
+    os.flush()
+  }
 
-  override def close(): Unit = {}
+  override def close(): Unit =
+    os.close()
 
 }
