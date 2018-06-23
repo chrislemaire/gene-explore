@@ -1,6 +1,7 @@
 package com.clemaire.gexplorer.core.gfa.reference
 
 import com.clemaire.gexplore.util.SimpleCheck.checkThatOrThrow
+import com.clemaire.gexplorer.core.gfa.CachePathList
 import com.clemaire.gexplorer.core.gfa.reference.Gfa1Parser._
 
 /**
@@ -62,13 +63,13 @@ object Gfa1Parser {
   private[core] val SEG_MIN_LENGTH: Int = 4
   private[core] val SEG_NAME_INDEX: Int = 1
   private[core] val SEG_CONTENT_INDEX: Int = 2
-  private[core] val SEG_OPTIONS_INDEX: Int = 4
+  private[core] val SEG_OPTIONS_INDEX: Int = 5
 
   // Link data column indices.
   private[core] val LINK_MIN_LENGTH: Int = 5
   private[core] val LINK_FROM_INDEX: Int = 1
   private[core] val LINK_TO_INDEX: Int = 3
-  private[core] val LINK_OPTIONS_INDEX: Int = 5
+  private[core] val LINK_OPTIONS_INDEX: Int = 6
 
   /**
     * Parses a single option and returns a tuple
@@ -100,7 +101,13 @@ object Gfa1Parser {
 
 }
 
-class Gfa1Parser(val cacheBuilder: ReferenceBuilder[_]) {
+abstract class Gfa1Parser {
+
+  /**
+    * The [[ReferenceBuilder]] to which parsed segments
+    * and links will be parsed for registration.
+    */
+  private var cacheBuilder: ReferenceBuilder[_] = _
 
   /**
     * Parses a header string by splitting it and passing
@@ -202,5 +209,28 @@ class Gfa1Parser(val cacheBuilder: ReferenceBuilder[_]) {
       offset + line.length + 1
     })
   }
+
+  /**
+    * Adjusts this [[Gfa1Parser]] to use the given
+    * [[ReferenceBuilder]] and returns the adjusted [[Gfa1Parser]].
+    *
+    * @param builder The new builder to use for GFA element
+    *                registration.
+    * @return The [[Gfa1Parser]] using the given builder.
+    */
+  def withBuilder(builder: ReferenceBuilder[_]): this.type = {
+    cacheBuilder = builder
+    this
+  }
+
+  /**
+    * Parses the source GFA file given and arranges
+    * for all segments and links in it to be registered
+    * to the [[ReferenceBuilder]].
+    *
+    * @param paths The list of paths containing the
+    *              source path.
+    */
+  def parse(paths: CachePathList): Unit
 
 }

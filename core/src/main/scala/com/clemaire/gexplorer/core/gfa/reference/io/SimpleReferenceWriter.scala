@@ -23,12 +23,18 @@ trait SimpleReferenceWriter extends ReferenceWriter {
     os.writeInt(node.contentLength)
     os.writeInt(node.outgoingEdges.length)
     os.writeInt(node.incomingEdges.length)
+    os.writeInt(node.genomeCoordinates.length)
 
     node.outgoingEdges.foreach(kv => {
       os.writeInt(kv._1)
       os.writeLong(kv._2)
     })
     node.incomingEdges.foreach(kv => {
+      os.writeInt(kv._1)
+      os.writeLong(kv._2)
+    })
+
+    node.genomeCoordinates.foreach(kv => {
       os.writeInt(kv._1)
       os.writeLong(kv._2)
     })

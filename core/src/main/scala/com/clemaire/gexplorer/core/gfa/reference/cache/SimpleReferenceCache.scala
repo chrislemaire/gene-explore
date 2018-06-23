@@ -7,15 +7,23 @@ import scala.collection.mutable
 
 class SimpleReferenceCache extends ReferenceCache {
 
-  private[cache] val _genomeNames: mutable.Map[String, Int] =
-    mutable.Map()
+  /**
+    * The mapping of genomes to their indices, or
+    * identifiers.
+    */
+  private[cache] val _genomes: mutable.Map[String, Int] =
+    mutable.HashMap()
 
-  private[cache] val _genomes: mutable.Map[Int, String] =
-    mutable.Map()
+  /**
+    * The mapping of genomes to their indices, or
+    * identifiers.
+    */
+  private[cache] val _genomeNames: mutable.Map[Int, String] =
+    mutable.HashMap()
 
-  def genomeNames: Map[String, Int] = _genomeNames.toMap
+  def genomeNames: Map[String, Int] = _genomes.toMap
 
-  def genomes: Map[Int, String] = _genomes.toMap
+  def genomes: Map[Int, String] = _genomeNames.toMap
 
   override def getFullNode(id: Int): FullNode = ???
 

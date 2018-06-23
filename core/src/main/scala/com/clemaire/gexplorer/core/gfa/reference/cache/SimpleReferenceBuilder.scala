@@ -6,8 +6,8 @@ import com.clemaire.gexplorer.core.gfa.reference.io.SimpleBufferedReferenceWrite
 
 import scala.collection.mutable
 
-class SimpleReferenceBuilder(val paths: CachePathList)
-  extends ReferenceBuilder[SimpleReferenceCache] {
+class SimpleReferenceBuilder(private val pathsIn: CachePathList)
+  extends ReferenceBuilder[SimpleReferenceCache](pathsIn) {
 
   /**
     * The cache being built by this [[SimpleReferenceBuilder]].
@@ -44,18 +44,11 @@ class SimpleReferenceBuilder(val paths: CachePathList)
   private var currentNode: Option[ReferenceNode] = None
 
   /**
-    * The mapping of genomes to their indices, or
-    * identifiers.
-    */
-  private val genomes: mutable.Map[String, Int] =
-    mutable.HashMap[String, Int]()
-
-  /**
     * The mapping of genome IDs to their respective
     * current coordinate.
     */
-  private val genomeCoordinates: mutable.Map[Int, Long] =
-    mutable.HashMap[Int, Long]()
+  private[cache] val genomeCoordinates: mutable.Map[Int, Long] =
+    mutable.HashMap()
 
   /**
     * Writer to write the node-reference data to file.
@@ -80,7 +73,7 @@ class SimpleReferenceBuilder(val paths: CachePathList)
         if (s forall Character.isDigit) {
           s.toInt
         } else {
-          genomes(s)
+          cache._genomes(s)
         }
       })
 
@@ -120,10 +113,12 @@ class SimpleReferenceBuilder(val paths: CachePathList)
     options.filter(_._1 == "ORI").values
       .foreach(value => value.split(";")
         .filterNot(gen => cache.genomeNames.contains(gen))
+        .filterNot(_.isEmpty)
         .foreach(gen => {
           genomeIndex += 1
-          cache._genomeNames += gen -> genomeIndex
-          cache._genomes += genomeIndex -> gen
+          cache._genomes += gen -> genomeIndex
+          cache._genomeNames += genomeIndex -> gen
+          genomeCoordinates(genomeIndex) = 0
         }))
 
   override final def registerLink(atOffset: Long,

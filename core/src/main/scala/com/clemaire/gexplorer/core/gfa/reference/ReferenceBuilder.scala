@@ -1,6 +1,8 @@
 package com.clemaire.gexplorer.core.gfa.reference
 
-trait ReferenceBuilder[+T <: ReferenceCache]
+import com.clemaire.gexplorer.core.gfa.CachePathList
+
+abstract class ReferenceBuilder[+T <: ReferenceCache](val paths: CachePathList)
   extends AutoCloseable {
 
   /**
@@ -54,8 +56,22 @@ trait ReferenceBuilder[+T <: ReferenceCache]
   /**
     * Finishes building the [[ReferenceCache]] and closes the
     * [[ReferenceBuilder]].
+    *
     * @return The built [[ReferenceCache]].
     */
   def finish(): T
+
+  /**
+    * Builds the [[ReferenceCache]] with the given [[Gfa1Parser]]
+    * as its parser and the given [[CachePathList]] to find the
+    * source and output files.
+    *
+    * @param parser The parser to use for parsing the GFA file.
+    * @return The finished cache.
+    */
+  def buildWith(parser: Gfa1Parser): T = {
+    parser.withBuilder(this).parse(paths)
+    finish()
+  }
 
 }

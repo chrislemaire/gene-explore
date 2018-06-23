@@ -16,8 +16,8 @@ class SimpleBufferedReferenceWriter(paths: CachePathList)
     * The output stream to which data is written
     * in a buffered manner.
     */
-  private val os = new DataOutputStream(
-    Files.newOutputStream(paths.referenceFilePath))
+  private val os = new DataOutputStream(new BufferedOutputStream(
+    new FileOutputStream(paths.referenceFilePath.toFile)))
 
   /**
     * Index at which the next [[ReferenceNode]]
@@ -30,7 +30,7 @@ class SimpleBufferedReferenceWriter(paths: CachePathList)
     * to an output stream all at once.
     */
   private val nodeBuffer: mutable.Buffer[ReferenceNode] =
-    mutable.Buffer.fill[ReferenceNode](1024)(ReferenceNode.empty)
+    mutable.Buffer.fill[ReferenceNode](8192)(ReferenceNode.empty)
 
   /**
     * Writes the buffered nodes to the given

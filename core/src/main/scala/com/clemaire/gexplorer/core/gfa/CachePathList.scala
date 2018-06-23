@@ -30,7 +30,7 @@ class CachePathList(val gfaPath: Path)
     */
   private val APP_DATA = Paths.get(
     if (System.getProperty("os.name").toLowerCase.contains("win")) {
-      System.getenv("AppData") + "/Gene\\ Explore/cache"
+      System.getenv("AppData") + "/Gene Explore/cache"
     } else {
       System.getProperty("user.home") + "/.gexplore/cache"
     })
