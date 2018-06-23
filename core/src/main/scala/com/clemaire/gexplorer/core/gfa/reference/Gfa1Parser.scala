@@ -3,19 +3,49 @@ package com.clemaire.gexplorer.core.gfa.reference
 import com.clemaire.gexplore.util.SimpleCheck.checkThatOrThrow
 import com.clemaire.gexplorer.core.gfa.reference.Gfa1Parser._
 
+/**
+  * Exception thrown when the length of some
+  * line-split is not high enough.
+  *
+  * @param expected   The number of columns that
+  *                   was expected.
+  * @param forElement The element type that
+  *                   is parsed for the line.
+  * @param butWas     What the actual number
+  *                   of split entries was.
+  * @param forLine    For which line the exception
+  *                   is raised.
+  */
 abstract class Gfa1ColumnLengthException(expected: Int,
                                          forElement: String,
                                          butWas: Int,
                                          forLine: String)
-  extends RuntimeException(s"Expected $expected columns in $forElement,\n" +
-    s"but there were $butWas columns in line:\n$forLine")
+  extends RuntimeException(s"Expected at least $expected columns in $forElement,\n" +
+    s"but there were only $butWas columns in line:\n$forLine")
 
 
+/**
+  * Exception thrown when the length of a
+  * segment-line-split is not high enough.
+  *
+  * @param butWas  What the actual number
+  *                of split entries was.
+  * @param forLine For which line the exception
+  *                is raised.
+  */
 case class Gfa1SegmentColumnLengthException(private val butWas: Int,
                                             private val forLine: String)
   extends Gfa1ColumnLengthException(SEG_MIN_LENGTH, "segment", butWas, forLine)
 
-
+/**
+  * Exception thrown when the length of a
+  * link-line-split is not high enough.
+  *
+  * @param butWas  What the actual number
+  *                of split entries was.
+  * @param forLine For which line the exception
+  *                is raised.
+  */
 case class Gfa1LinkColumnLengthException(private val butWas: Int,
                                          private val forLine: String)
   extends Gfa1ColumnLengthException(LINK_MIN_LENGTH, "link", butWas, forLine)
