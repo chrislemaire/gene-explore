@@ -7,8 +7,7 @@ import com.clemaire.gexplorer.core.gfa.reference.io.SimpleBufferedReferenceWrite
 import scala.collection.mutable
 
 class SimpleReferenceBuilder(val paths: CachePathList)
-  extends ReferenceBuilder[SimpleReferenceCache]
-    with AutoCloseable {
+  extends ReferenceBuilder[SimpleReferenceCache] {
 
   /**
     * The cache being built by this [[SimpleReferenceBuilder]].
@@ -174,10 +173,14 @@ class SimpleReferenceBuilder(val paths: CachePathList)
   }
 
   override final def finish(): SimpleReferenceCache = {
-    writeCurrentNode()
-    writer.flush()
+    try {
+      writeCurrentNode()
+      writer.flush()
 
-    cache
+      cache
+    } finally {
+      close()
+    }
   }
 
   override def close(): Unit =

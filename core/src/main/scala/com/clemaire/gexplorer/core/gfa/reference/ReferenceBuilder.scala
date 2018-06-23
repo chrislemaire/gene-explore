@@ -1,19 +1,61 @@
 package com.clemaire.gexplorer.core.gfa.reference
 
-trait ReferenceBuilder[+T <: ReferenceCache] {
+trait ReferenceBuilder[+T <: ReferenceCache]
+  extends AutoCloseable {
 
+  /**
+    * Registers a header that is identified
+    * by the list of options it defines. The
+    * built [[ReferenceCache]] should hereafter
+    * recognize the options provided as header
+    * options.
+    *
+    * @param options The options defining
+    *                the header.
+    */
   def registerHeader(options: Map[String, String]): Unit
 
+  /**
+    * Registers a link that is identified by its position
+    * in the source file, the node it starts in and the node
+    * it goes to. The built [[ReferenceCache]] should hereafter
+    * recognize the link provided as such.
+    *
+    * @param atOffset The position in the file at which the
+    *                 edge's description starts.
+    * @param from     The name of the node at which this edge
+    *                 starts.
+    * @param to       The name of the node at which this edge
+    *                 ends.
+    * @param options  The options provided to the edge.
+    */
   def registerLink(atOffset: Long,
                    from: String,
                    to: String,
                    options: Map[String, String] = Map()): Unit
 
+  /**
+    * Registers a segment that is identified by its position
+    * in the source file, its name, its content, and the options
+    * provided to it. The build [[ReferenceCache]] should hereafter
+    * recognize the segment provided as such.
+    *
+    * @param atOffset The position in the file at which the
+    *                 node's description starts.
+    * @param name     The name of the node.
+    * @param content  The content that the node describes.
+    * @param options  The options provided to the node.
+    */
   def registerSegment(atOffset: Long,
                       name: String,
                       content: String,
                       options: Map[String, String] = Map()): Unit
 
+  /**
+    * Finishes building the [[ReferenceCache]] and closes the
+    * [[ReferenceBuilder]].
+    * @return The built [[ReferenceCache]].
+    */
   def finish(): T
 
 }
