@@ -23,7 +23,7 @@ class SingleFlushHeatMapWriter(val paths: CachePathList)
     * to the number of nodes that were found to be in that
     * layer up until now.
     */
-  private var nodesPerLayer: mutable.Map[Int, Int] =
+  private val nodesPerLayer: mutable.Map[Int, Int] =
     mutable.HashMap()
 
   override def writeNode(node: ReferenceNode): Unit =
@@ -33,18 +33,22 @@ class SingleFlushHeatMapWriter(val paths: CachePathList)
       nodesPerLayer(node.layer) = 1
     }
 
-  override def flush(): Unit =
-    while (nodesPerLayer.nonEmpty) {
-      val split = nodesPerLayer.splitAt(
-        (bufferSize / ENTRY_SIZE).floor.toInt)
-
-      split._1.foreach(kv => {
-        buffer.putInt(kv._1)
-        buffer.putInt(kv._2)
-      })
+  override def flush(): Unit = {
+    var index = 0
+    while (index < nodesPerLayer.size) {
+      val length = (bufferSize / ENTRY_SIZE).floor.toInt
+      nodesPerLayer.view
+        .slice(index, index + length)
+        .foreach(kv => {
+          buffer.putInt(kv._1)
+          buffer.putInt(kv._2)
+        })
       flushBuffer()
 
-      nodesPerLayer = split._2
+      index += length
     }
+    nodesPerLayer.clear()
+    super.flush()
+  }
 
 }

@@ -2,7 +2,7 @@ package com.clemaire.gexplorer.core.gfa.reference.cache
 
 import com.clemaire.gexplorer.core.gfa.CachePathList
 import com.clemaire.gexplorer.core.gfa.reference.{ReferenceBuilder, ReferenceNode}
-import com.clemaire.gexplorer.core.gfa.reference.io.{SimpleNioBufferedReferenceWriter, SimpleReferenceWriter}
+import com.clemaire.gexplorer.core.gfa.reference.io.{SimpleNioBufferedReferenceWriterWith, SimpleReferenceWriter}
 
 import scala.collection.mutable
 
@@ -36,7 +36,7 @@ class SimpleReferenceBuilder(private val pathsIn: CachePathList)
     * Writer to write the node-reference data to file.
     */
   private val writer: SimpleReferenceWriter =
-    new SimpleNioBufferedReferenceWriter(paths)
+    new SimpleNioBufferedReferenceWriterWith(paths)
   /**
     * The number of genomes currently counted.
     */

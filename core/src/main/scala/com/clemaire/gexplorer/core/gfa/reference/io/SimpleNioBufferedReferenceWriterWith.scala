@@ -1,20 +1,21 @@
 package com.clemaire.gexplorer.core.gfa.reference.io
 
 import com.clemaire.gexplorer.core.gfa.CachePathList
-import com.clemaire.gexplorer.core.gfa.reference.{IoBufferedWriter, ReferenceNode}
+import com.clemaire.gexplorer.core.gfa.reference.{NioBufferedWriter, ReferenceNode}
 import com.clemaire.gexplorer.core.gfa.reference.additional.{AdditionalReferenceWriter, SingleFlushHeatMapWriter}
 import com.clemaire.gexplorer.core.gfa.reference.index.SimpleBufferedReferenceIndexWriter
 
-class SimpleBufferedReferenceWriter(paths: CachePathList)
-  extends IoBufferedWriter
+class SimpleNioBufferedReferenceWriterWith(paths: CachePathList)
+  extends NioBufferedWriter
     with SimpleReferenceWriter
     with AdditionalReferenceWriters {
 
   /**
-    * Initializes the writer by setting the path for
-    * the [[IoBufferedWriter]] to write to.
+    * Initializes the buffer and file channel indirectly
+    * through [[NioBufferedWriter]] functions.
     */
   private val _: Unit = {
+    withBufferSize(1024 * 1024 * 8)
     withPath(paths.referencePath)
   }
 
@@ -23,9 +24,11 @@ class SimpleBufferedReferenceWriter(paths: CachePathList)
     new SimpleBufferedReferenceIndexWriter(paths)
   )
 
-  override def write(referenceNode: ReferenceNode): Unit = {
-    write(referenceNode, os)
-    additionalWriters.foreach(_.writeNode(referenceNode))
+  override def write(node: ReferenceNode): Unit = {
+    checkForFlush(length(node))
+    write(node, buffer)
+
+    additionalWriters.foreach(_.writeNode(node))
   }
 
   override def flush(): Unit = {

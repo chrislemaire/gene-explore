@@ -4,16 +4,16 @@ import com.clemaire.gexplorer.core.gfa.CachePathList
 import com.clemaire.gexplorer.core.gfa.interval.IntInterval
 import com.clemaire.gexplorer.core.gfa.reference.{NioBufferedWriter, ReferenceNode}
 import com.clemaire.gexplorer.core.gfa.reference.additional.AdditionalReferenceWriter
-import com.clemaire.gexplorer.core.gfa.reference.index.BufferedReferenceIndexWriter._
+import com.clemaire.gexplorer.core.gfa.reference.index.SimpleBufferedReferenceIndexWriter._
 
-object BufferedReferenceIndexWriter {
+object SimpleBufferedReferenceIndexWriter {
   /**
     * The size of each index chunk in segments.
     */
   private val INDEX_CHUNK_SIZE = 4096
 }
 
-class BufferedReferenceIndexWriter(val paths: CachePathList)
+class SimpleBufferedReferenceIndexWriter(val paths: CachePathList)
   extends AdditionalReferenceWriter
     with NioBufferedWriter
     with SimpleReferenceIndexWriter {
@@ -74,6 +74,8 @@ class BufferedReferenceIndexWriter(val paths: CachePathList)
     * to the [[ReferenceIndex]] and the index file.
     */
   private[this] def flushIndex(): Unit = {
+    checkForFlush(chunkLength)
+
     val chunkIndex = ReferenceChunkIndex(chunkId,
       length, filePos,
       layers.toInterval, segmentIds.toInterval)
@@ -84,7 +86,6 @@ class BufferedReferenceIndexWriter(val paths: CachePathList)
     layers = new IntInterval(Int.MaxValue, Int.MinValue)
     segmentIds = new IntInterval(Int.MaxValue, Int.MinValue)
 
-    checkForFlush(chunkLength)
     write(chunkIndex, buffer)
   }
 
@@ -100,4 +101,9 @@ class BufferedReferenceIndexWriter(val paths: CachePathList)
     length += 1
   }
 
+  override def flush(): Unit = {
+    flushIndex()
+
+    super.flush()
+  }
 }
