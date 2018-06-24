@@ -97,6 +97,22 @@ class IntervalTreeMap[K <: Comparable[_ >: K], V]
     super.+=(kv)
   }
 
+  /**
+    * Removes the given key-value pair from this [[IntervalTreeMap]].
+    * This also removes the interval from the underlying
+    * [[IntervalTree]] and this map if no entries are left.
+    *
+    * @param kv The key-value pair to remove from this map.
+    * @return This [[IntervalTreeMap]].
+    */
+  def -=(kv: (Interval[K], V)): IntervalTreeMap.this.type =
+    get(kv._1).map(_ -= kv._2)
+      .filter(_.isEmpty)
+      .map(_ => {
+        intervalTree.remove(kv._1)
+        this -= kv._1
+      }).getOrElse(this)
+
   override def -=(key: Interval[K]): IntervalTreeMap.this.type = {
     intervalTree.remove(key)
     super.-=(key)
