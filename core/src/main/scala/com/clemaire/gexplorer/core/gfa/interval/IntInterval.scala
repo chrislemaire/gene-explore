@@ -7,6 +7,9 @@ class IntInterval(var start: Int = Int.MinValue,
                   var end: Int = Int.MaxValue)
   extends Interval[Int](start, end, Bounded.CLOSED) {
 
+  def toInterval: Interval[Int] =
+    new IntInterval(start, end)
+
   override def getStart: Int = start
 
   override def getEnd: Int = end
