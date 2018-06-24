@@ -10,7 +10,7 @@ class SingleFlushHeatMapWriter(val paths: CachePathList)
     with NioBufferedWriter {
 
   private val _: Unit = {
-    redefineFilePath(paths.heatMapPath)
+    withPath(paths.heatMapPath)
   }
 
   /**

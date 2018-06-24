@@ -5,7 +5,7 @@ import com.lodborg.intervaltree.{Interval, IntervalTree}
 import scala.collection.mutable
 import scala.collection.JavaConverters.asScalaSetConverter
 
-class IntervalTreeMap[K <: Comparable[_ >: K], V]
+class IntervalTreeMap[K <: Comparable[K], V]
   extends mutable.HashMap[Interval[K], mutable.Buffer[V]] {
 
   /**
@@ -78,17 +78,7 @@ class IntervalTreeMap[K <: Comparable[_ >: K], V]
     */
   def put(key: Interval[K],
           value: V): IntervalTreeMap.this.type =
-    this += (key -> value)
-
-  /**
-    * Puts the given key to map to the given value wrapped in a
-    * [[mutable.Buffer]].
-    *
-    * @param kv The interval key and value wrapped in a tuple.
-    * @return This [[IntervalTreeMap]].
-    */
-  def +=(kv: (Interval[K], V)): IntervalTreeMap.this.type =
-    this += (kv._1 -> mutable.Buffer(kv._2))
+    this.put(key, value)
 
   override def +=(kv: (Interval[K], mutable.Buffer[V])): IntervalTreeMap.this.type = {
     if (!contains(kv._1)) {
@@ -105,7 +95,7 @@ class IntervalTreeMap[K <: Comparable[_ >: K], V]
     * @param kv The key-value pair to remove from this map.
     * @return This [[IntervalTreeMap]].
     */
-  def -=(kv: (Interval[K], V)): IntervalTreeMap.this.type =
+  def -=(kv: (Interval[K], V)): IntervalTreeMap[K, V] =
     get(kv._1).map(_ -= kv._2)
       .filter(_.isEmpty)
       .map(_ => {

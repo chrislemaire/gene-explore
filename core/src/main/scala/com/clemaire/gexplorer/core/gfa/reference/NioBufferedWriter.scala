@@ -43,7 +43,7 @@ trait NioBufferedWriter extends Writer {
     * size and sets the [[bufferSize]] field accordingly.
     * @param newBufferSize The new buffer size.
     */
-  protected[this] def reallocateBuffer(newBufferSize: Int): Unit = {
+  private[this] def reallocateBuffer(newBufferSize: Int): Unit = {
     bufferSize = newBufferSize
     buffer = ByteBuffer.allocateDirect(newBufferSize)
   }
@@ -55,7 +55,7 @@ trait NioBufferedWriter extends Writer {
     * @param file The [[Path]] at which the file to open is
     *             located.
     */
-  protected[this] def redefineFilePath(file: Path): Unit = {
+  protected[this] def withPath(file: Path): Unit = {
     fc.foreach(_.close())
     fc = Some(FileChannel.open(file, StandardOpenOption.WRITE,
       StandardOpenOption.CREATE))
@@ -83,7 +83,7 @@ trait NioBufferedWriter extends Writer {
     * @return The new [[NioBufferedWriter]].
     */
   def forFileAt(file: Path): this.type = {
-    redefineFilePath(file)
+    withPath(file)
     this
   }
 

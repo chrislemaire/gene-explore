@@ -13,8 +13,8 @@ class SimpleNioBufferedReferenceWriter(paths: CachePathList)
     * through [[NioBufferedWriter]] functions.
     */
   private val _: Unit = {
-    reallocateBuffer(1024 * 1024 * 8)
-    redefineFilePath(paths.referenceFilePath)
+    withBufferSize(1024 * 1024 * 8)
+    withPath(paths.referencePath)
   }
 
   override def write(node: ReferenceNode): Unit = {

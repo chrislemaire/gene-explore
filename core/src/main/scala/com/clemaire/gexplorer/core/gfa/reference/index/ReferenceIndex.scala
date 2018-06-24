@@ -2,15 +2,15 @@ package com.clemaire.gexplorer.core.gfa.reference.index
 
 import com.clemaire.gexplorer.core.gfa.CachePathList
 import com.clemaire.gexplorer.core.gfa.interval.IntervalTreeMap
-import com.lodborg.intervaltree.Interval
+import com.lodborg.intervaltree.IntegerInterval
 
 import scala.collection.mutable
 
 case class ReferenceChunkIndex private[index](id: Int,
                                               length: Int,
                                               filePos: Long,
-                                              layers: Interval[Int],
-                                              segmentIds: Interval[Int])
+                                              layers: IntegerInterval,
+                                              segmentIds: IntegerInterval)
 
 class ReferenceIndex(val paths: CachePathList)
   extends mutable.ArrayBuffer[ReferenceChunkIndex] {
@@ -20,14 +20,14 @@ class ReferenceIndex(val paths: CachePathList)
     * contain nodes in these layers.
     */
   private[this] val layerChunkMap =
-    new IntervalTreeMap[Int, ReferenceChunkIndex]()
+    new IntervalTreeMap[Integer, ReferenceChunkIndex]()
 
   /**
     * Mapping of segment ID intervals to the chunks
     * that contain nodes with IDs within those intervals.
     */
   private[this] val segmentChunkMap =
-    new IntervalTreeMap[Int, ReferenceChunkIndex]()
+    new IntervalTreeMap[Integer, ReferenceChunkIndex]()
 
   override def +=:(elem: ReferenceChunkIndex): ReferenceIndex.this.type = {
     layerChunkMap.put(elem.layers, elem)

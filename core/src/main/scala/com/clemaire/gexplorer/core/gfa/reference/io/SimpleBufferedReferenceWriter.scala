@@ -1,30 +1,23 @@
 package com.clemaire.gexplorer.core.gfa.reference.io
 
-import java.io._
-import java.nio.file.Files
-
 import com.clemaire.gexplorer.core.gfa.CachePathList
-import com.clemaire.gexplorer.core.gfa.reference.{ReferenceNode, ReferenceWriter}
+import com.clemaire.gexplorer.core.gfa.reference.{IoBufferedWriter, ReferenceNode, ReferenceWriter}
 
 class SimpleBufferedReferenceWriter(paths: CachePathList)
   extends ReferenceWriter
-    with SimpleReferenceWriter {
+    with SimpleReferenceWriter
+    with IoBufferedWriter {
 
   /**
-    * The output stream to which data is written
-    * in a buffered manner.
+    * Initializes the writer by setting the path for
+    * the [[IoBufferedWriter]] to write to.
     */
-  private val os = new DataOutputStream(new BufferedOutputStream(
-    Files.newOutputStream(paths.referenceFilePath)))
+  private val _: Unit = {
+    withPath(paths.referencePath)
+  }
 
   override def write(referenceNode: ReferenceNode): Unit = {
     write(referenceNode, os)
   }
-
-  override def flush(): Unit =
-    os.flush()
-
-  override def close(): Unit =
-    os.close()
 
 }

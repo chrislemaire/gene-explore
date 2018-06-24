@@ -19,7 +19,7 @@ class BufferedReferenceIndexWriter(val paths: CachePathList)
     with SimpleReferenceIndexWriter {
 
   private val _: Unit = {
-    redefineFilePath(paths.referenceIndexPath)
+    withPath(paths.referenceIndexPath)
   }
 
   /**
@@ -66,8 +66,8 @@ class BufferedReferenceIndexWriter(val paths: CachePathList)
     */
   private[this] def pushBoundaries(interval: IntInterval,
                                    value: Int): Unit =
-    if (value < interval.getStart) interval.start = value
-    else if (value > interval.getEnd) interval.end = value
+    if (value < interval.start) interval.start = value
+    else if (value > interval.end) interval.end = value
 
   /**
     * Flushes the currently being built [[ReferenceChunkIndex]]
