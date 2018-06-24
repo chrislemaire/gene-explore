@@ -1,6 +1,7 @@
 package com.clemaire.gexplorer.core.gfa.reference.io
 
 import java.io.DataOutputStream
+import java.nio.ByteBuffer
 
 import com.clemaire.gexplorer.core.gfa.reference.{ReferenceNode, ReferenceWriter}
 
@@ -9,6 +10,11 @@ import com.clemaire.gexplorer.core.gfa.reference.{ReferenceNode, ReferenceWriter
   * [[ReferenceNode]]s in the 'simple' format.
   */
 trait SimpleReferenceWriter extends ReferenceWriter {
+
+  def length(node: ReferenceNode): Int = {
+    4 + 8 + 16 + 12 * (node.outgoingEdges.length +
+      node.incomingEdges.length + node.genomeCoordinates.length)
+  }
 
   /**
     * Writes a single node to the given [[DataOutputStream]].
@@ -37,6 +43,30 @@ trait SimpleReferenceWriter extends ReferenceWriter {
     node.genomeCoordinates.foreach(kv => {
       os.writeInt(kv._1)
       os.writeLong(kv._2)
+    })
+  }
+
+  def write(node: ReferenceNode,
+            ob: ByteBuffer): Unit = {
+    ob.putInt(node.id)
+    ob.putLong(node.fileOffset)
+    ob.putInt(node.contentLength)
+    ob.putInt(node.outgoingEdges.length)
+    ob.putInt(node.incomingEdges.length)
+    ob.putInt(node.genomeCoordinates.length)
+
+    node.outgoingEdges.foreach(kv => {
+      ob.putInt(kv._1)
+      ob.putLong(kv._2)
+    })
+    node.incomingEdges.foreach(kv => {
+      ob.putInt(kv._1)
+      ob.putLong(kv._2)
+    })
+
+    node.genomeCoordinates.foreach(kv => {
+      ob.putInt(kv._1)
+      ob.putLong(kv._2)
     })
   }
 

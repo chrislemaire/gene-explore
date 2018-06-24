@@ -2,7 +2,7 @@ package com.clemaire.gexplorer.core.gfa.reference.cache
 
 import com.clemaire.gexplorer.core.gfa.CachePathList
 import com.clemaire.gexplorer.core.gfa.reference.{ReferenceBuilder, ReferenceNode}
-import com.clemaire.gexplorer.core.gfa.reference.io.SimpleBufferedReferenceWriter
+import com.clemaire.gexplorer.core.gfa.reference.io.{SimpleNioBufferedReferenceWriter, SimpleReferenceWriter}
 
 import scala.collection.mutable
 
@@ -26,88 +26,30 @@ class SimpleReferenceBuilder(private val pathsIn: CachePathList)
     */
   private val incomingEdges: mutable.Map[Int, mutable.Buffer[(Int, Long)]] =
     mutable.Map()
-
-  /**
-    * The number of genomes currently counted.
-    */
-  private var genomeIndex = -1
-
-  /**
-    * The number of segments currently counted.
-    */
-  private var segmentIndex = -1
-
-  /**
-    * The current node being built by the reference
-    * builder wrapped in an option.
-    */
-  private var currentNode: Option[ReferenceNode] = None
-
   /**
     * The mapping of genome IDs to their respective
     * current coordinate.
     */
   private[cache] val genomeCoordinates: mutable.Map[Int, Long] =
     mutable.HashMap()
-
   /**
     * Writer to write the node-reference data to file.
     */
-  private val writer: SimpleBufferedReferenceWriter =
-    new SimpleBufferedReferenceWriter(paths)
-
+  private val writer: SimpleReferenceWriter =
+    new SimpleNioBufferedReferenceWriter(paths)
   /**
-    * Searches the given mapping of options for an
-    * ORI tag and maps its values to an array of genome
-    * indices.
-    *
-    * @param options The options to extract a list of
-    *                genomes from.
-    * @return The array of genomes that is extracted from
-    *         the given options.
+    * The number of genomes currently counted.
     */
-  private def getGenomes(options: Map[String, String]): Array[Int] =
-    options.getOrElse("ORI", "").split(';')
-      .filterNot(_.isEmpty)
-      .map(s => {
-        if (s forall Character.isDigit) {
-          s.toInt
-        } else {
-          cache._genomes(s)
-        }
-      })
-
+  private var genomeIndex = -1
   /**
-    * Writes node reference data to file through the
-    * accompanying [[writer]] and clears any auxiliary
-    * data kept on the current node.
+    * The number of segments currently counted.
     */
-  protected def writeCurrentNode(): Unit =
-    currentNode.foreach(node => {
-      writer.write(node)
-
-      incomingEdges.remove(node.id)
-      lookAheadSegments.remove(node.name)
-
-      currentNode = None
-    })
-
+  private var segmentIndex = -1
   /**
-    * Looks up a node with the given name and finds
-    * the associated node-ID and layer.
-    *
-    * @param name The name of the node to find.
-    * @return A tuple containing the node-ID and layer
-    *         of the node.
+    * The current node being built by the reference
+    * builder wrapped in an option.
     */
-  private def lookupNode(name: String): (Int, Int) =
-    if (lookAheadSegments.contains(name)) {
-      lookAheadSegments(name)
-    } else {
-      lookAheadSegments.put(name, (segmentIndex, 0))
-      segmentIndex += 1
-      (segmentIndex, 0)
-    }
+  private var currentNode: Option[ReferenceNode] = None
 
   override final def registerHeader(options: Map[String, String]): Unit =
     options.filter(_._1 == "ORI").values
@@ -146,6 +88,23 @@ class SimpleReferenceBuilder(private val pathsIn: CachePathList)
     }
   }
 
+  /**
+    * Looks up a node with the given name and finds
+    * the associated node-ID and layer.
+    *
+    * @param name The name of the node to find.
+    * @return A tuple containing the node-ID and layer
+    *         of the node.
+    */
+  private def lookupNode(name: String): (Int, Int) =
+    if (lookAheadSegments.contains(name)) {
+      lookAheadSegments(name)
+    } else {
+      lookAheadSegments.put(name, (segmentIndex, 0))
+      segmentIndex += 1
+      (segmentIndex, 0)
+    }
+
   override final def registerSegment(atOffset: Long,
                                      name: String,
                                      content: String,
@@ -166,6 +125,42 @@ class SimpleReferenceBuilder(private val pathsIn: CachePathList)
 
     nodeGenomes.foreach(gen => genomeCoordinates(gen) += content.length)
   }
+
+  /**
+    * Searches the given mapping of options for an
+    * ORI tag and maps its values to an array of genome
+    * indices.
+    *
+    * @param options The options to extract a list of
+    *                genomes from.
+    * @return The array of genomes that is extracted from
+    *         the given options.
+    */
+  private def getGenomes(options: Map[String, String]): Array[Int] =
+    options.getOrElse("ORI", "").split(';')
+      .filterNot(_.isEmpty)
+      .map(s => {
+        if (s forall Character.isDigit) {
+          s.toInt
+        } else {
+          cache._genomes(s)
+        }
+      })
+
+  /**
+    * Writes node reference data to file through the
+    * accompanying [[writer]] and clears any auxiliary
+    * data kept on the current node.
+    */
+  protected def writeCurrentNode(): Unit =
+    currentNode.foreach(node => {
+      writer.write(node)
+
+      incomingEdges.remove(node.id)
+      lookAheadSegments.remove(node.name)
+
+      currentNode = None
+    })
 
   override final def finish(): SimpleReferenceCache = {
     try {

@@ -72,19 +72,6 @@ object Gfa1Parser {
   private[core] val LINK_OPTIONS_INDEX: Int = 6
 
   /**
-    * Parses a single option and returns a tuple
-    * representing the tag, type and value of that
-    * option.
-    *
-    * @param option String representing a single option.
-    * @return Tuple representing an option object.
-    */
-  private def parseOption(option: String): (String, String) = {
-    val optionSplit = option.split(":")
-    (optionSplit(0), optionSplit(2))
-  }
-
-  /**
     * Parses the options provided from the end of a
     * line. Given is a line-split and the index from
     * which options can be read.
@@ -99,6 +86,19 @@ object Gfa1Parser {
                    from: Int): Map[String, String] =
     split.drop(from).map(parseOption).toMap
 
+  /**
+    * Parses a single option and returns a tuple
+    * representing the tag, type and value of that
+    * option.
+    *
+    * @param option String representing a single option.
+    * @return Tuple representing an option object.
+    */
+  private def parseOption(option: String): (String, String) = {
+    val optionSplit = option.split(":")
+    (optionSplit(0), optionSplit(2))
+  }
+
 }
 
 abstract class Gfa1Parser {
@@ -108,6 +108,62 @@ abstract class Gfa1Parser {
     * and links will be parsed for registration.
     */
   private var cacheBuilder: ReferenceBuilder[_] = _
+
+  /**
+    * Adjusts this [[Gfa1Parser]] to use the given
+    * [[ReferenceBuilder]] and returns the adjusted [[Gfa1Parser]].
+    *
+    * @param builder The new builder to use for GFA element
+    *                registration.
+    * @return The [[Gfa1Parser]] using the given builder.
+    */
+  def withBuilder(builder: ReferenceBuilder[_]): this.type = {
+    cacheBuilder = builder
+    this
+  }
+
+  /**
+    * Parses the source GFA file given and arranges
+    * for all segments and links in it to be registered
+    * to the [[ReferenceBuilder]].
+    *
+    * @param paths The list of paths containing the
+    *              source path.
+    */
+  def parse(paths: CachePathList): Unit
+
+  /**
+    * Parses a all lines of some GFA file and passes the
+    * parsed element onto the given [[ReferenceBuilder]].
+    *
+    * @param input  The lines to parse GFA elements from.
+    * @param offset The offset in the file at which this
+    *               lines start.
+    */
+  protected def parseAllIn(input: String,
+                           offset: Long): Unit = {
+    input.lines.foldLeft(offset)((offset, line) => {
+      parseLine(line, offset)
+      offset + line.length + 1
+    })
+  }
+
+  /**
+    * Parses a single line of some GFA file and passes the
+    * parsed element onto the given [[ReferenceBuilder]].
+    *
+    * @param line   The line to parse a GFA element from.
+    * @param offset The offset in the file at which this
+    *               line starts.
+    */
+  protected def parseLine(line: String,
+                          offset: Long): Unit = {
+    line.trim.charAt(0) match {
+      case 'H' => parseHeader(line)
+      case 'S' => parseSegment(line, offset)
+      case 'L' => parseLink(line, offset)
+    }
+  }
 
   /**
     * Parses a header string by splitting it and passing
@@ -137,16 +193,16 @@ abstract class Gfa1Parser {
     checkThatOrThrow(split.length >= SEG_MIN_LENGTH,
       Gfa1SegmentColumnLengthException(split.length, segString))
 
-    if (split.length > SEG_MIN_LENGTH) {
-      cacheBuilder.registerSegment(fileOffset,
-        split(SEG_NAME_INDEX),
-        split(SEG_CONTENT_INDEX),
-        parseOptions(split, SEG_OPTIONS_INDEX))
-    } else {
-      cacheBuilder.registerSegment(fileOffset,
-        split(SEG_NAME_INDEX),
-        split(SEG_CONTENT_INDEX))
-    }
+    //    if (split.length > SEG_MIN_LENGTH) {
+    cacheBuilder.registerSegment(fileOffset,
+      split(SEG_NAME_INDEX),
+      split(SEG_CONTENT_INDEX),
+      parseOptions(split, SEG_OPTIONS_INDEX))
+    //    } else {
+    //      cacheBuilder.registerSegment(fileOffset,
+    //        split(SEG_NAME_INDEX),
+    //        split(SEG_CONTENT_INDEX))
+    //    }
   }
 
   /**
@@ -165,72 +221,16 @@ abstract class Gfa1Parser {
     checkThatOrThrow(split.length >= LINK_MIN_LENGTH,
       Gfa1LinkColumnLengthException(split.length, linkString))
 
-    if (split.length > LINK_MIN_LENGTH) {
-      cacheBuilder.registerLink(fileOffset,
-        split(LINK_FROM_INDEX),
-        split(LINK_TO_INDEX),
-        parseOptions(split, LINK_OPTIONS_INDEX))
-    } else {
-      cacheBuilder.registerLink(fileOffset,
-        split(LINK_FROM_INDEX),
-        split(LINK_TO_INDEX))
-    }
+    //    if (split.length > LINK_MIN_LENGTH) {
+    cacheBuilder.registerLink(fileOffset,
+      split(LINK_FROM_INDEX),
+      split(LINK_TO_INDEX),
+      parseOptions(split, LINK_OPTIONS_INDEX))
+    //    } else {
+    //      cacheBuilder.registerLink(fileOffset,
+    //        split(LINK_FROM_INDEX),
+    //        split(LINK_TO_INDEX))
+    //    }
   }
-
-  /**
-    * Parses a single line of some GFA file and passes the
-    * parsed element onto the given [[ReferenceBuilder]].
-    *
-    * @param line   The line to parse a GFA element from.
-    * @param offset The offset in the file at which this
-    *               line starts.
-    */
-  protected def parseLine(line: String,
-                          offset: Long): Unit = {
-    line.trim.charAt(0) match {
-      case 'H' => parseHeader(line)
-      case 'S' => parseSegment(line, offset)
-      case 'L' => parseLink(line, offset)
-    }
-  }
-
-  /**
-    * Parses a all lines of some GFA file and passes the
-    * parsed element onto the given [[ReferenceBuilder]].
-    *
-    * @param input  The lines to parse GFA elements from.
-    * @param offset The offset in the file at which this
-    *               lines start.
-    */
-  protected def parseAllIn(input: String,
-                           offset: Long): Unit = {
-    input.lines.foldLeft(offset)((offset, line) => {
-      parseLine(line, offset)
-      offset + line.length + 1
-    })
-  }
-
-  /**
-    * Adjusts this [[Gfa1Parser]] to use the given
-    * [[ReferenceBuilder]] and returns the adjusted [[Gfa1Parser]].
-    *
-    * @param builder The new builder to use for GFA element
-    *                registration.
-    * @return The [[Gfa1Parser]] using the given builder.
-    */
-  def withBuilder(builder: ReferenceBuilder[_]): this.type = {
-    cacheBuilder = builder
-    this
-  }
-
-  /**
-    * Parses the source GFA file given and arranges
-    * for all segments and links in it to be registered
-    * to the [[ReferenceBuilder]].
-    *
-    * @param paths The list of paths containing the
-    *              source path.
-    */
-  def parse(paths: CachePathList): Unit
 
 }
