@@ -5,9 +5,13 @@ import com.clemaire.gexplorer.core.gfa.reference.{NioBufferedWriter, ReferenceNo
 
 import scala.collection.mutable
 
-class SingleFlushHeatMapWriter(val pathsIn: CachePathList)
+class SingleFlushHeatMapWriter(val paths: CachePathList)
   extends AdditionalReferenceWriter
     with NioBufferedWriter {
+
+  private val _: Unit = {
+    redefineFilePath(paths.heatMapPath)
+  }
 
   /**
     * The size of the entry that is written to disk.
