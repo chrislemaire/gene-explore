@@ -141,12 +141,11 @@ abstract class Gfa1Parser {
     *               lines start.
     */
   protected def parseAllIn(input: String,
-                           offset: Long): Unit = {
+                           offset: Long): Unit =
     input.lines.foldLeft(offset)((offset, line) => {
       parseLine(line, offset)
       offset + line.length + 1
     })
-  }
 
   /**
     * Parses a single line of some GFA file and passes the
@@ -157,13 +156,13 @@ abstract class Gfa1Parser {
     *               line starts.
     */
   protected def parseLine(line: String,
-                          offset: Long): Unit = {
+                          offset: Long): Unit =
     line.trim.charAt(0) match {
-      case 'H' => parseHeader(line)
-      case 'S' => parseSegment(line, offset)
       case 'L' => parseLink(line, offset)
+      case 'S' => parseSegment(line, offset)
+      case 'H' => parseHeader(line)
+      case '#' =>
     }
-  }
 
   /**
     * Parses a header string by splitting it and passing
@@ -193,16 +192,10 @@ abstract class Gfa1Parser {
     checkThatOrThrow(split.length >= SEG_MIN_LENGTH,
       Gfa1SegmentColumnLengthException(split.length, segString))
 
-    //    if (split.length > SEG_MIN_LENGTH) {
     cacheBuilder.registerSegment(fileOffset,
       split(SEG_NAME_INDEX),
       split(SEG_CONTENT_INDEX),
       parseOptions(split, SEG_OPTIONS_INDEX))
-    //    } else {
-    //      cacheBuilder.registerSegment(fileOffset,
-    //        split(SEG_NAME_INDEX),
-    //        split(SEG_CONTENT_INDEX))
-    //    }
   }
 
   /**
@@ -221,16 +214,10 @@ abstract class Gfa1Parser {
     checkThatOrThrow(split.length >= LINK_MIN_LENGTH,
       Gfa1LinkColumnLengthException(split.length, linkString))
 
-    //    if (split.length > LINK_MIN_LENGTH) {
     cacheBuilder.registerLink(fileOffset,
       split(LINK_FROM_INDEX),
       split(LINK_TO_INDEX),
       parseOptions(split, LINK_OPTIONS_INDEX))
-    //    } else {
-    //      cacheBuilder.registerLink(fileOffset,
-    //        split(LINK_FROM_INDEX),
-    //        split(LINK_TO_INDEX))
-    //    }
   }
 
 }

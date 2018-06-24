@@ -1,39 +1,25 @@
 package com.clemaire.gexplorer.core.gfa.reference.io
 
-import java.nio.ByteBuffer
-import java.nio.channels.FileChannel
-import java.nio.file.StandardOpenOption
-
 import com.clemaire.gexplorer.core.gfa.CachePathList
-import com.clemaire.gexplorer.core.gfa.reference.{ReferenceNode, ReferenceWriter}
+import com.clemaire.gexplorer.core.gfa.reference.{NioBufferedWriter, ReferenceNode, ReferenceWriter}
 
 class SimpleNioBufferedReferenceWriter(paths: CachePathList)
   extends ReferenceWriter
-    with SimpleReferenceWriter {
+    with SimpleReferenceWriter
+    with NioBufferedWriter {
 
-  private val fc: FileChannel = FileChannel.open(paths.referenceFilePath,
-    StandardOpenOption.WRITE, StandardOpenOption.CREATE)
-
-  private val buffer: ByteBuffer = ByteBuffer.allocateDirect(1024 * 1024 * 8)
+  /**
+    * Initializes the buffer and file channel indirectly
+    * through [[NioBufferedWriter]] functions.
+    */
+  private val _: Unit = {
+    reallocateBuffer(1024 * 1024 * 8)
+    redefineFilePath(paths.referenceFilePath)
+  }
 
   override def write(node: ReferenceNode): Unit = {
-    val len = length(node)
-    if (buffer.position + len > buffer.capacity()) {
-      flushBuffer()
-    }
+    checkForFlush(length(node))
 
     write(node, buffer)
   }
-
-  override def flush(): Unit =
-    flushBuffer()
-
-  def flushBuffer(): Unit = {
-    buffer.flip()
-    fc.write(buffer)
-    buffer.clear()
-  }
-
-  override def close(): Unit =
-    fc.close()
 }
