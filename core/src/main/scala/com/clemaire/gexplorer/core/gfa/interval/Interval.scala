@@ -41,6 +41,13 @@ case class Interval[T <: Comparable[T]](left: T,
       Interval.contains(left, otherLeft, otherRight) ||
       Interval.contains(right, otherLeft, otherRight)
 
+  def contains(other: Interval[T]): Boolean =
+    contains(other.left, other.right)
+
+  def contains(otherLeft: T,
+               otherRight: T): Boolean =
+    contains(otherLeft) && contains(otherRight)
+
   def contains(elem: T): Boolean = Interval.contains(elem, left, right)
 
 }
