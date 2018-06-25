@@ -2,7 +2,7 @@ package com.clemaire.gexplorer.core.gfa.reference.io
 
 import com.clemaire.gexplorer.core.gfa.CachePathList
 import com.clemaire.gexplorer.core.gfa.reference.{IoBufferedWriter, ReferenceNode}
-import com.clemaire.gexplorer.core.gfa.reference.additional.{AdditionalReferenceWriter, SingleFlushHeatMapWriter}
+import com.clemaire.gexplorer.core.gfa.reference.additional.SingleFlushHeatMapWriter
 import com.clemaire.gexplorer.core.gfa.reference.index.SimpleBufferedReferenceIndexWriter
 
 class SimpleBufferedReferenceWriter(paths: CachePathList)
@@ -18,7 +18,7 @@ class SimpleBufferedReferenceWriter(paths: CachePathList)
     withPath(paths.referencePath)
   }
 
-  override val additionalWriters: Seq[AdditionalReferenceWriter] = Seq(
+  override protected[this] val additionalWriters = Seq(
     new SingleFlushHeatMapWriter(paths),
     new SimpleBufferedReferenceIndexWriter(paths)
   )

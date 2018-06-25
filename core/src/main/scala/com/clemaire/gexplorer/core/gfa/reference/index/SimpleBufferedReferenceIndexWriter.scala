@@ -103,7 +103,6 @@ class SimpleBufferedReferenceIndexWriter(val paths: CachePathList)
 
   override def flush(): Unit = {
     flushIndex()
-
     super.flush()
   }
 }

@@ -34,20 +34,14 @@ class SingleFlushHeatMapWriter(val paths: CachePathList)
     }
 
   override def flush(): Unit = {
-    var index = 0
-    while (index < nodesPerLayer.size) {
-      val length = (bufferSize / ENTRY_SIZE).floor.toInt
-      nodesPerLayer.view
-        .slice(index, index + length)
-        .foreach(kv => {
-          buffer.putInt(kv._1)
-          buffer.putInt(kv._2)
-        })
-      flushBuffer()
+    nodesPerLayer.foreach(npl => {
+      if (buffer.position() + ENTRY_SIZE >= buffer.capacity()) {
+        flushBuffer()
+      }
 
-      index += length
-    }
-    nodesPerLayer.clear()
+      buffer.putInt(npl._1)
+      buffer.putInt(npl._2)
+    })
     super.flush()
   }
 

@@ -9,10 +9,10 @@ trait NioBufferedWriter extends Writer {
 
   /**
     * The [[FileChannel]] used to write the current
-    * buffer to once flushed, or [[None]] if no file
+    * buffer to a file, or [[None]] if no file
     * is selected yet.
     */
-  private var fc: Option[FileChannel] = None
+  private[this] var fc: Option[FileChannel] = None
 
   /**
     * The size of the buffer to allocate and use.

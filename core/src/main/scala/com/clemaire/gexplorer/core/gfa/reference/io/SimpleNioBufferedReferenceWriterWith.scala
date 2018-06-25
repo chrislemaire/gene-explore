@@ -1,12 +1,12 @@
 package com.clemaire.gexplorer.core.gfa.reference.io
 
 import com.clemaire.gexplorer.core.gfa.CachePathList
-import com.clemaire.gexplorer.core.gfa.reference.{NioBufferedWriter, ReferenceNode}
-import com.clemaire.gexplorer.core.gfa.reference.additional.{AdditionalReferenceWriter, SingleFlushHeatMapWriter}
+import com.clemaire.gexplorer.core.gfa.reference.{AsyncNioBufferedWriter, NioBufferedWriter, ReferenceNode}
+import com.clemaire.gexplorer.core.gfa.reference.additional.SingleFlushHeatMapWriter
 import com.clemaire.gexplorer.core.gfa.reference.index.SimpleBufferedReferenceIndexWriter
 
 class SimpleNioBufferedReferenceWriterWith(paths: CachePathList)
-  extends NioBufferedWriter
+  extends AsyncNioBufferedWriter[ReferenceNode]
     with SimpleReferenceWriter
     with AdditionalReferenceWriters {
 
@@ -15,11 +15,11 @@ class SimpleNioBufferedReferenceWriterWith(paths: CachePathList)
     * through [[NioBufferedWriter]] functions.
     */
   private val _: Unit = {
-    withBufferSize(1024 * 1024 * 8)
+    withBufferSize(1024 * 1024 * 4)
     withPath(paths.referencePath)
   }
 
-  override val additionalWriters: Seq[AdditionalReferenceWriter] = Seq(
+  override protected[this] val additionalWriters = Seq(
     new SingleFlushHeatMapWriter(paths),
     new SimpleBufferedReferenceIndexWriter(paths)
   )
@@ -27,8 +27,7 @@ class SimpleNioBufferedReferenceWriterWith(paths: CachePathList)
   override def write(node: ReferenceNode): Unit = {
     checkForFlush(length(node))
     write(node, buffer)
-
-    additionalWriters.foreach(_.writeNode(node))
+    addWork(node)
   }
 
   override def flush(): Unit = {
@@ -40,5 +39,4 @@ class SimpleNioBufferedReferenceWriterWith(paths: CachePathList)
     super.close()
     additionalWriters.foreach(_.close())
   }
-
 }
