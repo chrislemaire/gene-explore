@@ -4,27 +4,63 @@ import scala.collection.mutable
 
 object Stopwatch {
 
-  private val markers: mutable.Map[String, Long] =
+  /**
+    * A mapping of marker names to their current total times.
+    */
+  private val totalTimes: mutable.Map[String, Long] =
     mutable.Map()
 
-  private val relativeTimes: mutable.Map[String, Long] =
+  /**
+    * A mapping of marker names to the times at which they
+    * were last started.
+    */
+  private val startTimes: mutable.Map[String, Long] =
     mutable.Map()
 
-  def initializeMarker(marker: String): Unit =
-    markers.put(marker, 0L)
+  /**
+    * Resets the time for a marker with the given name.
+    * After a reset of marker {{{m}}} {{{time(m)}}} should
+    * give back {{{0}}} and {{{stop(m)}}} should throw an
+    * exception.
+    * @param marker The name of the marker to reset.
+    */
+  def reset(marker: String): Unit = {
+    totalTimes.put(marker, 0L)
+    startTimes.remove(marker)
+  }
 
+  /**
+    * Starts the time for the given marker by storing
+    * the current time for it.
+    * @param marker The name of the time marker to
+    *               start.
+    */
   def start(marker: String): Unit = {
-    if (!markers.contains(marker)) {
-      initializeMarker(marker)
+    if (!totalTimes.contains(marker)) {
+      reset(marker)
     }
-    relativeTimes.put(marker, System.currentTimeMillis())
+    startTimes.put(marker, System.currentTimeMillis())
   }
 
-  def stop(marker: String): Unit = {
-    markers(marker) += System.currentTimeMillis() - relativeTimes(marker)
-  }
+  /**
+    * Stops the time for the given marker by taking
+    * the last start time and adding the difference
+    * between it and the current time to the total
+    * time of the given marker.
+    * @param marker The name of the time marker to
+    *               stop.
+    */
+  def stop(marker: String): Unit =
+    totalTimes(marker) += System.currentTimeMillis() - startTimes(marker)
 
-  def time(marker: String): Long =
-    markers(marker)
+  /**
+    * @param marker The marker to get the time of.
+    * @return The current time for the given marker.
+    */
+  def timeFor(marker: String): Long =
+    totalTimes(marker)
+
+  override def toString: String =
+    totalTimes.map(kv => kv._1 + "\t= " + kv._2).mkString("\n")
 
 }
