@@ -63,7 +63,7 @@ object Gfa1Parser {
   private[core] val SEG_MIN_LENGTH: Int = 4
   private[core] val SEG_NAME_INDEX: Int = 1
   private[core] val SEG_CONTENT_INDEX: Int = 2
-  private[core] val SEG_OPTIONS_INDEX: Int = 5
+  private[core] val SEG_OPTIONS_INDEX: Int = 4
 
   // Link data column indices.
   private[core] val LINK_MIN_LENGTH: Int = 5

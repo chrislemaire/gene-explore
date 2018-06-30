@@ -115,10 +115,7 @@ class SimpleReferenceBuilder(private val pathsIn: CachePathList)
 
     val (id, layer) = lookupNode(name)
     currentNode = Some(ReferenceNode(name,
-      id,
-      layer,
-      atOffset,
-      content.length,
+      id, layer, atOffset, content.length,
       incomingEdges.getOrElse(id, mutable.Buffer()),
       mutable.Buffer(),
       nodeGenomes.map(gen => (gen, genomeCoordinates(gen)))))
