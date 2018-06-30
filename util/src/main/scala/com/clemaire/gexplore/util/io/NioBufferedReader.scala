@@ -144,6 +144,25 @@ class NioBufferedReader(val path: Path,
     */
   def hasNext: Boolean = !eofReached
 
+  @throws[IOException]
+  override def read(charBuf: Array[Char], off: Int, len: Int): Int = {
+    var currentPos = off
+
+    while (currentPos < len + off) {
+      if (checkBuffer())
+        return currentPos - off
+
+      val readUntil = Math.min(buffer.limit, bufferPos + len - currentPos)
+      while (bufferPos < readUntil) {
+        charBuf(currentPos) = bufferArray(bufferPos).asInstanceOf[Char]
+
+        bufferPos += 1
+        currentPos += 1
+      }
+    }
+    currentPos - off
+  }
+
   /**
     * Reads a single line from the file as a String
     * and returns the String that represents that line
@@ -214,24 +233,5 @@ class NioBufferedReader(val path: Path,
   @throws[IOException]
   override def close(): Unit = {
     fc.close()
-  }
-
-  @throws[IOException]
-  override def read(charBuf: Array[Char], off: Int, len: Int): Int = {
-    var currentPos = off
-
-    while (currentPos < len + off) {
-      if (checkBuffer())
-        return currentPos - off
-
-      val readUntil = Math.min(buffer.limit, bufferPos + len - currentPos)
-      while (bufferPos < readUntil) {
-        charBuf(currentPos) = bufferArray(bufferPos).asInstanceOf[Char]
-
-        bufferPos += 1
-        currentPos += 1
-      }
-    }
-    currentPos - off
   }
 }
