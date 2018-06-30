@@ -11,9 +11,7 @@ class BufferedGfa1Parser
   override def parse(paths: CachePathList): Unit = {
     var offset = 0
 
-    val stream = Files.lines(paths.gfaPath)
-
-    stream.forEach(line => {
+    Files.lines(paths.gfaPath).forEach(line => {
       parseLine(line, offset)
       offset += line.length + 1
     })

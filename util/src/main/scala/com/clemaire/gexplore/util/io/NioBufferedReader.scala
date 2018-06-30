@@ -222,6 +222,18 @@ class NioBufferedReader(val path: Path,
   }
 
   /**
+    * Creates an iterable that can be iterated over to
+    * get all lines in the files in order of occurrence.
+    * The stream closes
+    *
+    * @return The Stream of lines in the file to be read.
+    */
+  def lines(): Iterable[String] =
+    Stream.from(0)
+      .takeWhile(_ => this.hasNext)
+      .map(_ => this.readLine)
+
+  /**
     * Calculates the position in file that is currently
     * being pointed to as the next location to read a
     * byte from.
