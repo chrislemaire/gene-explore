@@ -7,6 +7,8 @@ import com.clemaire.gexplore.core.gfa.reference.cache.SimpleReferenceBuilder
 import com.clemaire.gexplore.core.gfa.reference.parsing.BufferedGfa1Parser
 import org.scalatest.{BeforeAndAfter, FunSuite}
 
+import scala.collection.immutable.HashSet
+
 class SimpleReferenceBuilderTest
   extends FunSuite
     with BeforeAndAfter {
@@ -22,7 +24,7 @@ class SimpleReferenceBuilderTest
   }
 
   test("Test TB10") {
-    underTest.buildWith(new BufferedGfa1Parser())
+    underTest.buildWith(new BufferedGfa1Parser(HashSet("ORI")))
   }
 
   after {

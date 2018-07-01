@@ -18,7 +18,7 @@ trait NioBufferedWriter
   /**
     * The size of the buffer to allocate and use.
     */
-  protected[this] var bufferSize: Int = 1024 * 1024
+  protected[this] var bufferSize: Int = 8192
 
   /**
     * The buffer that is directly allocated to serve

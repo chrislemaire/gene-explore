@@ -6,13 +6,13 @@ import java.nio.ByteBuffer
 import com.clemaire.gexplore.core.gfa.{DataWriter, LengthByType}
 
 trait GenomeDataWriter
-  extends DataWriter[(Int, Map[Int, Long])]
-    with LengthByType[Map[Int, Long]] {
+  extends DataWriter[(Int, Traversable[(Int, Long)])]
+    with LengthByType[Traversable[(Int, Long)]] {
 
-  override def length(genomeCoordinates: Map[Int, Long]): Int =
+  override def length(genomeCoordinates: Traversable[(Int, Long)]): Int =
     4 + 4 + 8 * genomeCoordinates.size
 
-  override protected[this] def write(obj: (Int, Map[Int, Long]),
+  override protected[this] def write(obj: (Int, Traversable[(Int, Long)]),
                                      os: DataOutputStream): Unit = {
     os.writeInt(obj._1)
 
@@ -22,7 +22,7 @@ trait GenomeDataWriter
     })
   }
 
-  override protected[this] def write(obj: (Int, Map[Int, Long]),
+  override protected[this] def write(obj: (Int, Traversable[(Int, Long)]),
                                      ob: ByteBuffer): Unit = {
     ob.putInt(obj._1)
 

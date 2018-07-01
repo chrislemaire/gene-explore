@@ -9,7 +9,7 @@ case class ReferenceNode(name: String,
                          contentLength: Int,
                          incomingEdges: mutable.Buffer[(Int, Long)],
                          outgoingEdges: mutable.Buffer[(Int, Long)],
-                         genomeCoordinates: Map[Int, Long])
+                         genomeCoordinates: Traversable[(Int, Long)])
 
 object ReferenceNode {
   lazy val empty: ReferenceNode = ReferenceNode(

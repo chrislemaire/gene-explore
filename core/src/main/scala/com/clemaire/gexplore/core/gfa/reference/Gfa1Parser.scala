@@ -1,8 +1,8 @@
 package com.clemaire.gexplore.core.gfa.reference
 
 import com.clemaire.gexplore.core.gfa.CachePathList
+import com.clemaire.gexplore.core.gfa.reference.Gfa1Parser._
 import com.clemaire.gexplore.util.SimpleCheck.checkThatOrThrow
-import Gfa1Parser._
 
 /**
   * Exception thrown when the length of some
@@ -23,7 +23,6 @@ abstract class Gfa1ColumnLengthException(expected: Int,
                                          forLine: String)
   extends RuntimeException(s"Expected at least $expected columns in $forElement,\n" +
     s"but there were only $butWas columns in line:\n$forLine")
-
 
 /**
   * Exception thrown when the length of a
@@ -50,7 +49,6 @@ case class Gfa1SegmentColumnLengthException(private val butWas: Int,
 case class Gfa1LinkColumnLengthException(private val butWas: Int,
                                          private val forLine: String)
   extends Gfa1ColumnLengthException(LINK_MIN_LENGTH, "link", butWas, forLine)
-
 
 object Gfa1Parser {
 
@@ -83,8 +81,8 @@ object Gfa1Parser {
     * @return The map of options parsed.
     */
   def parseOptions(split: Array[String],
-                   from: Int): Map[String, String] =
-    split.drop(from).map(parseOption).toMap
+                   from: Int): Traversable[(String, String)] =
+    split.drop(from).map(parseOption)
 
   /**
     * Parses a single option and returns a tuple
@@ -101,7 +99,11 @@ object Gfa1Parser {
 
 }
 
-abstract class Gfa1Parser {
+/**
+  * @param tags  The set of tags that should be passed
+  *              to registration for the options map.
+  */
+abstract class Gfa1Parser(val tags: Set[String]) {
 
   /**
     * The [[ReferenceBuilder]] to which parsed segments
@@ -131,6 +133,25 @@ abstract class Gfa1Parser {
     *              source path.
     */
   def parse(paths: CachePathList): Unit
+
+  /**
+    * Parses the options provided from the end of a
+    * line. Given is a line-split and the index from
+    * which options can be read. Additionally, this
+    * function filters the list of options in the given
+    * set of tags early.
+    *
+    * @param split Line split from which options will
+    *              have to be parsed.
+    * @param from  Index from which on options should be
+    *              parsed.
+    * @return The map of options parsed.
+    */
+  def parseOptionsWithFilter(split: Array[String],
+                             from: Int): Traversable[(String, String)] =
+    split.drop(from)
+      .filter(s => tags(s.substring(0, s.indexOf(':'))))
+      .map(parseOption)
 
   /**
     * Parses a all lines of some GFA file and passes the
@@ -195,7 +216,7 @@ abstract class Gfa1Parser {
     cacheBuilder.registerSegment(fileOffset,
       split(SEG_NAME_INDEX),
       split(SEG_CONTENT_INDEX),
-      parseOptions(split, SEG_OPTIONS_INDEX))
+      parseOptionsWithFilter(split, SEG_OPTIONS_INDEX))
   }
 
   /**
@@ -217,7 +238,7 @@ abstract class Gfa1Parser {
     cacheBuilder.registerLink(fileOffset,
       split(LINK_FROM_INDEX),
       split(LINK_TO_INDEX),
-      parseOptions(split, LINK_OPTIONS_INDEX))
+      parseOptionsWithFilter(split, LINK_OPTIONS_INDEX))
   }
 
 }

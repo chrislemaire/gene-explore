@@ -59,15 +59,12 @@ class GenomeCoordinatesIndexWriter(paths: CachePathList,
   private var segmentIds: IntInterval = new IntInterval(Int.MaxValue, Int.MinValue)
 
   def flushIndex(): Unit = {
-    lastIndexedCoordinates.keys.foreach(gen =>
-      lastIndexedCoordinates(gen) = currentCoordinates(gen))
+    currentCoordinates.foreach(kv => lastIndexedCoordinates(kv._1) = kv._2)
 
     val chunkIndex = GenomeCoordinateChunkIndex(
       chunkId, filePos, bytesWritten,
       layers.toInterval, segmentIds.toInterval,
       lastIndexedCoordinates.toMap)
-
-    checkForFlush(length(chunkIndex))
 
     chunkId += 1
     bytesWritten = 0
@@ -76,6 +73,9 @@ class GenomeCoordinatesIndexWriter(paths: CachePathList,
     segmentIds = new IntInterval(Int.MaxValue, Int.MinValue)
 
     index += chunkIndex
+
+    checkForFlush(length(chunkIndex))
+    write(chunkIndex, buffer)
   }
 
   override def writeNode(node: ReferenceNode,
@@ -90,6 +90,11 @@ class GenomeCoordinatesIndexWriter(paths: CachePathList,
     segmentIds.pushBoundaries(node.id)
 
     bytesWritten += byteLength
+  }
+
+  override def flush(): Unit = {
+    flushIndex()
+    super.flush()
   }
 
 }

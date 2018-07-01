@@ -15,7 +15,7 @@ abstract class ReferenceBuilder[+T <: ReferenceCache](val paths: CachePathList)
     * @param options The options defining
     *                the header.
     */
-  def registerHeader(options: Map[String, String]): Unit
+  def registerHeader(options: Traversable[(String, String)]): Unit
 
   /**
     * Registers a link that is identified by its position
@@ -34,7 +34,7 @@ abstract class ReferenceBuilder[+T <: ReferenceCache](val paths: CachePathList)
   def registerLink(atOffset: Long,
                    from: String,
                    to: String,
-                   options: Map[String, String] = Map()): Unit
+                   options: Traversable[(String, String)] = Map()): Unit
 
   /**
     * Registers a segment that is identified by its position
@@ -51,7 +51,7 @@ abstract class ReferenceBuilder[+T <: ReferenceCache](val paths: CachePathList)
   def registerSegment(atOffset: Long,
                       name: String,
                       content: String,
-                      options: Map[String, String] = Map()): Unit
+                      options: Traversable[(String, String)] = Map()): Unit
 
   /**
     * Finishes building the [[ReferenceCache]] and closes the

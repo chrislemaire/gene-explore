@@ -56,9 +56,8 @@ class SimpleReferenceBuilder(private val pathsIn: CachePathList)
     */
   private var currentNode: Option[ReferenceNode] = None
 
-  override final def registerHeader(options: Map[String, String]): Unit =
-    options.filter(_._1 == "ORI").values
-      .foreach(value => value.split(";")
+  override final def registerHeader(options: Traversable[(String, String)]): Unit =
+    options.filter(_._1 == "ORI").foreach(_._2.split(";")
         .filterNot(gen => cache.genomeNames.contains(gen))
         .filterNot(_.isEmpty)
         .foreach(gen => {
@@ -71,7 +70,7 @@ class SimpleReferenceBuilder(private val pathsIn: CachePathList)
   override final def registerLink(atOffset: Long,
                                   from: String,
                                   to: String,
-                                  options: Map[String, String]): Unit = {
+                                  options: Traversable[(String, String)]): Unit = {
     val (fromId, fromLayer) = lookupNode(from)
     val (toId, toLayer) = if (lookAheadSegments.contains(to)) {
       val (toId, toLayer) = lookupNode(to)
@@ -113,7 +112,7 @@ class SimpleReferenceBuilder(private val pathsIn: CachePathList)
   override final def registerSegment(atOffset: Long,
                                      name: String,
                                      content: String,
-                                     options: Map[String, String]): Unit = {
+                                     options: Traversable[(String, String)]): Unit = {
     writeCurrentNode()
 
     val nodeGenomes = getGenomes(options)
@@ -123,7 +122,7 @@ class SimpleReferenceBuilder(private val pathsIn: CachePathList)
       id, layer, atOffset, content.length,
       incomingEdges.getOrElse(id, mutable.Buffer()),
       mutable.Buffer(),
-      nodeGenomes.map(gen => (gen, genomeCoordinates(gen))).toMap))
+      nodeGenomes.map(gen => gen -> genomeCoordinates(gen))))
 
     nodeGenomes.foreach(gen => genomeCoordinates(gen) += content.length)
   }
@@ -138,8 +137,8 @@ class SimpleReferenceBuilder(private val pathsIn: CachePathList)
     * @return The array of genomes that is extracted from
     *         the given options.
     */
-  private def getGenomes(options: Map[String, String]): Array[Int] =
-    options.getOrElse("ORI", "").split(';')
+  private def getGenomes(options: Traversable[(String, String)]): Array[Int] =
+    options.headOption.map(_._2.split(';')
       .filterNot(_.isEmpty)
       .map(s => {
         if (s forall Character.isDigit) {
@@ -147,7 +146,7 @@ class SimpleReferenceBuilder(private val pathsIn: CachePathList)
         } else {
           cache._genomeNames(s)
         }
-      })
+      })).getOrElse(Array.empty)
 
   /**
     * Writes node reference data to file through the

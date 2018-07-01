@@ -19,7 +19,7 @@ class SimpleNioBufferedReferenceWriter(paths: CachePathList,
     * through [[NioBufferedWriter]] functions.
     */
   private val _: Unit = {
-    withBufferSize(1024 * 1024 * 4)
+    withBufferSize(1024 * 1024)
     withPath(paths.referencePath)
   }
 
