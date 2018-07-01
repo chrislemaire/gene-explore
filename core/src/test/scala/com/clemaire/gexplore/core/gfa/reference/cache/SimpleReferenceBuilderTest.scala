@@ -1,4 +1,4 @@
-package com.clemaire.gexplore.core.gfa.reference.writing.cache
+package com.clemaire.gexplore.core.gfa.reference.cache
 
 import java.nio.file.Paths
 

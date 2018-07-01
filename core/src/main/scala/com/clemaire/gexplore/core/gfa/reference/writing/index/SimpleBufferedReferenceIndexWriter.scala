@@ -28,7 +28,7 @@ class SimpleBufferedReferenceIndexWriter(val paths: CachePathList)
     * The in-memory representation of the [[ReferenceIndex]]
     * that is created during writing of the index to file.
     */
-  private val index: ReferenceIndex = new ReferenceIndex()
+  val index: ReferenceIndex = new ReferenceIndex()
 
   /**
     * The id of the chunk currently being worked on.

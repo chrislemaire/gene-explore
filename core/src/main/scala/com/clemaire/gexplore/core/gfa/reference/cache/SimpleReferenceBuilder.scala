@@ -1,4 +1,4 @@
-package com.clemaire.gexplore.core.gfa.reference.writing.cache
+package com.clemaire.gexplore.core.gfa.reference.cache
 
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
@@ -168,6 +168,9 @@ class SimpleReferenceBuilder(private val pathsIn: CachePathList)
     try {
       writeCurrentNode()
       writer.flush()
+
+      cache._index = writer.index
+      cache._coordinatesIndex = writer.coordinatesIndex
 
       cache
     } finally {

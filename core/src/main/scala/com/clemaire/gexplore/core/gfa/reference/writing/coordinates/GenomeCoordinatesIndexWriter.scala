@@ -28,7 +28,7 @@ class GenomeCoordinatesIndexWriter(paths: CachePathList,
   /**
     * The index keeping track of genome coordinate chunks.
     */
-  private val index: GenomeCoordinateIndex = new GenomeCoordinateIndex()
+  val index: GenomeCoordinateIndex = new GenomeCoordinateIndex()
 
   /**
     * The current chunk ID.
