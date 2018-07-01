@@ -58,17 +58,27 @@ class CachePathList(val gfaPath: Path)
   /**
     * Reference-level cache file extension.
     */
-  private val REFERENCE_EXT = ".ger"
+  private val REFERENCE_EXT = ".grc"
 
   /**
     * Reference-level index file extension.
     */
-  private val REFERENCE_INDEX_EXT = ".gei"
+  private val REFERENCE_INDEX_EXT = ".gri"
 
   /**
     * Heat map file extension.
     */
   private val HEAT_MAP_EXT = ".geh"
+
+  /**
+    * Coordinates cache file extension.
+    */
+  private val COORDINATES_EXT = ".gcc"
+
+  /**
+    * Coordinates index file extension.
+    */
+  private val COORDINATES_INDEX_EXT = ".gci"
 
   /**
     * Path to the reference-level cache file.
@@ -84,6 +94,16 @@ class CachePathList(val gfaPath: Path)
     * Path to the reference-level cache file.
     */
   val heatMapPath: Path = APP_DATA.resolve(gfaName + HEAT_MAP_EXT)
+
+  /**
+    * Path to the coordinates cache file.
+    */
+  val coordinatesPath: Path = APP_DATA.resolve(gfaName + COORDINATES_EXT)
+
+  /**
+    * Path to the coordinates index file.
+    */
+  val coordinatesIndexPath: Path = APP_DATA.resolve(gfaName + COORDINATES_INDEX_EXT)
 
   /**
     * List of paths used as the underlying structure

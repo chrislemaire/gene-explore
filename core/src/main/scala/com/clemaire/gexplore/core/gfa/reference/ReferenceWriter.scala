@@ -4,7 +4,7 @@ import java.io.Writer
 
 trait ReferenceWriter extends Writer {
 
-  override def write(cbuf: Array[Char], off: Int, len: Int): Unit = {}
+  override def write(charBuf: Array[Char], off: Int, len: Int): Unit = {}
 
   /**
     * Writes a single ReferenceNode to file.

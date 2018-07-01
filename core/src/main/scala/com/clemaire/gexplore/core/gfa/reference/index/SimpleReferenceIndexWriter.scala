@@ -3,18 +3,16 @@ package com.clemaire.gexplore.core.gfa.reference.index
 import java.io.DataOutputStream
 import java.nio.ByteBuffer
 
-import com.clemaire.gexplore.core.gfa.reference.additional.AdditionalReferenceWriter
+import com.clemaire.gexplore.core.gfa.{DataWriter, StaticLength}
 
 trait SimpleReferenceIndexWriter
-  extends AdditionalReferenceWriter {
+  extends DataWriter[ReferenceChunkIndex]
+    with StaticLength {
 
-  /**
-    * The length of each chunk index in the written file.
-    */
-  protected[this] val chunkLength: Int = 4 * 6 + 8
+  override val LENGTH: Int = 4 * 6 + 8
 
-  protected[this] def write(indexChunk: ReferenceChunkIndex,
-                            os: DataOutputStream): Unit = {
+  override def write(indexChunk: ReferenceChunkIndex,
+                     os: DataOutputStream): Unit = {
     os.writeInt(indexChunk.id)
     os.writeLong(indexChunk.filePos)
     os.writeInt(indexChunk.length)
@@ -24,8 +22,8 @@ trait SimpleReferenceIndexWriter
     os.writeInt(indexChunk.segmentIds.getEnd)
   }
 
-  protected[this] def write(indexChunk: ReferenceChunkIndex,
-                            ob: ByteBuffer): Unit = {
+  override def write(indexChunk: ReferenceChunkIndex,
+                     ob: ByteBuffer): Unit = {
     ob.putInt(indexChunk.id)
     ob.putLong(indexChunk.filePos)
     ob.putInt(indexChunk.length)

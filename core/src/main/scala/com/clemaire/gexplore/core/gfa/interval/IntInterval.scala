@@ -9,4 +9,14 @@ class IntInterval(var start: Int = Int.MinValue,
   def toInterval: IntegerInterval =
     new IntegerInterval(start, end, Bounded.CLOSED)
 
+  /**
+    * Updates this interval such that its range
+    * contains its previous range plus the given value.
+    *
+    * @param value    The value to push into the interval.
+    */
+  def pushBoundaries(value: Int): Unit =
+    if (value < start) start = value
+    else if (value > end) end = value
+
 }

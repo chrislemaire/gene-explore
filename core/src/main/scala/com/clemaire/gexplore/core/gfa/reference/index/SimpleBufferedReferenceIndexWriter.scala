@@ -10,9 +10,9 @@ import SimpleBufferedReferenceIndexWriter._
 
 object SimpleBufferedReferenceIndexWriter {
   /**
-    * The size of each index chunk in segments.
+    * The size of each index chunk in bytes.
     */
-  private val INDEX_CHUNK_SIZE = 4096
+  private val MAX_CHUNK_LENGTH = 1024 * 1024
 }
 
 class SimpleBufferedReferenceIndexWriter(val paths: CachePathList)
@@ -28,24 +28,29 @@ class SimpleBufferedReferenceIndexWriter(val paths: CachePathList)
     * The in-memory representation of the [[ReferenceIndex]]
     * that is created during writing of the index to file.
     */
-  private val index: ReferenceIndex = new ReferenceIndex(paths)
+  private val index: ReferenceIndex = new ReferenceIndex()
 
   /**
     * The id of the chunk currently being worked on.
     */
-  private var chunkId = 0
+  private var chunkId: Int = 0
 
   /**
-    * The position in the file the chunk that is currently
-    * being processed starts.
+    * The number of nodes currently processed into the chunk.
     */
-  private var length: Int = 0
+  private var nodesProcessed: Int = 0
 
   /**
     * The position in the file the chunk that is currently
     * being processed starts.
     */
   private var filePos: Long = 0
+
+  /**
+    * The number of bytes written to disk for the nodes the
+    * currently being processed chunk references.
+    */
+  private var bytesWritten: Int = 0
 
   /**
     * The interval containing the range of layers in the
@@ -60,47 +65,41 @@ class SimpleBufferedReferenceIndexWriter(val paths: CachePathList)
   private var segmentIds: IntInterval = new IntInterval(Int.MaxValue, Int.MinValue)
 
   /**
-    * Updates the given interval such that its range
-    * contains its previous range plus the given value.
-    *
-    * @param interval The interval to update.
-    * @param value    The value to push into the interval.
-    */
-  private[this] def pushBoundaries(interval: IntInterval,
-                                   value: Int): Unit =
-    if (value < interval.start) interval.start = value
-    else if (value > interval.end) interval.end = value
-
-  /**
     * Flushes the currently being built [[ReferenceChunkIndex]]
     * to the [[ReferenceIndex]] and the index file.
     */
   private[this] def flushIndex(): Unit = {
-    checkForFlush(chunkLength)
+    checkForFlush(LENGTH)
 
     val chunkIndex = ReferenceChunkIndex(chunkId,
-      length, filePos,
+      filePos, bytesWritten,
       layers.toInterval, segmentIds.toInterval)
 
-    chunkId += 1
-    length = 0
     index += chunkIndex
+
+    chunkId += 1
+    nodesProcessed = 0
+    bytesWritten = 0
+
     layers = new IntInterval(Int.MaxValue, Int.MinValue)
     segmentIds = new IntInterval(Int.MaxValue, Int.MinValue)
 
     write(chunkIndex, buffer)
   }
 
-  override def writeNode(node: ReferenceNode): Unit = {
-    if (length >= INDEX_CHUNK_SIZE) {
+  override def writeNode(node: ReferenceNode,
+                         byteLength: Int): Unit = {
+    if (bytesWritten >= MAX_CHUNK_LENGTH) {
       flushIndex()
 
       filePos = node.fileOffset
     }
 
-    pushBoundaries(layers, node.layer)
-    pushBoundaries(segmentIds, node.id)
-    length += 1
+    layers.pushBoundaries(node.layer)
+    segmentIds.pushBoundaries(node.id)
+
+    nodesProcessed += 1
+    bytesWritten += byteLength
   }
 
   override def flush(): Unit = {

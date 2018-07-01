@@ -11,19 +11,19 @@ class SimpleReferenceCache extends ReferenceCache {
     * The mapping of genomes to their indices, or
     * identifiers.
     */
-  private[cache] val _genomes: mutable.Map[String, Int] =
+  private[cache] val _genomeNames: mutable.Map[String, Int] =
     mutable.HashMap()
 
   /**
     * The mapping of genomes to their indices, or
     * identifiers.
     */
-  private[cache] val _genomeNames: mutable.Map[Int, String] =
+  private[cache] val _genomes: mutable.Map[Int, String] =
     mutable.HashMap()
 
-  def genomeNames: Map[String, Int] = _genomes.toMap
+  def genomeNames: Map[String, Int] = _genomeNames.toMap
 
-  def genomes: Map[Int, String] = _genomeNames.toMap
+  def genomes: Map[Int, String] = _genomes.toMap
 
   override def getFullNode(id: Int): FullNode = ???
 

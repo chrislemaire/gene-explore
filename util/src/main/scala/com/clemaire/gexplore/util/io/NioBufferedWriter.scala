@@ -28,6 +28,22 @@ trait NioBufferedWriter
   protected[this] var buffer: ByteBuffer =
     ByteBuffer.allocateDirect(bufferSize)
 
+  override def write(charBuf: Array[Char],
+                     off: Int,
+                     len: Int): Unit = {
+    var arrPos = off
+    while (arrPos < off + len) {
+      checkForFlush(len)
+
+      val pos = buffer.position()
+      val limit = buffer.limit()
+      for (_ <- pos until limit) {
+        buffer.put(charBuf(arrPos).toByte)
+        arrPos += 1
+      }
+    }
+  }
+
   /**
     * Flushes the current buffer to the current [[FileChannel]]
     * in a blocking fashion after confirming the buffer has

@@ -1,8 +1,8 @@
 package com.clemaire.gexplore.core.gfa.reference.cache
 
 import com.clemaire.gexplore.core.gfa.CachePathList
-import com.clemaire.gexplore.core.gfa.reference.{ReferenceBuilder, ReferenceNode}
-import com.clemaire.gexplore.core.gfa.reference.io.{SimpleNioBufferedReferenceWriterWith, SimpleReferenceWriter}
+import com.clemaire.gexplore.core.gfa.reference.{ReferenceBuilder, ReferenceNode, ReferenceWriter}
+import com.clemaire.gexplore.core.gfa.reference.io.SimpleNioBufferedReferenceWriter
 
 import scala.collection.mutable
 
@@ -26,25 +26,30 @@ class SimpleReferenceBuilder(private val pathsIn: CachePathList)
     */
   private val incomingEdges: mutable.Map[Int, mutable.Buffer[(Int, Long)]] =
     mutable.Map()
+
   /**
     * The mapping of genome IDs to their respective
     * current coordinate.
     */
-  private[cache] val genomeCoordinates: mutable.Map[Int, Long] =
+  val genomeCoordinates: mutable.Map[Int, Long] =
     mutable.HashMap()
+
   /**
     * Writer to write the node-reference data to file.
     */
-  private val writer: SimpleReferenceWriter =
-    new SimpleNioBufferedReferenceWriterWith(paths)
+  private val writer: ReferenceWriter =
+    new SimpleNioBufferedReferenceWriter(paths, this)
+
   /**
     * The number of genomes currently counted.
     */
   private var genomeIndex = -1
+
   /**
     * The number of segments currently counted.
     */
   private var segmentIndex = -1
+
   /**
     * The current node being built by the reference
     * builder wrapped in an option.
@@ -58,8 +63,8 @@ class SimpleReferenceBuilder(private val pathsIn: CachePathList)
         .filterNot(_.isEmpty)
         .foreach(gen => {
           genomeIndex += 1
-          cache._genomes += gen -> genomeIndex
-          cache._genomeNames += genomeIndex -> gen
+          cache._genomeNames += gen -> genomeIndex
+          cache._genomes += genomeIndex -> gen
           genomeCoordinates(genomeIndex) = 0
         }))
 
@@ -118,7 +123,7 @@ class SimpleReferenceBuilder(private val pathsIn: CachePathList)
       id, layer, atOffset, content.length,
       incomingEdges.getOrElse(id, mutable.Buffer()),
       mutable.Buffer(),
-      nodeGenomes.map(gen => (gen, genomeCoordinates(gen)))))
+      nodeGenomes.map(gen => (gen, genomeCoordinates(gen))).toMap))
 
     nodeGenomes.foreach(gen => genomeCoordinates(gen) += content.length)
   }
@@ -140,7 +145,7 @@ class SimpleReferenceBuilder(private val pathsIn: CachePathList)
         if (s forall Character.isDigit) {
           s.toInt
         } else {
-          cache._genomes(s)
+          cache._genomeNames(s)
         }
       })
 

@@ -27,7 +27,8 @@ class SingleFlushHeatMapWriter(val paths: CachePathList)
   private val nodesPerLayer: mutable.Map[Int, Int] =
     mutable.HashMap()
 
-  override def writeNode(node: ReferenceNode): Unit =
+  override def writeNode(node: ReferenceNode,
+                         byteLength: Int): Unit =
     if (nodesPerLayer.contains(node.layer)) {
       nodesPerLayer(node.layer) += 1
     } else {

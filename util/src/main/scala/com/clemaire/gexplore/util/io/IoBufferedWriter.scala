@@ -3,8 +3,7 @@ package com.clemaire.gexplore.util.io
 import java.io.{BufferedOutputStream, DataOutputStream, Writer}
 import java.nio.file.{Files, Path, StandardOpenOption}
 
-trait IoBufferedWriter
-  extends Writer {
+trait IoBufferedWriter extends Writer {
 
   /**
     * The [[DataOutputStream]] to write data to.

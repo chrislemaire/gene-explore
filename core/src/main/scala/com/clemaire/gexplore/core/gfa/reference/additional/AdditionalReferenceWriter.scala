@@ -11,12 +11,11 @@ abstract class AdditionalReferenceWriter
     * Writes the given node to the additional
     * reference cache through this writer.
     *
-    * @param node The [[ReferenceNode]] to write.
+    * @param node       The [[ReferenceNode]] to write.
+    * @param byteLength The number of bytes written to
+    *                   disk to store the [[ReferenceNode]].
     */
-  def writeNode(node: ReferenceNode): Unit
-
-  override def write(cbuf: Array[Char],
-                     off: Int,
-                     len: Int): Unit = {}
+  def writeNode(node: ReferenceNode,
+                byteLength: Int): Unit
 
 }

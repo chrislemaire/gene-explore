@@ -3,13 +3,16 @@ package com.clemaire.gexplore.core.gfa.reference.io
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.additional.SingleFlushHeatMapWriter
+import com.clemaire.gexplore.core.gfa.reference.cache.SimpleReferenceBuilder
+import com.clemaire.gexplore.core.gfa.reference.coordinates.GenomeCoordinatesWriter
 import com.clemaire.gexplore.core.gfa.reference.index.SimpleBufferedReferenceIndexWriter
 import com.clemaire.gexplore.util.io.{AsyncNioBufferedWriter, NioBufferedWriter}
 
-class SimpleNioBufferedReferenceWriterWith(paths: CachePathList)
-  extends AsyncNioBufferedWriter[ReferenceNode]
-    with SimpleReferenceWriter
-    with AdditionalReferenceWriters {
+class SimpleNioBufferedReferenceWriter(paths: CachePathList,
+                                       builder: SimpleReferenceBuilder)
+  extends AsyncNioBufferedWriter[(ReferenceNode, Int)]
+    with SimpleReferenceDataWriter
+    with AdditionalReferenceWriterWorkBuffer {
 
   /**
     * Initializes the buffer and file channel indirectly
@@ -22,13 +25,16 @@ class SimpleNioBufferedReferenceWriterWith(paths: CachePathList)
 
   override protected[this] val additionalWriters = Seq(
     new SingleFlushHeatMapWriter(paths),
-    new SimpleBufferedReferenceIndexWriter(paths)
+    new SimpleBufferedReferenceIndexWriter(paths),
+    new GenomeCoordinatesWriter(paths, builder.genomeCoordinates)
   )
 
   override def write(node: ReferenceNode): Unit = {
-    checkForFlush(length(node))
+    val len = length(node)
+    checkForFlush(len)
+
     write(node, buffer)
-    addWork(node)
+    addWork(node -> len)
   }
 
   override def flush(): Unit = {
