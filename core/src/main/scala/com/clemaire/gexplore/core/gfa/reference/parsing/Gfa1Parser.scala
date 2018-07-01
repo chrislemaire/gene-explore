@@ -1,7 +1,8 @@
-package com.clemaire.gexplore.core.gfa.reference
+package com.clemaire.gexplore.core.gfa.reference.parsing
 
 import com.clemaire.gexplore.core.gfa.CachePathList
-import com.clemaire.gexplore.core.gfa.reference.Gfa1Parser._
+import com.clemaire.gexplore.core.gfa.reference.parsing.Gfa1Parser._
+import com.clemaire.gexplore.core.gfa.reference.writing.ReferenceBuilder
 import com.clemaire.gexplore.util.SimpleCheck.checkThatOrThrow
 
 /**

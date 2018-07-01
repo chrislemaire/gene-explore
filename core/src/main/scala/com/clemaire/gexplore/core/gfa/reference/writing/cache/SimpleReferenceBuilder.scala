@@ -1,8 +1,9 @@
-package com.clemaire.gexplore.core.gfa.reference.cache
+package com.clemaire.gexplore.core.gfa.reference.writing.cache
 
 import com.clemaire.gexplore.core.gfa.CachePathList
-import com.clemaire.gexplore.core.gfa.reference.{ReferenceBuilder, ReferenceNode, ReferenceWriter}
-import com.clemaire.gexplore.core.gfa.reference.io.SimpleNioBufferedReferenceWriter
+import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
+import com.clemaire.gexplore.core.gfa.reference.writing.{ReferenceBuilder, ReferenceWriter}
+import com.clemaire.gexplore.core.gfa.reference.writing.io.SimpleNioBufferedReferenceWriter
 
 import scala.collection.mutable
 

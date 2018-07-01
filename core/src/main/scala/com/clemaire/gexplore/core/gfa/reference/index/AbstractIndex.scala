@@ -1,4 +1,4 @@
-package com.clemaire.gexplore.core.gfa.reference
+package com.clemaire.gexplore.core.gfa.reference.index
 
 import com.clemaire.gexplore.core.gfa.interval.IntervalTreeMap
 import com.lodborg.intervaltree.IntegerInterval

@@ -1,6 +1,8 @@
-package com.clemaire.gexplore.core.gfa.reference
+package com.clemaire.gexplore.core.gfa.reference.writing
 
 import java.io.Writer
+
+import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
 
 trait ReferenceWriter
   extends Writer {

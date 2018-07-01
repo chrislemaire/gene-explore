@@ -1,6 +1,5 @@
 package com.clemaire.gexplore.core.gfa.reference.index
 
-import com.clemaire.gexplore.core.gfa.reference.{AbstractIndex, ChunkIndex}
 import com.lodborg.intervaltree.IntegerInterval
 
 case class ReferenceChunkIndex private[index]

@@ -1,11 +1,11 @@
-package com.clemaire.gexplore.core.gfa.reference.index
+package com.clemaire.gexplore.core.gfa.reference.writing.index
 
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.interval.IntInterval
 import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
-import com.clemaire.gexplore.core.gfa.reference.additional.AdditionalReferenceWriter
+import com.clemaire.gexplore.core.gfa.reference.index.{ReferenceChunkIndex, ReferenceIndex}
+import com.clemaire.gexplore.core.gfa.reference.writing.additional.AdditionalReferenceWriter
 import com.clemaire.gexplore.util.io.NioBufferedWriter
-
 import SimpleBufferedReferenceIndexWriter._
 
 object SimpleBufferedReferenceIndexWriter {

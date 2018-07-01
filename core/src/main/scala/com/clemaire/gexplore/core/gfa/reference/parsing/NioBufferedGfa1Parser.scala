@@ -1,7 +1,6 @@
 package com.clemaire.gexplore.core.gfa.reference.parsing
 
 import com.clemaire.gexplore.core.gfa.CachePathList
-import com.clemaire.gexplore.core.gfa.reference.Gfa1Parser
 import com.clemaire.gexplore.util.io.NioBufferedReader
 
 class NioBufferedGfa1Parser(tags: Set[String])

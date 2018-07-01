@@ -1,4 +1,4 @@
-package com.clemaire.gexplore.core.gfa.reference.cache
+package com.clemaire.gexplore.core.gfa.reference.writing.cache
 
 import com.clemaire.gexplore.core.gfa.data.{FullEdge, FullNode, Node}
 import com.clemaire.gexplore.core.gfa.reference.ReferenceCache

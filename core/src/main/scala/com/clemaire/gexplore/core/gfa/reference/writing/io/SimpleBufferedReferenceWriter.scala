@@ -1,11 +1,11 @@
-package com.clemaire.gexplore.core.gfa.reference.io
+package com.clemaire.gexplore.core.gfa.reference.writing.io
 
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
-import com.clemaire.gexplore.core.gfa.reference.additional.SingleFlushHeatMapWriter
-import com.clemaire.gexplore.core.gfa.reference.cache.SimpleReferenceBuilder
-import com.clemaire.gexplore.core.gfa.reference.coordinates.GenomeCoordinatesWriter
-import com.clemaire.gexplore.core.gfa.reference.index.SimpleBufferedReferenceIndexWriter
+import com.clemaire.gexplore.core.gfa.reference.writing.additional.SingleFlushHeatMapWriter
+import com.clemaire.gexplore.core.gfa.reference.writing.cache.SimpleReferenceBuilder
+import com.clemaire.gexplore.core.gfa.reference.writing.coordinates.GenomeCoordinatesWriter
+import com.clemaire.gexplore.core.gfa.reference.writing.index.SimpleBufferedReferenceIndexWriter
 import com.clemaire.gexplore.util.io.IoBufferedWriter
 
 class SimpleBufferedReferenceWriter(paths: CachePathList,

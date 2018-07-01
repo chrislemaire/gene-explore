@@ -1,10 +1,11 @@
-package com.clemaire.gexplore.core.gfa.reference.coordinates
+package com.clemaire.gexplore.core.gfa.reference.writing.coordinates
 
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.interval.IntInterval
 import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
-import com.clemaire.gexplore.core.gfa.reference.additional.AdditionalReferenceWriter
-import com.clemaire.gexplore.core.gfa.reference.coordinates.GenomeCoordinatesIndexWriter._
+import com.clemaire.gexplore.core.gfa.reference.index.{GenomeCoordinateChunkIndex, GenomeCoordinateIndex}
+import com.clemaire.gexplore.core.gfa.reference.writing.additional.AdditionalReferenceWriter
+import com.clemaire.gexplore.core.gfa.reference.writing.coordinates.GenomeCoordinatesIndexWriter._
 import com.clemaire.gexplore.util.io.NioBufferedWriter
 
 import scala.collection.mutable

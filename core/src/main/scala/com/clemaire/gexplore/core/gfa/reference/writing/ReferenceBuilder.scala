@@ -1,6 +1,8 @@
-package com.clemaire.gexplore.core.gfa.reference
+package com.clemaire.gexplore.core.gfa.reference.writing
 
 import com.clemaire.gexplore.core.gfa.CachePathList
+import com.clemaire.gexplore.core.gfa.reference.ReferenceCache
+import com.clemaire.gexplore.core.gfa.reference.parsing.Gfa1Parser
 
 abstract class ReferenceBuilder[+T <: ReferenceCache](val paths: CachePathList)
   extends AutoCloseable {

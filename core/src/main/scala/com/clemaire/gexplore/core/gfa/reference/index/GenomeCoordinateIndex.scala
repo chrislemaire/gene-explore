@@ -1,9 +1,8 @@
-package com.clemaire.gexplore.core.gfa.reference.coordinates
+package com.clemaire.gexplore.core.gfa.reference.index
 
-import com.clemaire.gexplore.core.gfa.reference.{AbstractIndex, ChunkIndex}
 import com.lodborg.intervaltree.IntegerInterval
 
-case class GenomeCoordinateChunkIndex private[coordinates]
+case class GenomeCoordinateChunkIndex private[index]
 (override val id: Int,
  override val filePos: Long,
  override val length: Int,
