@@ -2,16 +2,16 @@ package com.clemaire.gexplore.core.gfa.reference.cache
 
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
-import com.clemaire.gexplore.core.gfa.reference.writing.{ReferenceBuilder, ReferenceWriter}
-import com.clemaire.gexplore.core.gfa.reference.writing.io.SimpleNioBufferedReferenceWriter
+import com.clemaire.gexplore.core.gfa.reference.writing.{ReferenceCacheBuilder, ReferenceNodeWriter}
+import com.clemaire.gexplore.core.gfa.reference.writing.io.SimpleNioBufferedReferenceNodeWriter
 
 import scala.collection.mutable
 
-class SimpleReferenceBuilder(private val pathsIn: CachePathList)
-  extends ReferenceBuilder[SimpleReferenceCache](pathsIn) {
+class SimpleReferenceCacheBuilder(private val pathsIn: CachePathList)
+  extends ReferenceCacheBuilder[SimpleReferenceCache](pathsIn) {
 
   /**
-    * The cache being built by this [[SimpleReferenceBuilder]].
+    * The cache being built by this [[SimpleReferenceCacheBuilder]].
     */
   private val cache: SimpleReferenceCache = new SimpleReferenceCache()
 
@@ -38,8 +38,8 @@ class SimpleReferenceBuilder(private val pathsIn: CachePathList)
   /**
     * Writer to write the node-reference data to file.
     */
-  private val writer: ReferenceWriter =
-    new SimpleNioBufferedReferenceWriter(paths, this)
+  private val writer: ReferenceNodeWriter =
+    new SimpleNioBufferedReferenceNodeWriter(paths, this)
 
   /**
     * The number of genomes currently counted.

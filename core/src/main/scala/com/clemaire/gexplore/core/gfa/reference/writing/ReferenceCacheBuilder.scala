@@ -4,7 +4,7 @@ import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.reference.ReferenceCache
 import com.clemaire.gexplore.core.gfa.reference.parsing.Gfa1Parser
 
-abstract class ReferenceBuilder[+T <: ReferenceCache](val paths: CachePathList)
+abstract class ReferenceCacheBuilder[+T <: ReferenceCache](val paths: CachePathList)
   extends AutoCloseable {
 
   /**
@@ -57,7 +57,7 @@ abstract class ReferenceBuilder[+T <: ReferenceCache](val paths: CachePathList)
 
   /**
     * Finishes building the [[ReferenceCache]] and closes the
-    * [[ReferenceBuilder]].
+    * [[ReferenceCacheBuilder]].
     *
     * @return The built [[ReferenceCache]].
     */

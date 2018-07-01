@@ -2,24 +2,25 @@ package com.clemaire.gexplore.core.gfa.reference.writing.io
 
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
-import com.clemaire.gexplore.core.gfa.reference.cache.SimpleReferenceBuilder
+import com.clemaire.gexplore.core.gfa.reference.cache.SimpleReferenceCacheBuilder
 import com.clemaire.gexplore.core.gfa.reference.index.{GenomeCoordinateIndex, ReferenceIndex}
 import com.clemaire.gexplore.core.gfa.reference.writing.additional.{AdditionalReferenceWriter, SingleFlushHeatMapWriter}
 import com.clemaire.gexplore.core.gfa.reference.writing.coordinates.GenomeCoordinatesWriter
 import com.clemaire.gexplore.core.gfa.reference.writing.index.SimpleBufferedReferenceIndexWriter
-import com.clemaire.gexplore.util.io.IoBufferedWriter
+import com.clemaire.gexplore.util.io.{AsyncNioBufferedWriter, NioBufferedWriter}
 
-class SimpleBufferedReferenceWriter(paths: CachePathList,
-                                    builder: SimpleReferenceBuilder)
-  extends IoBufferedWriter
+class SimpleNioBufferedReferenceNodeWriter(paths: CachePathList,
+                                           builder: SimpleReferenceCacheBuilder)
+  extends AsyncNioBufferedWriter[(ReferenceNode, Int)]
     with SimpleReferenceDataWriter
     with AdditionalReferenceWriterWorkBuffer {
 
   /**
-    * Initializes the writer by setting the path for
-    * the [[IoBufferedWriter]] to write to.
+    * Initializes the buffer and file channel indirectly
+    * through [[NioBufferedWriter]] functions.
     */
   private val _: Unit = {
+    withBufferSize(4 * 1024 * 1024)
     withPath(paths.referencePath)
   }
 
@@ -47,8 +48,11 @@ class SimpleBufferedReferenceWriter(paths: CachePathList,
     )
 
   override def write(node: ReferenceNode): Unit = {
-    write(node, os)
-    additionalWriters.foreach(_.writeNode(node, length(node)))
+    val len = length(node)
+    checkForFlush(len)
+
+    write(node, buffer)
+    addWork(node -> len)
   }
 
   override def flush(): Unit = {

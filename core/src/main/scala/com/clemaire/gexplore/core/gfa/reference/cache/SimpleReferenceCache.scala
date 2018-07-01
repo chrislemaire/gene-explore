@@ -1,6 +1,6 @@
 package com.clemaire.gexplore.core.gfa.reference.cache
 
-import com.clemaire.gexplore.core.gfa.data.{FullEdge, FullNode, Node}
+import com.clemaire.gexplore.core.gfa.data.Node
 import com.clemaire.gexplore.core.gfa.reference.ReferenceCache
 import com.clemaire.gexplore.core.gfa.reference.index.{GenomeCoordinateIndex, ReferenceIndex}
 
@@ -39,13 +39,6 @@ class SimpleReferenceCache extends ReferenceCache {
 
   def genomes: Map[Int, String] = _genomes.toMap
 
-  override def getFullNode(id: Int): FullNode = ???
-
-  override def getFullNode(name: String): FullNode = ???
-
-  override def getFullEdge(id: Int): FullEdge = ???
-
-  override def getNode(id: Int): Node = ???
-
-  override def getNode(name: String): Node = ???
+  override def nodesBetweenLayers(left: Int,
+                                  right: Int): Traversable[Node] = ???
 }

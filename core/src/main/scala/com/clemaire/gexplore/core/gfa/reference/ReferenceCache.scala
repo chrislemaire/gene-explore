@@ -1,17 +1,12 @@
 package com.clemaire.gexplore.core.gfa.reference
 
-import com.clemaire.gexplore.core.gfa.data.{FullEdge, FullNode, Node}
+import com.clemaire.gexplore.core.gfa.data.Node
 
 trait ReferenceCache {
 
-  def getFullNode(id: Int): FullNode
+  def nodesBetweenLayers(left: Int,
+                         right: Int): Traversable[Node]
 
-  def getFullNode(name: String): FullNode
-
-  def getFullEdge(id: Int): FullEdge
-
-  def getNode(id: Int): Node
-
-  def getNode(name: String): Node
+  def
 
 }

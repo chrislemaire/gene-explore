@@ -5,7 +5,7 @@ import java.io.Writer
 import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.index.{GenomeCoordinateIndex, ReferenceIndex}
 
-trait ReferenceWriter
+trait ReferenceNodeWriter
   extends Writer {
 
   override def write(charBuf: Array[Char], off: Int, len: Int): Unit = {}
