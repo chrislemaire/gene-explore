@@ -1,2 +1,8 @@
+image: sbt
+
+install:
+  - echo "Oh Well"
+  - sleep 20
+
 script:
   - echo "Hello World"
