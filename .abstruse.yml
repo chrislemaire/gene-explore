@@ -12,3 +12,6 @@ install:
 
 script:
   - sbt test
+
+cache:
+  - .m2
