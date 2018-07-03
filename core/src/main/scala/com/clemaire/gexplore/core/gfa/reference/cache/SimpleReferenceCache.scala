@@ -42,4 +42,3 @@ class SimpleReferenceCache extends ReferenceCache {
   override def nodesBetweenLayers(left: Int,
                                   right: Int): Traversable[Node] = ???
 }
-
