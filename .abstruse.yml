@@ -1,2 +1,8 @@
+image: hseeberger/scala-sbt
+
+install:
+  - echo "Oh Well"
+#  - sbt install
+
 script:
   - echo "Hello World"
