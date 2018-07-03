@@ -1,4 +1,4 @@
-image: hseeberger/scala-sbt
+image: sbt
 
 install:
   - echo "Oh Well"
