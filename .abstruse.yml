@@ -1,8 +1,14 @@
 image: sbt
 
+matrix:
+  - env: JAVA_VERSION=8
+
+before_install:
+  - sbt clean
+
 install:
-  - echo "Oh Well"
-  - sleep 20
+  - sbt reload
+  - sbt install
 
 script:
-  - echo "Hello World"
+  - sbt test
