@@ -1,11 +1,11 @@
-package com.clemaire.gexplore.core.gfa.reference.index
+package com.clemaire.gexplore.core.gfa.reference.writing.index
 
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.interval.IntInterval
 import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
-import com.clemaire.gexplore.core.gfa.reference.additional.AdditionalReferenceWriter
+import com.clemaire.gexplore.core.gfa.reference.index.{ReferenceChunkIndex, ReferenceIndex}
+import com.clemaire.gexplore.core.gfa.reference.writing.additional.AdditionalReferenceWriter
 import com.clemaire.gexplore.util.io.NioBufferedWriter
-
 import SimpleBufferedReferenceIndexWriter._
 
 object SimpleBufferedReferenceIndexWriter {
@@ -28,7 +28,7 @@ class SimpleBufferedReferenceIndexWriter(val paths: CachePathList)
     * The in-memory representation of the [[ReferenceIndex]]
     * that is created during writing of the index to file.
     */
-  private val index: ReferenceIndex = new ReferenceIndex()
+  val index: ReferenceIndex = new ReferenceIndex()
 
   /**
     * The id of the chunk currently being worked on.

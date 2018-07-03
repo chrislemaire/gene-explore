@@ -1,4 +1,4 @@
-package com.clemaire.gexplore.core.gfa.reference.additional
+package com.clemaire.gexplore.core.gfa.reference.writing.additional
 
 import java.io.Writer
 

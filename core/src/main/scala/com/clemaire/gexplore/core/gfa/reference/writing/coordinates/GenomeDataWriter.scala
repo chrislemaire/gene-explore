@@ -1,4 +1,4 @@
-package com.clemaire.gexplore.core.gfa.reference.coordinates
+package com.clemaire.gexplore.core.gfa.reference.writing.coordinates
 
 import java.io.DataOutputStream
 import java.nio.ByteBuffer

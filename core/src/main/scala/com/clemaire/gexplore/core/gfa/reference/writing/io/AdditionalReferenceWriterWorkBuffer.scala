@@ -1,10 +1,11 @@
-package com.clemaire.gexplore.core.gfa.reference.io
+package com.clemaire.gexplore.core.gfa.reference.writing.io
 
-import com.clemaire.gexplore.core.gfa.reference.{ReferenceNode, ReferenceWriter}
-import com.clemaire.gexplore.core.gfa.reference.additional.AdditionalReferenceWriter
+import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
+import com.clemaire.gexplore.core.gfa.reference.writing.additional.AdditionalReferenceWriter
+import com.clemaire.gexplore.core.gfa.reference.writing.ReferenceNodeWriter
 
 trait AdditionalReferenceWriterWorkBuffer
-  extends ReferenceWriter {
+  extends ReferenceNodeWriter {
 
   /**
     * The sequence of [[AdditionalReferenceWriter]]

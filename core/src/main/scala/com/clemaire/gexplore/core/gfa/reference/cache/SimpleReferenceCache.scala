@@ -1,11 +1,25 @@
 package com.clemaire.gexplore.core.gfa.reference.cache
 
-import com.clemaire.gexplore.core.gfa.data.{FullEdge, FullNode, Node}
+import com.clemaire.gexplore.core.gfa.data.Node
 import com.clemaire.gexplore.core.gfa.reference.ReferenceCache
+import com.clemaire.gexplore.core.gfa.reference.index.{GenomeCoordinateIndex, ReferenceIndex}
 
 import scala.collection.mutable
 
 class SimpleReferenceCache extends ReferenceCache {
+
+  /**
+    * The index of reference nodes used to retrieve
+    * chunks of nodes by their layer or segment overlap.
+    */
+  private[cache] var _index: ReferenceIndex = _
+
+  /**
+    * The index of genome coordinates used to retrieve
+    * chunks of genome coordinates by the layer or
+    * segment ID the corresponding nodes have.
+    */
+  private[cache] var _coordinatesIndex: GenomeCoordinateIndex = _
 
   /**
     * The mapping of genomes to their indices, or
@@ -25,13 +39,6 @@ class SimpleReferenceCache extends ReferenceCache {
 
   def genomes: Map[Int, String] = _genomes.toMap
 
-  override def getFullNode(id: Int): FullNode = ???
-
-  override def getFullNode(name: String): FullNode = ???
-
-  override def getFullEdge(id: Int): FullEdge = ???
-
-  override def getNode(id: Int): Node = ???
-
-  override def getNode(name: String): Node = ???
+  override def nodesBetweenLayers(left: Int,
+                                  right: Int): Traversable[Node] = ???
 }

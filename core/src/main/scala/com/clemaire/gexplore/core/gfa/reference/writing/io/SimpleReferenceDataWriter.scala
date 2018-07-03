@@ -1,4 +1,4 @@
-package com.clemaire.gexplore.core.gfa.reference.io
+package com.clemaire.gexplore.core.gfa.reference.writing.io
 
 import java.io.DataOutputStream
 import java.nio.ByteBuffer

@@ -1,9 +1,10 @@
-package com.clemaire.gexplore.core.gfa.reference.index
+package com.clemaire.gexplore.core.gfa.reference.writing.index
 
 import java.io.DataOutputStream
 import java.nio.ByteBuffer
 
 import com.clemaire.gexplore.core.gfa.{DataWriter, StaticLength}
+import com.clemaire.gexplore.core.gfa.reference.index.ReferenceChunkIndex
 
 trait SimpleReferenceIndexWriter
   extends DataWriter[ReferenceChunkIndex]

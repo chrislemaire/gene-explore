@@ -12,13 +12,5 @@ case class ReferenceNode(name: String,
                          genomeCoordinates: Traversable[(Int, Long)])
 
 object ReferenceNode {
-  lazy val empty: ReferenceNode = ReferenceNode(
-    "",
-    -1,
-    -1,
-    -1,
-    -1,
-    mutable.Buffer.empty,
-    mutable.Buffer.empty,
-    Map.empty)
+  lazy val empty: ReferenceNode = ReferenceNode("", -1, -1, -1, -1, mutable.Buffer.empty, mutable.Buffer.empty, Map.empty)
 }
