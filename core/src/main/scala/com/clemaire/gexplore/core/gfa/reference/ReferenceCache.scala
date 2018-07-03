@@ -7,6 +7,4 @@ trait ReferenceCache {
   def nodesBetweenLayers(left: Int,
                          right: Int): Traversable[Node]
 
-  def
-
 }
