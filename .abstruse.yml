@@ -14,5 +14,5 @@ script:
   - sbt test
 
 cache:
-  - ../.ivy2
-  - ../.sbt
+  - .ivy2
+  - .sbt
