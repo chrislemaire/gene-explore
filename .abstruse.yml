@@ -2,7 +2,7 @@ image: hseeberger/scala-sbt
 
 install:
   - echo "Oh Well"
-#  - sbt install
+  - sleep 20
 
 script:
   - echo "Hello World"
