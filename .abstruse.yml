@@ -8,7 +8,7 @@ before_install:
 
 install:
   - sbt reload
-  - sbt install
+  - sbt compile
 
 script:
   - sbt test
