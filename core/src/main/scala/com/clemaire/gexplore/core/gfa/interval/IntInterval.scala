@@ -15,8 +15,9 @@ class IntInterval(var start: Int = Int.MinValue,
     *
     * @param value    The value to push into the interval.
     */
-  def pushBoundaries(value: Int): Unit =
+  def pushBoundaries(value: Int): Unit = {
     if (value < start) start = value
-    else if (value > end) end = value
+    if (value > end) end = value
+  }
 
 }

@@ -1,5 +1,7 @@
 package com.clemaire.gexplore.core.gfa.reference.parsing
 
+import java.util.InputMismatchException
+
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.reference.parsing.Gfa1Parser._
 import com.clemaire.gexplore.core.gfa.reference.writing.ReferenceCacheBuilder
@@ -184,6 +186,7 @@ abstract class Gfa1Parser(val tags: Set[String]) {
       case 'S' => parseSegment(line, offset)
       case 'H' => parseHeader(line)
       case '#' =>
+      case e => throw new InputMismatchException(s"Symbol '$e' not a valid start of a GFA line.")
     }
 
   /**
