@@ -20,7 +20,7 @@ import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
   * [ 4][    8   ][  4  ][   4   ][  4   ][12*OUT_LEN][12*IN_LEN]
   * }}}
   */
-trait SimpleReferenceDataWriter
+trait SRDataWriter
   extends DataWriter[ReferenceNode]
     with LengthByType[ReferenceNode] {
 

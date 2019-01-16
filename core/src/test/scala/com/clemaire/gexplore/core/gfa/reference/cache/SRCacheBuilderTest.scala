@@ -8,7 +8,7 @@ import org.scalatest.{BeforeAndAfter, FunSuite}
 
 import scala.collection.immutable.HashSet
 
-class SimpleReferenceCacheBuilderTest
+class SRCacheBuilderTest
   extends FunSuite
     with BeforeAndAfter {
 
@@ -17,10 +17,10 @@ class SimpleReferenceCacheBuilderTest
   private val paths = new CachePathList(Paths.get("C:\\Users\\Chris Lemaire\\Documents\\Delft\\Bachelor Computer Science year 2\\Q4\\[TI2806] - Context Project\\data\\TB328v2.gfa"))
 //  private val paths = new CachePathList(Paths.get("C:\\Users\\Chris Lemaire\\Documents\\Delft\\Bachelor Computer Science year 2\\Q4\\[TI2806] - Context Project\\data\\Tomato_150_VCFs_2.50_chr06.gfa"))
 
-  private var underTest: SimpleReferenceCacheBuilder = _
+  private var underTest: SRCacheBuilder = _
 
   before {
-    underTest = new SimpleReferenceCacheBuilder(paths)
+    underTest = new SRCacheBuilder(paths)
   }
 
   test("Test TB10") {

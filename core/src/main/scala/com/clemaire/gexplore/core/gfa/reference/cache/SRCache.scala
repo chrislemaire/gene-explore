@@ -6,7 +6,7 @@ import com.clemaire.gexplore.core.gfa.reference.index.{GenomeCoordinateIndex, Re
 
 import scala.collection.mutable
 
-class SimpleReferenceCache extends ReferenceCache {
+class SRCache extends ReferenceCache {
 
   /**
     * The index of reference nodes used to retrieve

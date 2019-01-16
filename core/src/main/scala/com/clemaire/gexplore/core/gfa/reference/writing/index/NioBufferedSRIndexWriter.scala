@@ -6,19 +6,19 @@ import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.index.{ReferenceChunkIndex, ReferenceIndex}
 import com.clemaire.gexplore.core.gfa.reference.writing.additional.AdditionalReferenceWriter
 import com.clemaire.gexplore.util.io.NioBufferedWriter
-import SimpleNioBufferedReferenceIndexWriter._
+import NioBufferedSRIndexWriter._
 
-object SimpleNioBufferedReferenceIndexWriter {
+object NioBufferedSRIndexWriter {
   /**
     * The size of each index chunk in bytes.
     */
   private val MAX_CHUNK_LENGTH = 1024 * 1024
 }
 
-class SimpleNioBufferedReferenceIndexWriter(val paths: CachePathList)
+class NioBufferedSRIndexWriter(val paths: CachePathList)
   extends AdditionalReferenceWriter
     with NioBufferedWriter
-    with SimpleReferenceIndexWriter {
+    with SRIndexDataWriter {
 
   private val _: Unit = {
     withPath(paths.referenceIndexPath)

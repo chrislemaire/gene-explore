@@ -6,7 +6,7 @@ import java.nio.ByteBuffer
 import com.clemaire.gexplore.core.gfa.{DataWriter, StaticLength}
 import com.clemaire.gexplore.core.gfa.reference.index.ReferenceChunkIndex
 
-trait SimpleReferenceIndexWriter
+trait SRIndexDataWriter
   extends DataWriter[ReferenceChunkIndex]
     with StaticLength {
 

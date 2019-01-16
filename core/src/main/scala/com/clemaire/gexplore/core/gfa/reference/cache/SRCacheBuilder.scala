@@ -3,17 +3,17 @@ package com.clemaire.gexplore.core.gfa.reference.cache
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.writing.{ReferenceCacheBuilder, ReferenceNodeWriter}
-import com.clemaire.gexplore.core.gfa.reference.writing.io.SimpleNioBufferedReferenceNodeWriter
+import com.clemaire.gexplore.core.gfa.reference.writing.io.NioBufferedSRWriter
 
 import scala.collection.mutable
 
-class SimpleReferenceCacheBuilder(private val pathsIn: CachePathList)
-  extends ReferenceCacheBuilder[SimpleReferenceCache](pathsIn) {
+class SRCacheBuilder(private val pathsIn: CachePathList)
+  extends ReferenceCacheBuilder[SRCache](pathsIn) {
 
   /**
-    * The cache being built by this [[SimpleReferenceCacheBuilder]].
+    * The cache being built by this [[SRCacheBuilder]].
     */
-  private val cache: SimpleReferenceCache = new SimpleReferenceCache()
+  private val cache: SRCache = new SRCache()
 
   /**
     * The segments that are to come paired with the
@@ -39,7 +39,7 @@ class SimpleReferenceCacheBuilder(private val pathsIn: CachePathList)
     * Writer to write the node-reference data to file.
     */
   private val writer: ReferenceNodeWriter =
-    new SimpleNioBufferedReferenceNodeWriter(paths, this)
+    new NioBufferedSRWriter(paths, this)
 
   /**
     * The number of genomes currently counted.
@@ -164,7 +164,7 @@ class SimpleReferenceCacheBuilder(private val pathsIn: CachePathList)
       currentNode = None
     })
 
-  override final def finish(): SimpleReferenceCache = {
+  override final def finish(): SRCache = {
     try {
       writeCurrentNode()
       writer.flush()
