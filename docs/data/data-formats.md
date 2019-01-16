@@ -32,8 +32,9 @@ Each of these genomes will follow their own paths through the graph and therefor
 The coordinates are stored in a separate cache-index file-pair as the number of coordinates get problematically large in graphs like Tomato where 72 different genomes will have coordinates for each node.
 The way the coordinates themselves are stored is described here:
 
-1. 4 bytes for the node ID for which the genome coordinates will be given.
-2. `k` genome coordinate pairs where each pair consists of 4 bytes to give the genome ID and 4 bytes to give the relative coordinates.
+1. 4 bytes for the number of genome coordinate pairs `k`.
+2. 4 bytes for the node ID for which the genome coordinates will be given.
+3. `k` genome coordinate pairs where each pair consists of 4 bytes to give the genome ID and 4 bytes to give the relative coordinates.
 
 ## 4. Genome coordinate index
 As one might notice from the previous section, the coordinate pair stores relative coordinates. These are relative to the coordinates of their corresponding chunk described in the genome index file.

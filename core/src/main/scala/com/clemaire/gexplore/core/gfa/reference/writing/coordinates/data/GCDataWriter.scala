@@ -14,6 +14,7 @@ trait GCDataWriter
 
   override protected[this] def write(obj: (Int, Traversable[(Int, Long)]),
                                      os: DataOutputStream): Unit = {
+    os.writeInt(obj._2.size)
     os.writeInt(obj._1)
 
     obj._2.foreach(kv => {
@@ -24,6 +25,7 @@ trait GCDataWriter
 
   override protected[this] def write(obj: (Int, Traversable[(Int, Long)]),
                                      ob: ByteBuffer): Unit = {
+    ob.putInt(obj._2.size)
     ob.putInt(obj._1)
 
     obj._2.foreach(kv => {

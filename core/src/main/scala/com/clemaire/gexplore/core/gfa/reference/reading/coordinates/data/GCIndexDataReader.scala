@@ -27,24 +27,24 @@ trait GCIndexDataReader
     this
   }
 
-  override protected def read(os: DataInputStream)
+  override protected def read(is: DataInputStream)
   : GenomeCoordinateChunkIndex = GenomeCoordinateChunkIndex(
-    os.readInt(),
-    os.readLong(),
-    os.readInt(),
-    new IntegerInterval(os.readInt(), os.readInt(), Bounded.CLOSED),
-    new IntegerInterval(os.readInt(), os.readInt(), Bounded.CLOSED),
-    (1 to _n).map(_ => (os.readInt(), os.readLong())).toMap
+    is.readInt(),
+    is.readLong(),
+    is.readInt(),
+    new IntegerInterval(is.readInt(), is.readInt(), Bounded.CLOSED),
+    new IntegerInterval(is.readInt(), is.readInt(), Bounded.CLOSED),
+    (1 to _n).map(_ => (is.readInt(), is.readLong())).toMap
   )
 
-  override protected def read(ob: ByteBuffer)
+  override protected def read(ib: ByteBuffer)
   : GenomeCoordinateChunkIndex = GenomeCoordinateChunkIndex(
-    ob.getInt(),
-    ob.getLong(),
-    ob.getInt(),
-    new IntegerInterval(ob.getInt(), ob.getInt(), Bounded.CLOSED),
-    new IntegerInterval(ob.getInt(), ob.getInt(), Bounded.CLOSED),
-    (1 to _n).map(_ => (ob.getInt(), ob.getLong())).toMap
+    ib.getInt(),
+    ib.getLong(),
+    ib.getInt(),
+    new IntegerInterval(ib.getInt(), ib.getInt(), Bounded.CLOSED),
+    new IntegerInterval(ib.getInt(), ib.getInt(), Bounded.CLOSED),
+    (1 to _n).map(_ => (ib.getInt(), ib.getLong())).toMap
   )
 
 }
