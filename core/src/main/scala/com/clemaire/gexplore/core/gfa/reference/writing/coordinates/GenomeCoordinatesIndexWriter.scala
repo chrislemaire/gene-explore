@@ -62,10 +62,7 @@ class GenomeCoordinatesIndexWriter(paths: CachePathList,
   def flushIndex(): Unit = {
     currentCoordinates.foreach(kv => lastIndexedCoordinates(kv._1) = kv._2)
 
-    val chunkIndex = GenomeCoordinateChunkIndex(
-      chunkId, filePos, bytesWritten,
-      layers.toInterval, segmentIds.toInterval,
-      lastIndexedCoordinates.toMap)
+    val chunkIndex = GenomeCoordinateChunkIndex(chunkId, filePos, bytesWritten, layers.toInterval, segmentIds.toInterval, lastIndexedCoordinates.toMap)
 
     chunkId += 1
     bytesWritten = 0

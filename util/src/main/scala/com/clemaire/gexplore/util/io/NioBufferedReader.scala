@@ -37,33 +37,33 @@ class NioBufferedReader(val path: Path,
   /**
     * The [[FileChannel]] used to read from file.
     */
-  private val fc: FileChannel = FileChannel.open(path, StandardOpenOption.READ)
+  private[this] val _fc: FileChannel = FileChannel.open(path, StandardOpenOption.READ)
 
   /**
     * The currently buffered data.
     */
-  private var buffer: ByteBuffer = ByteBuffer.allocateDirect(bufferSize)
+  private[this] var _buffer: ByteBuffer = ByteBuffer.allocateDirect(bufferSize)
 
   /**
     * The currently buffered data as a byte array.
     */
-  private var bufferArray: Array[Byte] = Array.ofDim(bufferSize)
+  private[this] var _bufferArray: Array[Byte] = Array.ofDim(bufferSize)
 
   /**
     * The current position in the buffer.
     */
-  private var bufferPos = 0
+  private[this] var _bufferPos = 0
 
   /**
     * The left-most position of the file currently
     * buffered.
     */
-  private var filePos = 0L
+  private[this] var _filePos = 0L
 
   /**
     * Whether the end of the file has been reached.
     */
-  private var eofReached = false
+  private[this] var _eofReached = false
 
   /**
     * Reset the reader upon initial creation.
@@ -81,20 +81,20 @@ class NioBufferedReader(val path: Path,
     */
   @throws[IOException]
   override def reset(): Unit = {
-    this.fc.position(0L)
-    this.buffer = ByteBuffer.allocateDirect(bufferSize)
-    this.bufferArray = new Array[Byte](bufferSize)
-    this.filePos = 0L
-    this.bufferPos = 0
-    this.eofReached = false
+    this._fc.position(0L)
+    this._buffer = ByteBuffer.allocateDirect(bufferSize)
+    this._bufferArray = new Array[Byte](bufferSize)
+    this._filePos = 0L
+    this._bufferPos = 0
+    this._eofReached = false
 
     loadNextBuffer()
   }
 
   /**
     * Loads the next chunk of size [[bufferSize]] into
-    * [[buffer]] and [[bufferArray]]. This also
-    * increments the file [[filePos pointer]] to be
+    * [[_buffer]] and [[_bufferArray]]. This also
+    * increments the file [[_filePos pointer]] to be
     * pointing to the left minimum byte position currently
     * read.
     *
@@ -103,14 +103,14 @@ class NioBufferedReader(val path: Path,
     */
   @throws[IOException]
   private def loadNextBuffer(): Unit = {
-    filePos += buffer.position
-    bufferPos = 0
+    _filePos += _buffer.position
+    _bufferPos = 0
 
-    buffer.clear
-    fc.read(buffer)
-    buffer.flip
+    _buffer.clear
+    _fc.read(_buffer)
+    _buffer.flip
 
-    buffer.get(bufferArray, 0, Math.min(bufferSize, buffer.limit))
+    _buffer.get(_bufferArray, 0, Math.min(bufferSize, _buffer.limit))
   }
 
   /**
@@ -126,12 +126,12 @@ class NioBufferedReader(val path: Path,
     */
   @throws[IOException]
   private def checkBuffer() = {
-    if (bufferPos >= buffer.limit && !eofReached)
-      if (filePos + buffer.position >= fc.size)
-        eofReached = true
+    if (_bufferPos >= _buffer.limit && !_eofReached)
+      if (_filePos + _buffer.position >= _fc.size)
+        _eofReached = true
       else
         loadNextBuffer()
-    eofReached
+    _eofReached
   }
 
   /**
@@ -142,7 +142,7 @@ class NioBufferedReader(val path: Path,
     * @return {{{true}}} when the file still has
     *         more bytes to read, {{{false}}} otherwise.
     */
-  def hasNext: Boolean = !eofReached
+  def hasNext: Boolean = !_eofReached
 
   @throws[IOException]
   override def read(charBuf: Array[Char], off: Int, len: Int): Int = {
@@ -152,11 +152,11 @@ class NioBufferedReader(val path: Path,
       if (checkBuffer())
         return currentPos - off
 
-      val readUntil = Math.min(buffer.limit, bufferPos + len - currentPos)
-      while (bufferPos < readUntil) {
-        charBuf(currentPos) = bufferArray(bufferPos).asInstanceOf[Char]
+      val readUntil = Math.min(_buffer.limit, _bufferPos + len - currentPos)
+      while (_bufferPos < readUntil) {
+        charBuf(currentPos) = _bufferArray(_bufferPos).asInstanceOf[Char]
 
-        bufferPos += 1
+        _bufferPos += 1
         currentPos += 1
       }
     }
@@ -184,35 +184,35 @@ class NioBufferedReader(val path: Path,
     var foundCR = false
 
     while (true) {
-      start = bufferPos
-      val limit = buffer.limit
+      start = _bufferPos
+      val limit = _buffer.limit
 
-      var i = bufferPos
+      var i = _bufferPos
       while (i < limit) {
-        c = bufferArray(i)
+        c = _bufferArray(i)
         if (c == '\r') {
           lineBuilder.append(new String(
-            bufferArray, start, i - start))
+            _bufferArray, start, i - start))
           foundCR = true
           start = i + 1
         } else if (c == '\n') {
           if (!foundCR) {
             lineBuilder.append(new String(
-              bufferArray, start, i - start - 1))
+              _bufferArray, start, i - start - 1))
           }
-          bufferPos = i + 1
+          _bufferPos = i + 1
           return lineBuilder.toString()
         } else if (foundCR) {
-          bufferPos = i
+          _bufferPos = i
           return lineBuilder.toString()
         }
 
         i += 1
       }
 
-      bufferPos = limit
+      _bufferPos = limit
       lineBuilder.append(new String(
-        bufferArray, start, i - start))
+        _bufferArray, start, i - start))
       if (checkBuffer()) {
         return lineBuilder.toString()
       }
@@ -240,10 +240,10 @@ class NioBufferedReader(val path: Path,
     *
     * @return The current file position.
     */
-  def position: Long = filePos + bufferPos
+  def position: Long = _filePos + _bufferPos
 
   @throws[IOException]
   override def close(): Unit = {
-    fc.close()
+    _fc.close()
   }
 }

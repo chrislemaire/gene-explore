@@ -43,3 +43,4 @@ Process finished with exit code 0
 ```
 
 * 16:34 - Started looking at low speeds of line reading in NioBufferedReader.
+* 16:38 - Decided against inspecting low line read speeds, as reader will be used for byte reads only. Will instead work on getting reading functional.

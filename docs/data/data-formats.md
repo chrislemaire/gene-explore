@@ -41,7 +41,7 @@ Each indexed chunk is formatted in the following way:
 
 1. 4 bytes for the chunk ID.
 2. 8 bytes for the position the chunk starts in the genome coordinates cache file.
-3. 8 bytes for the number of bytes this chunk uses up.
+3. 4 bytes for the number of bytes this chunk uses up.
 4. 4 bytes for the left-most layer stored in the chunk.
 5. 4 bytes for the right-most layer stored in the chunk.
 6. 4 bytes for the lowest segment ID stored in the chunk.

@@ -17,7 +17,7 @@ trait GenomeIndexDataWriter
                                      os: DataOutputStream): Unit = {
     os.writeInt(chunkIndex.id)
     os.writeLong(chunkIndex.filePos)
-    os.writeLong(chunkIndex.length)
+    os.writeInt(chunkIndex.length)
     os.writeInt(chunkIndex.layers.getStart)
     os.writeInt(chunkIndex.layers.getEnd)
     os.writeInt(chunkIndex.segmentIds.getStart)
@@ -33,7 +33,7 @@ trait GenomeIndexDataWriter
                                      ob: ByteBuffer): Unit = {
     ob.putInt(chunkIndex.id)
     ob.putLong(chunkIndex.filePos)
-    ob.putLong(chunkIndex.length)
+    ob.putInt(chunkIndex.length)
     ob.putInt(chunkIndex.layers.getStart)
     ob.putInt(chunkIndex.layers.getEnd)
     ob.putInt(chunkIndex.segmentIds.getStart)

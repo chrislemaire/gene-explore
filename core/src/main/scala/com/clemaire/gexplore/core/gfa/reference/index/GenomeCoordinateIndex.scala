@@ -2,7 +2,7 @@ package com.clemaire.gexplore.core.gfa.reference.index
 
 import com.lodborg.intervaltree.IntegerInterval
 
-case class GenomeCoordinateChunkIndex private[index]
+case class GenomeCoordinateChunkIndex private
 (override val id: Int,
  override val filePos: Long,
  override val length: Int,
