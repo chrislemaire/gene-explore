@@ -1,11 +1,11 @@
-package com.clemaire.gexplore.core.gfa.reference.writing.coordinates
+package com.clemaire.gexplore.core.gfa.reference.writing.coordinates.data
 
 import java.io.DataOutputStream
 import java.nio.ByteBuffer
 
 import com.clemaire.gexplore.core.gfa.{DataWriter, LengthByType}
 
-trait GenomeDataWriter
+trait GCDataWriter
   extends DataWriter[(Int, Traversable[(Int, Long)])]
     with LengthByType[Traversable[(Int, Long)]] {
 

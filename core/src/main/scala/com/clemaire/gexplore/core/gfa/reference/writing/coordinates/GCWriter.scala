@@ -3,15 +3,16 @@ package com.clemaire.gexplore.core.gfa.reference.writing.coordinates
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.writing.additional.AdditionalReferenceWriter
+import com.clemaire.gexplore.core.gfa.reference.writing.coordinates.data.GCDataWriter
 import com.clemaire.gexplore.util.io.NioBufferedWriter
 
 import scala.collection.mutable
 
-class GenomeCoordinatesWriter(paths: CachePathList,
-                              currentCoordinates: mutable.Map[Int, Long])
+class GCWriter(paths: CachePathList,
+               currentCoordinates: mutable.Map[Int, Long])
   extends AdditionalReferenceWriter
     with NioBufferedWriter
-    with GenomeDataWriter {
+    with GCDataWriter {
 
   private val _: Unit = {
     withPath(paths.coordinatesPath)
@@ -27,8 +28,8 @@ class GenomeCoordinatesWriter(paths: CachePathList,
   /**
     * Writer to write the coordinates index.
     */
-  val indexWriter: GenomeCoordinatesIndexWriter =
-    new GenomeCoordinatesIndexWriter(paths, lastIndexedCoordinates, currentCoordinates)
+  val indexWriter: GCIndexWriter =
+    new GCIndexWriter(paths, lastIndexedCoordinates, currentCoordinates)
 
   override def writeNode(node: ReferenceNode,
                          byteLength: Int): Unit = {

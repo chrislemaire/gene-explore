@@ -5,21 +5,22 @@ import com.clemaire.gexplore.core.gfa.interval.IntInterval
 import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.index.{GenomeCoordinateChunkIndex, GenomeCoordinateIndex}
 import com.clemaire.gexplore.core.gfa.reference.writing.additional.AdditionalReferenceWriter
-import com.clemaire.gexplore.core.gfa.reference.writing.coordinates.GenomeCoordinatesIndexWriter._
+import com.clemaire.gexplore.core.gfa.reference.writing.coordinates.GCIndexWriter._
+import com.clemaire.gexplore.core.gfa.reference.writing.coordinates.data.GCIndexDataWriter
 import com.clemaire.gexplore.util.io.NioBufferedWriter
 
 import scala.collection.mutable
 
-object GenomeCoordinatesIndexWriter {
+object GCIndexWriter {
   val MAX_CHUNK_LENGTH: Long = 1024 * 1024
 }
 
-class GenomeCoordinatesIndexWriter(paths: CachePathList,
-                                   val lastIndexedCoordinates: mutable.Map[Int, Long],
-                                   val currentCoordinates: mutable.Map[Int, Long])
+class GCIndexWriter(paths: CachePathList,
+                    val lastIndexedCoordinates: mutable.Map[Int, Long],
+                    val currentCoordinates: mutable.Map[Int, Long])
   extends AdditionalReferenceWriter
     with NioBufferedWriter
-    with GenomeIndexDataWriter {
+    with GCIndexDataWriter {
 
   private val _: Unit = {
     withPath(paths.coordinatesIndexPath)

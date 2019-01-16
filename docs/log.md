@@ -44,3 +44,9 @@ Process finished with exit code 0
 
 * 16:34 - Started looking at low speeds of line reading in NioBufferedReader.
 * 16:38 - Decided against inspecting low line read speeds, as reader will be used for byte reads only. Will instead work on getting reading functional.
+
+## 16-01-2019
+* 11:30 - Finished data reader for genome indices. Decided to work on index reading first as it is required first and not very complicated.
+* Decided chunk length cannot be more than 2GB and the length thereof should therefore be stored as an integer instead of a double.
+* Problem: GenomeIndexDataReader should know the number of genomes. Fix: required 'with' in GenomeIndexDataReader.
+* 

@@ -1,4 +1,4 @@
-package com.clemaire.gexplore.core.gfa.reference.writing.coordinates
+package com.clemaire.gexplore.core.gfa.reference.writing.coordinates.data
 
 import java.io.DataOutputStream
 import java.nio.ByteBuffer
@@ -6,7 +6,7 @@ import java.nio.ByteBuffer
 import com.clemaire.gexplore.core.gfa.{DataWriter, LengthByType}
 import com.clemaire.gexplore.core.gfa.reference.index.GenomeCoordinateChunkIndex
 
-trait GenomeIndexDataWriter
+trait GCIndexDataWriter
   extends DataWriter[GenomeCoordinateChunkIndex]
     with LengthByType[GenomeCoordinateChunkIndex] {
 

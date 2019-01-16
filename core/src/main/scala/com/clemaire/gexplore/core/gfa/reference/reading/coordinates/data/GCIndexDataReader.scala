@@ -1,14 +1,14 @@
-package com.clemaire.gexplore.core.gfa.reference.reading.index
+package com.clemaire.gexplore.core.gfa.reference.reading.coordinates.data
 
 import java.io.DataInputStream
 import java.nio.ByteBuffer
 
-import com.clemaire.gexplore.core.gfa.DataReader
 import com.clemaire.gexplore.core.gfa.reference.index.GenomeCoordinateChunkIndex
+import com.clemaire.gexplore.core.gfa.DataReader
 import com.lodborg.intervaltree.IntegerInterval
 import com.lodborg.intervaltree.Interval.Bounded
 
-trait GenomeIndexDataReader
+trait GCIndexDataReader
   extends DataReader[GenomeCoordinateChunkIndex] {
 
   /**

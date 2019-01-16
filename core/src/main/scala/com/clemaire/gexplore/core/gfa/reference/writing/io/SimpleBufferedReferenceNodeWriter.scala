@@ -5,7 +5,7 @@ import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.cache.SimpleReferenceCacheBuilder
 import com.clemaire.gexplore.core.gfa.reference.index.{GenomeCoordinateIndex, ReferenceIndex}
 import com.clemaire.gexplore.core.gfa.reference.writing.additional.{AdditionalReferenceWriter, SingleFlushHeatMapWriter}
-import com.clemaire.gexplore.core.gfa.reference.writing.coordinates.GenomeCoordinatesWriter
+import com.clemaire.gexplore.core.gfa.reference.writing.coordinates.GCWriter
 import com.clemaire.gexplore.core.gfa.reference.writing.index.SimpleNioBufferedReferenceIndexWriter
 import com.clemaire.gexplore.util.io.IoBufferedWriter
 
@@ -38,7 +38,7 @@ class SimpleBufferedReferenceNodeWriter(paths: CachePathList,
     * building of a [[GenomeCoordinateIndex]].
     */
   private val coordinatesWriter =
-    new GenomeCoordinatesWriter(paths, builder.genomeCoordinates)
+    new GCWriter(paths, builder.genomeCoordinates)
 
   override protected[this] val additionalWriters: Seq[AdditionalReferenceWriter] =
     Seq(
