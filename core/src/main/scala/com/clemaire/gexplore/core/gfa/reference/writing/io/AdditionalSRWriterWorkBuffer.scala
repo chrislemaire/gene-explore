@@ -4,7 +4,7 @@ import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.writing.additional.AdditionalReferenceWriter
 import com.clemaire.gexplore.core.gfa.reference.writing.ReferenceNodeWriter
 
-trait AdditionalReferenceWriterWorkBuffer
+trait AdditionalSRWriterWorkBuffer
   extends ReferenceNodeWriter {
 
   /**
