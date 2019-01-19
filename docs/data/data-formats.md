@@ -5,11 +5,11 @@ The goal is to parse and copy over the original GFA information adding interpret
 The format of the data reflects the minimalist approach to reference data. All node and edge information is stored relative to nodes.
 Every single node is eventually stored as a reference node. Each node has the following format on disk:
 
-1. 4 bytes for the node ID.
-2. 8 bytes for the original file position where the node is stored.
-3. 4 bytes for the length of the content (nucleotide string).
-4. 4 bytes for the number of outgoing edges.
-5. 4 bytes for the number of incoming edges.
+1. 4 bytes for the number of outgoing edges.
+2. 4 bytes for the number of incoming edges.
+3. 4 bytes for the node ID.
+4. 8 bytes for the original file position where the node is stored.
+5. 4 bytes for the length of the content (nucleotide string).
 6. A variable number of bytes for the incoming edges where each edge is 12 bytes.
 7. A variable number of bytes for the outgoing edges where each edge is 12 bytes.
 

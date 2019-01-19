@@ -30,11 +30,11 @@ trait SRDataWriter
 
   override def write(node: ReferenceNode,
                      os: DataOutputStream): Unit = {
+    os.writeInt(node.outgoingEdges.length)
+    os.writeInt(node.incomingEdges.length)
     os.writeInt(node.id)
     os.writeLong(node.fileOffset)
     os.writeInt(node.contentLength)
-    os.writeInt(node.outgoingEdges.length)
-    os.writeInt(node.incomingEdges.length)
 
     node.outgoingEdges.foreach(kv => {
       os.writeInt(kv._1)
@@ -48,11 +48,11 @@ trait SRDataWriter
 
   override def write(node: ReferenceNode,
                      ob: ByteBuffer): Unit = {
+    ob.putInt(node.outgoingEdges.length)
+    ob.putInt(node.incomingEdges.length)
     ob.putInt(node.id)
     ob.putLong(node.fileOffset)
     ob.putInt(node.contentLength)
-    ob.putInt(node.outgoingEdges.length)
-    ob.putInt(node.incomingEdges.length)
 
     node.outgoingEdges.foreach(kv => {
       ob.putInt(kv._1)
