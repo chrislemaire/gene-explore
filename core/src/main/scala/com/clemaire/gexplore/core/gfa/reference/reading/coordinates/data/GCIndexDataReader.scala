@@ -3,13 +3,13 @@ package com.clemaire.gexplore.core.gfa.reference.reading.coordinates.data
 import java.io.DataInputStream
 import java.nio.ByteBuffer
 
-import com.clemaire.gexplore.core.gfa.reference.index.GenomeCoordinateChunkIndex
+import com.clemaire.gexplore.core.gfa.reference.index.GCChunkIndex
 import com.clemaire.gexplore.core.gfa.DataReader
 import com.lodborg.intervaltree.IntegerInterval
 import com.lodborg.intervaltree.Interval.Bounded
 
 trait GCIndexDataReader
-  extends DataReader[GenomeCoordinateChunkIndex] {
+  extends DataReader[GCChunkIndex] {
 
   /**
     * The number of genomes to read.
@@ -28,7 +28,7 @@ trait GCIndexDataReader
   }
 
   override protected def read(is: DataInputStream)
-  : GenomeCoordinateChunkIndex = GenomeCoordinateChunkIndex(
+  : GCChunkIndex = GCChunkIndex(
     is.readInt(),
     is.readLong(),
     is.readInt(),
@@ -38,7 +38,7 @@ trait GCIndexDataReader
   )
 
   override protected def read(ib: ByteBuffer)
-  : GenomeCoordinateChunkIndex = GenomeCoordinateChunkIndex(
+  : GCChunkIndex = GCChunkIndex(
     ib.getInt(),
     ib.getLong(),
     ib.getInt(),

@@ -4,16 +4,16 @@ import java.io.DataOutputStream
 import java.nio.ByteBuffer
 
 import com.clemaire.gexplore.core.gfa.{DataWriter, LengthByType}
-import com.clemaire.gexplore.core.gfa.reference.index.GenomeCoordinateChunkIndex
+import com.clemaire.gexplore.core.gfa.reference.index.GCChunkIndex
 
 trait GCIndexDataWriter
-  extends DataWriter[GenomeCoordinateChunkIndex]
-    with LengthByType[GenomeCoordinateChunkIndex] {
+  extends DataWriter[GCChunkIndex]
+    with LengthByType[GCChunkIndex] {
 
-  override protected[this] def length(obj: GenomeCoordinateChunkIndex): Int =
+  override protected[this] def length(obj: GCChunkIndex): Int =
     4 + 8 + 8 + 4 + 4 + 4 + 4 + 12 * obj.referenceCoordinates.size
 
-  override protected[this] def write(chunkIndex: GenomeCoordinateChunkIndex,
+  override protected[this] def write(chunkIndex: GCChunkIndex,
                                      os: DataOutputStream): Unit = {
     os.writeInt(chunkIndex.id)
     os.writeLong(chunkIndex.filePos)
@@ -29,7 +29,7 @@ trait GCIndexDataWriter
     })
   }
 
-  override protected[this] def write(chunkIndex: GenomeCoordinateChunkIndex,
+  override protected[this] def write(chunkIndex: GCChunkIndex,
                                      ob: ByteBuffer): Unit = {
     ob.putInt(chunkIndex.id)
     ob.putLong(chunkIndex.filePos)

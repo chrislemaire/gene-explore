@@ -3,7 +3,7 @@ package com.clemaire.gexplore.core.gfa.reference.writing.index
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.interval.IntInterval
 import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
-import com.clemaire.gexplore.core.gfa.reference.index.{ReferenceChunkIndex, ReferenceIndex}
+import com.clemaire.gexplore.core.gfa.reference.index.{SRChunkIndex, SRIndex}
 import com.clemaire.gexplore.core.gfa.reference.writing.additional.AdditionalReferenceWriter
 import com.clemaire.gexplore.util.io.NioBufferedWriter
 import NioBufferedSRIndexWriter._
@@ -25,10 +25,10 @@ class NioBufferedSRIndexWriter(val paths: CachePathList)
   }
 
   /**
-    * The in-memory representation of the [[ReferenceIndex]]
+    * The in-memory representation of the [[SRIndex]]
     * that is created during writing of the index to file.
     */
-  val index: ReferenceIndex = new ReferenceIndex()
+  val index: SRIndex = new SRIndex()
 
   /**
     * The id of the chunk currently being worked on.
@@ -65,13 +65,13 @@ class NioBufferedSRIndexWriter(val paths: CachePathList)
   private var segmentIds: IntInterval = new IntInterval(Int.MaxValue, Int.MinValue)
 
   /**
-    * Flushes the currently being built [[ReferenceChunkIndex]]
-    * to the [[ReferenceIndex]] and the index file.
+    * Flushes the currently being built [[SRChunkIndex]]
+    * to the [[SRIndex]] and the index file.
     */
   private[this] def flushIndex(): Unit = {
     checkForFlush(LENGTH)
 
-    val chunkIndex = ReferenceChunkIndex(chunkId,
+    val chunkIndex = SRChunkIndex(chunkId,
       filePos, bytesWritten,
       layers.toInterval, segmentIds.toInterval)
 

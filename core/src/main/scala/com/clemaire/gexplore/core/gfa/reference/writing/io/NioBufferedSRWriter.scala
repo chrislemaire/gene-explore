@@ -3,7 +3,7 @@ package com.clemaire.gexplore.core.gfa.reference.writing.io
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.cache.SRCacheBuilder
-import com.clemaire.gexplore.core.gfa.reference.index.{GenomeCoordinateIndex, ReferenceIndex}
+import com.clemaire.gexplore.core.gfa.reference.index.{GCIndex, SRIndex}
 import com.clemaire.gexplore.core.gfa.reference.writing.additional.{AdditionalReferenceWriter, SingleFlushHeatMapWriter}
 import com.clemaire.gexplore.core.gfa.reference.writing.coordinates.GCWriter
 import com.clemaire.gexplore.core.gfa.reference.writing.index.NioBufferedSRIndexWriter
@@ -13,7 +13,7 @@ class NioBufferedSRWriter(paths: CachePathList,
                           builder: SRCacheBuilder)
   extends AsyncNioBufferedWriter[(ReferenceNode, Int)]
     with SRDataWriter
-    with AdditionalReferenceWriterWorkBuffer {
+    with AdditionalSRWriterWorkBuffer {
 
   /**
     * Initializes the buffer and file channel indirectly
@@ -26,7 +26,7 @@ class NioBufferedSRWriter(paths: CachePathList,
 
   /**
     * The [[AdditionalReferenceWriter]] responsible for
-    * writing the [[ReferenceIndex]] to file while building
+    * writing the [[SRIndex]] to file while building
     * it constantly as well.
     */
   private val indexWriter =
@@ -35,7 +35,7 @@ class NioBufferedSRWriter(paths: CachePathList,
   /**
     * The [[AdditionalReferenceWriter]] responsible for
     * writing genome coordinates to file and managing the
-    * building of a [[GenomeCoordinateIndex]].
+    * building of a [[GCIndex]].
     */
   private val coordinatesWriter =
     new GCWriter(paths, builder.genomeCoordinates)
@@ -65,9 +65,9 @@ class NioBufferedSRWriter(paths: CachePathList,
     additionalWriters.foreach(_.close())
   }
 
-  override def index: ReferenceIndex =
+  override def index: SRIndex =
     indexWriter.index
 
-  override def coordinatesIndex: GenomeCoordinateIndex =
+  override def coordinatesIndex: GCIndex =
     coordinatesWriter.indexWriter.index
 }

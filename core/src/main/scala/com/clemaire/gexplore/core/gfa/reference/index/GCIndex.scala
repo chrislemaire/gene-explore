@@ -2,12 +2,13 @@ package com.clemaire.gexplore.core.gfa.reference.index
 
 import com.lodborg.intervaltree.IntegerInterval
 
-case class ReferenceChunkIndex private[index]
+case class GCChunkIndex private
 (override val id: Int,
  override val filePos: Long,
  override val length: Int,
  override val layers: IntegerInterval,
- override val segmentIds: IntegerInterval) extends ChunkIndex
+ override val segmentIds: IntegerInterval,
+ referenceCoordinates: Map[Int, Long]) extends ChunkIndex
 
-class ReferenceIndex
-  extends AbstractIndex[ReferenceChunkIndex]
+class GCIndex
+  extends AbstractIndex[GCChunkIndex]

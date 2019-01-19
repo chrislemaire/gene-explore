@@ -3,7 +3,7 @@ package com.clemaire.gexplore.core.gfa.reference.writing.coordinates
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.interval.IntInterval
 import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
-import com.clemaire.gexplore.core.gfa.reference.index.{GenomeCoordinateChunkIndex, GenomeCoordinateIndex}
+import com.clemaire.gexplore.core.gfa.reference.index.{GCChunkIndex, GCIndex}
 import com.clemaire.gexplore.core.gfa.reference.writing.additional.AdditionalReferenceWriter
 import com.clemaire.gexplore.core.gfa.reference.writing.coordinates.GCIndexWriter._
 import com.clemaire.gexplore.core.gfa.reference.writing.coordinates.data.GCIndexDataWriter
@@ -29,7 +29,7 @@ class GCIndexWriter(paths: CachePathList,
   /**
     * The index keeping track of genome coordinate chunks.
     */
-  val index: GenomeCoordinateIndex = new GenomeCoordinateIndex()
+  val index: GCIndex = new GCIndex()
 
   /**
     * The current chunk ID.
@@ -63,7 +63,7 @@ class GCIndexWriter(paths: CachePathList,
   def flushIndex(): Unit = {
     currentCoordinates.foreach(kv => lastIndexedCoordinates(kv._1) = kv._2)
 
-    val chunkIndex = GenomeCoordinateChunkIndex(chunkId, filePos, bytesWritten, layers.toInterval, segmentIds.toInterval, lastIndexedCoordinates.toMap)
+    val chunkIndex = GCChunkIndex(chunkId, filePos, bytesWritten, layers.toInterval, segmentIds.toInterval, lastIndexedCoordinates.toMap)
 
     chunkId += 1
     bytesWritten = 0

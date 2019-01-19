@@ -2,7 +2,7 @@ package com.clemaire.gexplore.core.gfa.reference.cache
 
 import com.clemaire.gexplore.core.gfa.data.Node
 import com.clemaire.gexplore.core.gfa.reference.ReferenceCache
-import com.clemaire.gexplore.core.gfa.reference.index.{GenomeCoordinateIndex, ReferenceIndex}
+import com.clemaire.gexplore.core.gfa.reference.index.{GCIndex, SRIndex}
 
 import scala.collection.mutable
 
@@ -12,14 +12,14 @@ class SRCache extends ReferenceCache {
     * The index of reference nodes used to retrieve
     * chunks of nodes by their layer or segment overlap.
     */
-  private[cache] var _index: ReferenceIndex = _
+  private[cache] var _index: SRIndex = _
 
   /**
     * The index of genome coordinates used to retrieve
     * chunks of genome coordinates by the layer or
     * segment ID the corresponding nodes have.
     */
-  private[cache] var _coordinatesIndex: GenomeCoordinateIndex = _
+  private[cache] var _coordinatesIndex: GCIndex = _
 
   /**
     * The mapping of genomes to their indices, or
