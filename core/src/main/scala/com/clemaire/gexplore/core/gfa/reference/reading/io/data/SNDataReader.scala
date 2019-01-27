@@ -1,4 +1,4 @@
-package com.clemaire.gexplore.core.gfa.reference.reading.io
+package com.clemaire.gexplore.core.gfa.reference.reading.io.data
 
 import java.io.DataInputStream
 import java.nio.ByteBuffer
