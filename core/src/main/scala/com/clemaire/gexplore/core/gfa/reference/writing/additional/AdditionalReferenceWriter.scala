@@ -2,7 +2,7 @@ package com.clemaire.gexplore.core.gfa.reference.writing.additional
 
 import java.io.Writer
 
-import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
+import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
 
 abstract class AdditionalReferenceWriter
   extends Writer {

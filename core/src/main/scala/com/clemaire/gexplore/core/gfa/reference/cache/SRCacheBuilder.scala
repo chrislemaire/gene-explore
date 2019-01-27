@@ -1,7 +1,7 @@
 package com.clemaire.gexplore.core.gfa.reference.cache
 
 import com.clemaire.gexplore.core.gfa.CachePathList
-import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
+import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.writing.{ReferenceCacheBuilder, ReferenceNodeWriter}
 import com.clemaire.gexplore.core.gfa.reference.writing.io.NioBufferedSRWriter
 

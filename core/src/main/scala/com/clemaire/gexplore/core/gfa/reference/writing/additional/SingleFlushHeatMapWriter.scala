@@ -1,7 +1,7 @@
 package com.clemaire.gexplore.core.gfa.reference.writing.additional
 
 import com.clemaire.gexplore.core.gfa.CachePathList
-import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
+import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
 import com.clemaire.gexplore.util.io.NioBufferedWriter
 
 import scala.collection.mutable

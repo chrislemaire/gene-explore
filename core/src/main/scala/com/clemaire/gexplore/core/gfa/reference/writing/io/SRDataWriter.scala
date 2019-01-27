@@ -4,7 +4,7 @@ import java.io.DataOutputStream
 import java.nio.ByteBuffer
 
 import com.clemaire.gexplore.core.gfa.{DataWriter, LengthByType}
-import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
+import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
 
 /**
   * [[DataWriter]] defining functions to write

@@ -1,6 +1,6 @@
 package com.clemaire.gexplore.core.gfa.reference.writing.io
 
-import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
+import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.writing.additional.AdditionalReferenceWriter
 import com.clemaire.gexplore.core.gfa.reference.writing.ReferenceNodeWriter
 

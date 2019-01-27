@@ -1,7 +1,6 @@
 package com.clemaire.gexplore.core.gfa.reference.cache
 
 import com.clemaire.gexplore.core.gfa.data.Node
-import com.clemaire.gexplore.core.gfa.reference.ReferenceCache
 import com.clemaire.gexplore.core.gfa.reference.index.{GCIndex, SRIndex}
 
 import scala.collection.mutable

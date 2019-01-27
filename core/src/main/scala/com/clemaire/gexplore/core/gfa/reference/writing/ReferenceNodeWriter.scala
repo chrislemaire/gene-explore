@@ -2,7 +2,7 @@ package com.clemaire.gexplore.core.gfa.reference.writing
 
 import java.io.Writer
 
-import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
+import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.index.{GCIndex, SRIndex}
 
 trait ReferenceNodeWriter

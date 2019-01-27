@@ -1,7 +1,7 @@
 package com.clemaire.gexplore.core.gfa.reference.writing.coordinates
 
 import com.clemaire.gexplore.core.gfa.CachePathList
-import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
+import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.writing.additional.AdditionalReferenceWriter
 import com.clemaire.gexplore.core.gfa.reference.writing.coordinates.data.GCDataWriter
 import com.clemaire.gexplore.util.io.NioBufferedWriter

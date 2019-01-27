@@ -1,7 +1,7 @@
 package com.clemaire.gexplore.core.gfa.reference.writing
 
 import com.clemaire.gexplore.core.gfa.CachePathList
-import com.clemaire.gexplore.core.gfa.reference.ReferenceCache
+import com.clemaire.gexplore.core.gfa.reference.cache.ReferenceCache
 import com.clemaire.gexplore.core.gfa.reference.parsing.Gfa1Parser
 
 abstract class ReferenceCacheBuilder[+T <: ReferenceCache](val paths: CachePathList)

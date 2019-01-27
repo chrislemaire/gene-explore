@@ -30,7 +30,7 @@ class AbstractIndex[T <: ChunkIndex]
   private[this] val segmentChunkMap =
     new IntervalTreeMap[Integer, T]()
 
-  override def +=:(elem: T): this.type = {
+  override def +=(elem: T): this.type = {
     layerChunkMap.put(elem.layers, elem)
     segmentChunkMap.put(elem.segmentIds, elem)
 
