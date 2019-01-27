@@ -1,11 +1,11 @@
-package com.clemaire.gexplore.core.gfa.reference.cache.cache
+package com.clemaire.gexplore.core.gfa.reference.cache.cache.scheduling
 
 import com.clemaire.gexplore.core.gfa.reference.cache.{Cache, Chunk}
 import com.clemaire.gexplore.core.gfa.reference.index.{AbstractIndex, ChunkIndex}
 
 import scala.collection.mutable
 
-trait LRUCache[I <: AbstractIndex[CI], D, CI <: ChunkIndex]
+trait LRU[I <: AbstractIndex[CI], D, CI <: ChunkIndex]
   extends Cache[I, D, CI] {
 
   private var currInstance: Long = -1L
