@@ -1,6 +1,6 @@
-package com.clemaire.gexplore.core.gfa.reference.cache.scheduling
+package com.clemaire.gexplore.core.gfa.cache.scheduling
 
-import com.clemaire.gexplore.core.gfa.reference.cache.Chunk
+import com.clemaire.gexplore.core.gfa.cache.Chunk
 
 import scala.collection.mutable
 

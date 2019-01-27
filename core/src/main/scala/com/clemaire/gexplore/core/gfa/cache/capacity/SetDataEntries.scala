@@ -1,6 +1,6 @@
-package com.clemaire.gexplore.core.gfa.reference.cache.capacity
+package com.clemaire.gexplore.core.gfa.cache.capacity
 
-import com.clemaire.gexplore.core.gfa.reference.cache.{CacheData, Chunk}
+import com.clemaire.gexplore.core.gfa.cache.{CacheData, Chunk}
 
 trait SetDataEntries[C <: Chunk[_, _]]
   extends CapacityLimiter

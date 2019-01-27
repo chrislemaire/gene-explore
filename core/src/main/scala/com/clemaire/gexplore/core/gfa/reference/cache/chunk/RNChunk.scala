@@ -1,6 +1,6 @@
 package com.clemaire.gexplore.core.gfa.reference.cache.chunk
 
-import com.clemaire.gexplore.core.gfa.reference.cache.Chunk
+import com.clemaire.gexplore.core.gfa.cache.Chunk
 import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.index.SRChunkIndex
 

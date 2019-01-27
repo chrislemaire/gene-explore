@@ -1,6 +1,6 @@
-package com.clemaire.gexplore.core.gfa.reference.cache.specialized
+package com.clemaire.gexplore.core.gfa.cache.specialized
 
-import com.clemaire.gexplore.core.gfa.reference.cache.Cache
+import com.clemaire.gexplore.core.gfa.cache.Cache
 import com.clemaire.gexplore.core.gfa.reference.data.Indexed
 import com.clemaire.gexplore.core.gfa.reference.index.{AbstractIndex, ChunkIndex}
 

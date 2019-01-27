@@ -1,4 +1,4 @@
-package com.clemaire.gexplore.core.gfa.reference.cache.capacity
+package com.clemaire.gexplore.core.gfa.cache.capacity
 
 trait CapacityLimiter {
 

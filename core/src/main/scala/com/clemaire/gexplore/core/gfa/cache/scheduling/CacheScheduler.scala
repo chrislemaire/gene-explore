@@ -1,6 +1,6 @@
-package com.clemaire.gexplore.core.gfa.reference.cache.scheduling
+package com.clemaire.gexplore.core.gfa.cache.scheduling
 
-import com.clemaire.gexplore.core.gfa.reference.cache.{CacheData, Chunk}
+import com.clemaire.gexplore.core.gfa.cache.{CacheData, Chunk}
 
 trait CacheScheduler[C <: Chunk[_, _]]
   extends Object

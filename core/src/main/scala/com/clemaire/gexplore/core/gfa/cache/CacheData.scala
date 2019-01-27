@@ -1,4 +1,4 @@
-package com.clemaire.gexplore.core.gfa.reference.cache
+package com.clemaire.gexplore.core.gfa.cache
 
 import scala.collection.mutable
 
