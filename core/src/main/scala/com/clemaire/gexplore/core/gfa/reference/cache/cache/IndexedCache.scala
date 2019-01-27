@@ -4,8 +4,8 @@ import com.clemaire.gexplore.core.gfa.reference.cache.Cache
 import com.clemaire.gexplore.core.gfa.reference.data.Indexed
 import com.clemaire.gexplore.core.gfa.reference.index.{AbstractIndex, ChunkIndex}
 
-trait IndexedCache[I <: AbstractIndex[CI], D <: Indexed, CI <: ChunkIndex]
-  extends Cache[I, D, CI] {
+trait IndexedCache[I <: AbstractIndex[CI], CI <: ChunkIndex, D <: Indexed]
+  extends Cache[I, CI, D] {
 
   def betweenIds(leftId: Int,
                  rightId: Int): Map[Int, D] =

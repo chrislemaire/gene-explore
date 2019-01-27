@@ -1,18 +1,17 @@
 package com.clemaire.gexplore.core.gfa.reference.cache.cache.scheduling
 
-import com.clemaire.gexplore.core.gfa.reference.cache.{Cache, Chunk}
-import com.clemaire.gexplore.core.gfa.reference.index.{AbstractIndex, ChunkIndex}
+import com.clemaire.gexplore.core.gfa.reference.cache.Chunk
 
 import scala.collection.mutable
 
-trait LRU[I <: AbstractIndex[CI], D, CI <: ChunkIndex]
-  extends Cache[I, D, CI] {
+trait LRU[C <: Chunk[_, _]]
+  extends CacheScheduler[C] {
 
   private var currInstance: Long = -1L
 
   private val order: mutable.TreeMap[Long, Int] = mutable.TreeMap()
 
-  override protected def add(id: Int, chunk: Chunk[CI, D]): Unit = {
+  override protected def add(id: Int, chunk: C): Unit = {
     super.add(id, chunk)
 
     currInstance += 1

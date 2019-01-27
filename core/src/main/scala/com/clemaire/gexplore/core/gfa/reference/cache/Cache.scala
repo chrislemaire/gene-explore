@@ -1,6 +1,7 @@
 package com.clemaire.gexplore.core.gfa.reference.cache
 
 import com.clemaire.gexplore.core.gfa.reference.cache.cache.capacity.CapacityLimiter
+import com.clemaire.gexplore.core.gfa.reference.cache.cache.scheduling.CacheScheduler
 import com.clemaire.gexplore.core.gfa.reference.index.{AbstractIndex, ChunkIndex}
 
 /**
@@ -16,31 +17,13 @@ import com.clemaire.gexplore.core.gfa.reference.index.{AbstractIndex, ChunkIndex
   * @tparam I The type of [[AbstractIndex]] used.
   * @tparam D The type of data returned upon retrieval calls.
   */
-trait Cache[I <: AbstractIndex[CI], D, CI <: ChunkIndex]
+trait Cache[I <: AbstractIndex[CI], CI <: ChunkIndex, D]
   extends Object
     with CacheData[Chunk[CI, D]]
-    with CapacityLimiter {
+    with CapacityLimiter
+    with CacheScheduler[Chunk[CI, D]] {
 
   val index: I
-
-  type C = Chunk[CI, D]
-
-  /**
-    * Adds a chunk to the loaded chunks map and performs
-    * any necessary cache scheduling activities.
-    *
-    * @param id    The index of the chunk to add.
-    * @param chunk The chunk to add itself.
-    */
-  protected def add(id: Int,
-                    chunk: C): Unit =
-    loadedChunks(id) = chunk
-
-  /**
-    * Decides the next chunk to unload and removes it
-    * from the loadedChunk map.
-    */
-  protected def removeNext(): Unit
 
   /**
     * Calls the appropriate functions to fetch chunks from
@@ -50,7 +33,7 @@ trait Cache[I <: AbstractIndex[CI], D, CI <: ChunkIndex]
     * @param chunks The indexes of the chunks to load into memory.
     * @return A mapping of chunk ids to chunks.
     */
-  protected def fetch(chunks: Set[CI]): Map[Int, C]
+  protected def fetch(chunks: Set[CI]): Map[Int, Chunk[CI, D]]
 
   /**
     * Loads the requested chunks into memory if they weren't
@@ -60,7 +43,7 @@ trait Cache[I <: AbstractIndex[CI], D, CI <: ChunkIndex]
     * @param chunksToLoad The indexes of the chunks to load.
     * @return A mapping of chunk ids to chunks.
     */
-  def load(chunksToLoad: Set[CI]): Map[Int, C] = {
+  def load(chunksToLoad: Set[CI]): Map[Int, Chunk[CI, D]] = {
     val chunksAlreadyFetched = chunksToLoad
       .filter(ci => loadedChunks.contains(ci.id))
       .map(ci => ci.id -> loadedChunks(ci.id))

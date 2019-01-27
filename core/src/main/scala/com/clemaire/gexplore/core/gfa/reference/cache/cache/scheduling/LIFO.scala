@@ -1,16 +1,15 @@
 package com.clemaire.gexplore.core.gfa.reference.cache.cache.scheduling
 
-import com.clemaire.gexplore.core.gfa.reference.cache.{Cache, Chunk}
-import com.clemaire.gexplore.core.gfa.reference.index.{AbstractIndex, ChunkIndex}
+import com.clemaire.gexplore.core.gfa.reference.cache.Chunk
 
 import scala.collection.mutable
 
-trait LIFO[I <: AbstractIndex[CI], D, CI <: ChunkIndex]
-  extends Cache[I, D, CI] {
+trait LIFO[C <: Chunk[_, _]]
+  extends CacheScheduler[C] {
 
   private val queue: mutable.Queue[Int] = mutable.Queue()
 
-  override protected def add(id: Int, chunk: Chunk[CI, D]): Unit = {
+  override protected def add(id: Int, chunk: C): Unit = {
     super.add(id, chunk)
 
     queue.enqueue(id)

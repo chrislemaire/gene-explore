@@ -2,9 +2,9 @@ package com.clemaire.gexplore.core.gfa.reference.cache
 
 import scala.collection.mutable
 
-trait CacheData[ChunkType <: Chunk[_, _]] {
+trait CacheData[C <: Chunk[_, _]] {
 
-  protected val loadedChunks: mutable.HashMap[Int, ChunkType] =
+  protected val loadedChunks: mutable.HashMap[Int, C] =
     mutable.HashMap()
 
 }
