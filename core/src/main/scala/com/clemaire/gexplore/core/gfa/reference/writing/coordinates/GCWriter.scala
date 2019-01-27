@@ -1,7 +1,7 @@
 package com.clemaire.gexplore.core.gfa.reference.writing.coordinates
 
 import com.clemaire.gexplore.core.gfa.CachePathList
-import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
+import com.clemaire.gexplore.core.gfa.reference.data.BuilderReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.writing.additional.AdditionalReferenceWriter
 import com.clemaire.gexplore.core.gfa.reference.writing.coordinates.data.GCDataWriter
 import com.clemaire.gexplore.util.io.NioBufferedWriter
@@ -31,7 +31,7 @@ class GCWriter(paths: CachePathList,
   val indexWriter: GCIndexWriter =
     new GCIndexWriter(paths, lastIndexedCoordinates, currentCoordinates)
 
-  override def writeNode(node: ReferenceNode,
+  override def writeNode(node: BuilderReferenceNode,
                          byteLength: Int): Unit = {
     indexWriter.writeNode(node, byteLength)
 

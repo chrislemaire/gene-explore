@@ -4,11 +4,11 @@ import java.io.DataOutputStream
 import java.nio.ByteBuffer
 
 import com.clemaire.gexplore.core.gfa.{DataWriter, LengthByType}
-import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
+import com.clemaire.gexplore.core.gfa.reference.data.BuilderReferenceNode
 
 /**
   * [[DataWriter]] defining functions to write
-  * [[ReferenceNode]]s in the 'simple' format.
+  * [[BuilderReferenceNode]]s in the 'simple' format.
   *
   * The following lines describe this format with, on
   * the first line, an identifier of the data that is
@@ -21,14 +21,14 @@ import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
   * }}}
   */
 trait SRDataWriter
-  extends DataWriter[ReferenceNode]
-    with LengthByType[ReferenceNode] {
+  extends DataWriter[BuilderReferenceNode]
+    with LengthByType[BuilderReferenceNode] {
 
-  override def length(node: ReferenceNode): Int =
+  override def length(node: BuilderReferenceNode): Int =
     4 + 8 + 4 * 4 + 12 * (node.outgoingEdges.length +
       node.incomingEdges.length)
 
-  override def write(node: ReferenceNode,
+  override def write(node: BuilderReferenceNode,
                      os: DataOutputStream): Unit = {
     os.writeInt(node.outgoingEdges.length)
     os.writeInt(node.incomingEdges.length)
@@ -46,7 +46,7 @@ trait SRDataWriter
     })
   }
 
-  override def write(node: ReferenceNode,
+  override def write(node: BuilderReferenceNode,
                      ob: ByteBuffer): Unit = {
     ob.putInt(node.outgoingEdges.length)
     ob.putInt(node.incomingEdges.length)

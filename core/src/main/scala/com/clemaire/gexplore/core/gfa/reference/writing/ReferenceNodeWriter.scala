@@ -2,7 +2,7 @@ package com.clemaire.gexplore.core.gfa.reference.writing
 
 import java.io.Writer
 
-import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
+import com.clemaire.gexplore.core.gfa.reference.data.BuilderReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.index.{GCIndex, SRIndex}
 
 trait ReferenceNodeWriter
@@ -13,14 +13,14 @@ trait ReferenceNodeWriter
   /**
     * Writes a single ReferenceNode to file.
     *
-    * @param node The [[ReferenceNode]] to write
+    * @param node The [[BuilderReferenceNode]] to write
     *             to file.
     */
-  def write(node: ReferenceNode): Unit
+  def write(node: BuilderReferenceNode): Unit
 
   /**
     * @return The built [[SRIndex]] resulting
-    *         from writing all [[ReferenceNode]]s to disk.
+    *         from writing all [[BuilderReferenceNode]]s to disk.
     */
   def index: SRIndex
 

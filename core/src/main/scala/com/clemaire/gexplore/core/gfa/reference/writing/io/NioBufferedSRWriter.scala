@@ -1,7 +1,7 @@
 package com.clemaire.gexplore.core.gfa.reference.writing.io
 
 import com.clemaire.gexplore.core.gfa.CachePathList
-import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
+import com.clemaire.gexplore.core.gfa.reference.data.BuilderReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.index.{GCIndex, SRIndex}
 import com.clemaire.gexplore.core.gfa.reference.parsing.GraphBuilder
 import com.clemaire.gexplore.core.gfa.reference.writing.additional.{AdditionalReferenceWriter, SingleFlushHeatMapWriter}
@@ -10,7 +10,7 @@ import com.clemaire.gexplore.core.gfa.reference.writing.index.NioBufferedSRIndex
 import com.clemaire.gexplore.util.io.{AsyncNioBufferedWriter, NioBufferedWriter}
 
 class NioBufferedSRWriter(builder: GraphBuilder)
-  extends AsyncNioBufferedWriter[(ReferenceNode, Int)]
+  extends AsyncNioBufferedWriter[(BuilderReferenceNode, Int)]
     with SRDataWriter
     with AdditionalSRWriterWorkBuffer {
 
@@ -48,7 +48,7 @@ class NioBufferedSRWriter(builder: GraphBuilder)
       coordinatesWriter
     )
 
-  override def write(node: ReferenceNode): Unit = {
+  override def write(node: BuilderReferenceNode): Unit = {
     val len = length(node)
     checkForFlush(len)
 

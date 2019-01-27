@@ -6,7 +6,7 @@ import com.clemaire.gexplore.core.gfa.reference.index.{SRChunkIndex, SRIndex}
 import com.clemaire.gexplore.core.gfa.reference.writing.additional.AdditionalReferenceWriter
 import com.clemaire.gexplore.util.io.NioBufferedWriter
 import NioBufferedSRIndexWriter._
-import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
+import com.clemaire.gexplore.core.gfa.reference.data.BuilderReferenceNode
 
 object NioBufferedSRIndexWriter {
   /**
@@ -87,7 +87,7 @@ class NioBufferedSRIndexWriter(val paths: CachePathList)
     write(chunkIndex, buffer)
   }
 
-  override def writeNode(node: ReferenceNode,
+  override def writeNode(node: BuilderReferenceNode,
                          byteLength: Int): Unit = {
     if (bytesWritten >= MAX_CHUNK_LENGTH) {
       flushIndex()

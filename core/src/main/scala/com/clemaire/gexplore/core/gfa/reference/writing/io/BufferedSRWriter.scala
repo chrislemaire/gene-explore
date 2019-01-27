@@ -1,7 +1,7 @@
 package com.clemaire.gexplore.core.gfa.reference.writing.io
 
 import com.clemaire.gexplore.core.gfa.CachePathList
-import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
+import com.clemaire.gexplore.core.gfa.reference.data.BuilderReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.index.{GCIndex, SRIndex}
 import com.clemaire.gexplore.core.gfa.reference.parsing.GraphBuilder
 import com.clemaire.gexplore.core.gfa.reference.writing.additional.{AdditionalReferenceWriter, SingleFlushHeatMapWriter}
@@ -47,7 +47,7 @@ class BufferedSRWriter(paths: CachePathList,
       coordinatesWriter
     )
 
-  override def write(node: ReferenceNode): Unit = {
+  override def write(node: BuilderReferenceNode): Unit = {
     write(node, os)
     additionalWriters.foreach(_.writeNode(node, length(node)))
   }

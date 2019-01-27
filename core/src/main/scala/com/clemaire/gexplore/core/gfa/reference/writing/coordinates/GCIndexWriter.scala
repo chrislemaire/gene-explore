@@ -2,7 +2,7 @@ package com.clemaire.gexplore.core.gfa.reference.writing.coordinates
 
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.interval.IntInterval
-import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
+import com.clemaire.gexplore.core.gfa.reference.data.BuilderReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.index.{GCChunkIndex, GCIndex}
 import com.clemaire.gexplore.core.gfa.reference.writing.additional.AdditionalReferenceWriter
 import com.clemaire.gexplore.core.gfa.reference.writing.coordinates.GCIndexWriter._
@@ -77,7 +77,7 @@ class GCIndexWriter(paths: CachePathList,
     write(chunkIndex, buffer)
   }
 
-  override def writeNode(node: ReferenceNode,
+  override def writeNode(node: BuilderReferenceNode,
                          byteLength: Int): Unit = {
     if (bytesWritten >= MAX_CHUNK_LENGTH) {
       flushIndex()

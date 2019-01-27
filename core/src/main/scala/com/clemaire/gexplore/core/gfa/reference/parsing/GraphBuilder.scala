@@ -2,7 +2,7 @@ package com.clemaire.gexplore.core.gfa.reference.parsing
 
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.reference.cache.Cache
-import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
+import com.clemaire.gexplore.core.gfa.reference.data.BuilderReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.writing.ReferenceNodeWriter
 import com.clemaire.gexplore.core.gfa.reference.writing.io.NioBufferedSRWriter
 
@@ -55,7 +55,7 @@ class GraphBuilder(val paths: CachePathList) {
     * The current node being built by the reference
     * builder wrapped in an option.
     */
-  private var currentNode: Option[ReferenceNode] = None
+  private var currentNode: Option[BuilderReferenceNode] = None
 
   /**
     * Registers a header that is identified
@@ -107,7 +107,7 @@ class GraphBuilder(val paths: CachePathList) {
 
     lookAheadSegments.put(to, (toId, toLayer))
 
-    val node: ReferenceNode = currentNode.get
+    val node: BuilderReferenceNode = currentNode.get
     node.outgoingEdges += toId -> atOffset
 
     if (incomingEdges.contains(toId)) {
@@ -155,7 +155,7 @@ class GraphBuilder(val paths: CachePathList) {
     val nodeGenomes = getGenomes(options)
 
     val (id, layer) = lookupNode(name)
-    currentNode = Some(ReferenceNode(name,
+    currentNode = Some(BuilderReferenceNode(name,
       id, layer, atOffset, content.length,
       incomingEdges.getOrElse(id, mutable.Buffer()),
       mutable.Buffer(),

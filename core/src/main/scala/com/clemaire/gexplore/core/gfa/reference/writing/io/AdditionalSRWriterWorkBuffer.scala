@@ -1,6 +1,6 @@
 package com.clemaire.gexplore.core.gfa.reference.writing.io
 
-import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
+import com.clemaire.gexplore.core.gfa.reference.data.BuilderReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.writing.additional.AdditionalReferenceWriter
 import com.clemaire.gexplore.core.gfa.reference.writing.ReferenceNodeWriter
 
@@ -16,7 +16,7 @@ trait AdditionalSRWriterWorkBuffer
   protected[this] val additionalWriters: Seq[AdditionalReferenceWriter] =
     Seq.empty
 
-  protected[this] def acceptWork(work: (ReferenceNode, Int)): Unit = {
+  protected[this] def acceptWork(work: (BuilderReferenceNode, Int)): Unit = {
     additionalWriters.foreach(_.writeNode(work._1, work._2))
   }
 
