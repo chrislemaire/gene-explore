@@ -4,30 +4,30 @@ import java.io.DataInputStream
 import java.nio.ByteBuffer
 
 import com.clemaire.gexplore.core.gfa.DataReader
-import com.clemaire.gexplore.core.gfa.data.StructuralNode
+import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
 
-trait SRDataReader
-  extends DataReader[StructuralNode] {
+class RNReader
+  extends DataReader[ReferenceNode] {
 
-  override protected def read(is: DataInputStream): StructuralNode = {
+  override protected def read(is: DataInputStream): ReferenceNode = {
     val nOutgoing = is.readInt()
     val nIncoming = is.readInt()
 
-    StructuralNode(
+    ReferenceNode(
       is.readInt(),
       is.readInt(),
       is.readLong(),
       is.readInt(),
-      (1 to nOutgoing).map(_ => (is.readInt(), is.readLong())),
-      (1 to nIncoming).map(_ => (is.readInt(), is.readLong()))
+      (1 to nOutgoing).map(_ => (is.readInt, is.readLong)),
+      (1 to nIncoming).map(_ => (is.readInt, is.readLong))
     )
   }
 
-  override protected def read(ib: ByteBuffer): StructuralNode = {
+  override protected def read(ib: ByteBuffer): ReferenceNode = {
     val nOutgoing = ib.getInt()
     val nIncoming = ib.getInt()
 
-    StructuralNode(
+    ReferenceNode(
       ib.getInt,
       ib.getInt,
       ib.getLong,
