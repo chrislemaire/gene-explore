@@ -3,12 +3,12 @@ package com.clemaire.gexplore.core.gfa.reference.cache
 import java.nio.file.Paths
 
 import com.clemaire.gexplore.core.gfa.CachePathList
-import com.clemaire.gexplore.core.gfa.reference.parsing.BufferedGfa1Parser
+import com.clemaire.gexplore.core.gfa.reference.parsing.{BufferedGfa1Parser, GraphBuilder}
 import org.scalatest.{BeforeAndAfter, FunSuite}
 
 import scala.collection.immutable.HashSet
 
-class RCacheBuilderTest
+class GraphBuilderTest
   extends FunSuite
     with BeforeAndAfter {
 
@@ -17,10 +17,10 @@ class RCacheBuilderTest
   private val paths = new CachePathList(Paths.get("C:\\Users\\Chris Lemaire\\Documents\\Delft\\Bachelor Computer Science year 2\\Q4\\[TI2806] - Context Project\\data\\TB328v2.gfa"))
 //  private val paths = new CachePathList(Paths.get("C:\\Users\\Chris Lemaire\\Documents\\Delft\\Bachelor Computer Science year 2\\Q4\\[TI2806] - Context Project\\data\\Tomato_150_VCFs_2.50_chr06.gfa"))
 
-  private var underTest: RCacheBuilder = _
+  private var underTest: GraphBuilder = _
 
   before {
-    underTest = new RCacheBuilder(paths)
+    underTest = new GraphBuilder(paths)
   }
 
   test("Test TB10") {

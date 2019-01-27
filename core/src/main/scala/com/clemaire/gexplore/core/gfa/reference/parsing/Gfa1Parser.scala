@@ -4,7 +4,6 @@ import java.util.InputMismatchException
 
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.reference.parsing.Gfa1Parser._
-import com.clemaire.gexplore.core.gfa.reference.writing.ReferenceCacheBuilder
 import com.clemaire.gexplore.util.SimpleCheck.checkThatOrThrow
 
 /**
@@ -103,26 +102,26 @@ object Gfa1Parser {
 }
 
 /**
-  * @param tags  The set of tags that should be passed
-  *              to registration for the options map.
+  * @param tags The set of tags that should be passed
+  *             to registration for the options map.
   */
 abstract class Gfa1Parser(val tags: Set[String]) {
 
   /**
-    * The [[ReferenceCacheBuilder]] to which parsed segments
+    * The [[GraphBuilder]] to which parsed segments
     * and links will be parsed for registration.
     */
-  private var cacheBuilder: ReferenceCacheBuilder[_] = _
+  private var cacheBuilder: GraphBuilder = _
 
   /**
     * Adjusts this [[Gfa1Parser]] to use the given
-    * [[ReferenceCacheBuilder]] and returns the adjusted [[Gfa1Parser]].
+    * [[GraphBuilder]] and returns the adjusted [[Gfa1Parser]].
     *
     * @param builder The new builder to use for GFA element
     *                registration.
     * @return The [[Gfa1Parser]] using the given builder.
     */
-  def withBuilder(builder: ReferenceCacheBuilder[_]): this.type = {
+  def withBuilder(builder: GraphBuilder): this.type = {
     cacheBuilder = builder
     this
   }
@@ -130,7 +129,7 @@ abstract class Gfa1Parser(val tags: Set[String]) {
   /**
     * Parses the source GFA file given and arranges
     * for all segments and links in it to be registered
-    * to the [[ReferenceCacheBuilder]].
+    * to the [[GraphBuilder]].
     *
     * @param paths The list of paths containing the
     *              source path.
@@ -158,7 +157,7 @@ abstract class Gfa1Parser(val tags: Set[String]) {
 
   /**
     * Parses a all lines of some GFA file and passes the
-    * parsed element onto the given [[ReferenceCacheBuilder]].
+    * parsed element onto the given [[GraphBuilder]].
     *
     * @param input  The lines to parse GFA elements from.
     * @param offset The offset in the file at which this
@@ -173,7 +172,7 @@ abstract class Gfa1Parser(val tags: Set[String]) {
 
   /**
     * Parses a single line of some GFA file and passes the
-    * parsed element onto the given [[ReferenceCacheBuilder]].
+    * parsed element onto the given [[GraphBuilder]].
     *
     * @param line   The line to parse a GFA element from.
     * @param offset The offset in the file at which this
@@ -191,7 +190,7 @@ abstract class Gfa1Parser(val tags: Set[String]) {
 
   /**
     * Parses a header string by splitting it and passing
-    * the parsed options onto the given [[ReferenceCacheBuilder]].
+    * the parsed options onto the given [[GraphBuilder]].
     *
     * @param headerString The String representing a header
     *                     that is to be parsed.
@@ -203,7 +202,7 @@ abstract class Gfa1Parser(val tags: Set[String]) {
 
   /**
     * Parses a segment string by splitting it and passing
-    * the relevant data onto the given [[ReferenceCacheBuilder]].
+    * the relevant data onto the given [[GraphBuilder]].
     *
     * @param segString  The String representing a segment
     *                   that is to be parsed.
@@ -225,7 +224,7 @@ abstract class Gfa1Parser(val tags: Set[String]) {
 
   /**
     * Parses a link string by splitting it and passing
-    * the relevant data onto the given [[ReferenceCacheBuilder]].
+    * the relevant data onto the given [[GraphBuilder]].
     *
     * @param linkString The String representing a link
     *                   that is to be parsed.

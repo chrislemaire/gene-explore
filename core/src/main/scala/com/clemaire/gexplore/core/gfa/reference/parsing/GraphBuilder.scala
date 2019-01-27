@@ -1,19 +1,19 @@
-package com.clemaire.gexplore.core.gfa.reference.cache
+package com.clemaire.gexplore.core.gfa.reference.parsing
 
 import com.clemaire.gexplore.core.gfa.CachePathList
+import com.clemaire.gexplore.core.gfa.reference.cache.Cache
 import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
-import com.clemaire.gexplore.core.gfa.reference.writing.{ReferenceCacheBuilder, ReferenceNodeWriter}
+import com.clemaire.gexplore.core.gfa.reference.writing.ReferenceNodeWriter
 import com.clemaire.gexplore.core.gfa.reference.writing.io.NioBufferedSRWriter
 
 import scala.collection.mutable
 
-class RCacheBuilder(private val pathsIn: CachePathList)
-  extends ReferenceCacheBuilder[RCache](pathsIn) {
+class GraphBuilder(val paths: CachePathList) {
 
   /**
-    * The cache being built by this [[RCacheBuilder]].
+    * The data being built by this [[GraphBuilder]].
     */
-  private val cache: RCache = new RCache()
+  private val data: GraphData = new GraphData()
 
   /**
     * The segments that are to come paired with the
@@ -39,7 +39,7 @@ class RCacheBuilder(private val pathsIn: CachePathList)
     * Writer to write the node-reference data to file.
     */
   private val writer: ReferenceNodeWriter =
-    new NioBufferedSRWriter(paths, this)
+    new NioBufferedSRWriter(this)
 
   /**
     * The number of genomes currently counted.
@@ -57,18 +57,42 @@ class RCacheBuilder(private val pathsIn: CachePathList)
     */
   private var currentNode: Option[ReferenceNode] = None
 
-  override final def registerHeader(options: Traversable[(String, String)]): Unit =
+  /**
+    * Registers a header that is identified
+    * by the list of options it defines. The
+    * built [[GraphData]] should hereafter
+    * recognize the options provided as header
+    * options.
+    *
+    * @param options The options defining
+    *                the header.
+    */
+  final def registerHeader(options: Traversable[(String, String)]): Unit =
     options.filter(_._1 == "ORI").foreach(_._2.split(";")
-        .filterNot(gen => cache.genomeNames.contains(gen))
+        .filterNot(gen => data.genomeNames.contains(gen))
         .filterNot(_.isEmpty)
         .foreach(gen => {
           genomeIndex += 1
-          cache._genomeNames += gen -> genomeIndex
-          cache._genomes += genomeIndex -> gen
+          data._genomeNames += gen -> genomeIndex
+          data._genomes += genomeIndex -> gen
           genomeCoordinates(genomeIndex) = 0
         }))
 
-  override final def registerLink(atOffset: Long,
+  /**
+    * Registers a link that is identified by its position
+    * in the source file, the node it starts in and the node
+    * it goes to. The built [[GraphData]] should hereafter
+    * recognize the link provided as such.
+    *
+    * @param atOffset The position in the file at which the
+    *                 edge's description starts.
+    * @param from     The name of the node at which this edge
+    *                 starts.
+    * @param to       The name of the node at which this edge
+    *                 ends.
+    * @param options  The options provided to the edge.
+    */
+  final def registerLink(atOffset: Long,
                                   from: String,
                                   to: String,
                                   options: Traversable[(String, String)]): Unit = {
@@ -110,7 +134,19 @@ class RCacheBuilder(private val pathsIn: CachePathList)
       (segmentIndex, 0)
     }
 
-  override final def registerSegment(atOffset: Long,
+  /**
+    * Registers a segment that is identified by its position
+    * in the source file, its name, its content, and the options
+    * provided to it. The build [[Cache]] should hereafter
+    * recognize the segment provided as such.
+    *
+    * @param atOffset The position in the file at which the
+    *                 node's description starts.
+    * @param name     The name of the node.
+    * @param content  The content that the node describes.
+    * @param options  The options provided to the node.
+    */
+  final def registerSegment(atOffset: Long,
                                      name: String,
                                      content: String,
                                      options: Traversable[(String, String)]): Unit = {
@@ -145,7 +181,7 @@ class RCacheBuilder(private val pathsIn: CachePathList)
         if (s forall Character.isDigit) {
           s.toInt
         } else {
-          cache._genomeNames(s)
+          data._genomeNames(s)
         }
       })).getOrElse(Array.empty)
 
@@ -164,20 +200,40 @@ class RCacheBuilder(private val pathsIn: CachePathList)
       currentNode = None
     })
 
-  override final def finish(): RCache = {
+  /**
+    * Finishes building the [[GraphData]] and closes this
+    * [[GraphBuilder]].
+    *
+    * @return The built [[Cache]].
+    */
+  final def finish(): GraphData = {
     try {
       writeCurrentNode()
       writer.flush()
 
-      cache._index = writer.index
-      cache._coordinatesIndex = writer.coordinatesIndex
+      data._index = writer.index
+      data._coordinatesIndex = writer.coordinatesIndex
 
-      cache
+      data
     } finally {
       close()
     }
   }
 
-  override def close(): Unit =
+  /**
+    * Builds this [[GraphData]] with the given [[Gfa1Parser]]
+    * as its parser and the given [[CachePathList]] to find the
+    * source and output files.
+    *
+    * @param parser The parser to use for parsing the GFA file.
+    * @return The finished cache.
+    */
+  def buildWith(parser: Gfa1Parser): GraphData = {
+    parser.withBuilder(this).parse(paths)
+    finish()
+  }
+
+  def close(): Unit =
     writer.close()
+
 }

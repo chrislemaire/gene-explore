@@ -1,16 +1,16 @@
 package com.clemaire.gexplore.core.gfa.reference.writing.io
 
 import com.clemaire.gexplore.core.gfa.CachePathList
-import com.clemaire.gexplore.core.gfa.reference.cache.RCacheBuilder
 import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.index.{GCIndex, SRIndex}
+import com.clemaire.gexplore.core.gfa.reference.parsing.GraphBuilder
 import com.clemaire.gexplore.core.gfa.reference.writing.additional.{AdditionalReferenceWriter, SingleFlushHeatMapWriter}
 import com.clemaire.gexplore.core.gfa.reference.writing.coordinates.GCWriter
 import com.clemaire.gexplore.core.gfa.reference.writing.index.NioBufferedSRIndexWriter
 import com.clemaire.gexplore.util.io.IoBufferedWriter
 
 class BufferedSRWriter(paths: CachePathList,
-                       builder: RCacheBuilder)
+                       builder: GraphBuilder)
   extends IoBufferedWriter
     with SRDataWriter
     with AdditionalSRWriterWorkBuffer {
