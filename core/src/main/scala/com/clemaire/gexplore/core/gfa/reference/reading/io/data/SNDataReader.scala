@@ -4,7 +4,7 @@ import java.io.DataInputStream
 import java.nio.ByteBuffer
 
 import com.clemaire.gexplore.core.gfa.DataReader
-import com.clemaire.gexplore.core.gfa.reference.data.StructuralNode
+import com.clemaire.gexplore.core.gfa.data.StructuralNode
 
 trait SNDataReader
   extends DataReader[StructuralNode] {

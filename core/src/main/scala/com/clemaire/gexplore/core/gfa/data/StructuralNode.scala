@@ -1,6 +1,4 @@
-package com.clemaire.gexplore.core.gfa.reference.data
-
-import com.clemaire.gexplore.core.gfa.data.Positional
+package com.clemaire.gexplore.core.gfa.data
 
 case class StructuralNode(id: Int,
                           layer: Int,
