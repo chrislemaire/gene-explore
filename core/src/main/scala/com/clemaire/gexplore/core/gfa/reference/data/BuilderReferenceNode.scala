@@ -10,6 +10,7 @@ case class BuilderReferenceNode(name: String,
                                 incomingEdges: mutable.Buffer[(Int, Long)],
                                 outgoingEdges: mutable.Buffer[(Int, Long)],
                                 genomeCoordinates: Traversable[(Int, Long)])
+  extends Positional
 
 object BuilderReferenceNode {
   lazy val empty: BuilderReferenceNode = BuilderReferenceNode("", -1, -1, -1, -1, mutable.Buffer.empty, mutable.Buffer.empty, Map.empty)

@@ -6,3 +6,5 @@ case class ReferenceNode(id: Int,
                          contentLength: Int,
                          incomingEdges: Traversable[(Int, Long)],
                          outgoingEdges: Traversable[(Int, Long)])
+  extends Indexed
+    with Positional

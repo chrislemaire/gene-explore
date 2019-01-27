@@ -5,3 +5,4 @@ case class StructuralNode(id: Int,
                           contentLength: Int,
                           incomingEdges: Set[Int],
                           outgoingEdges: Set[Int])
+  extends Positional
