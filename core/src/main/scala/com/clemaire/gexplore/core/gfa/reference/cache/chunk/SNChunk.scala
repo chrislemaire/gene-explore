@@ -2,11 +2,11 @@ package com.clemaire.gexplore.core.gfa.reference.cache.chunk
 
 import com.clemaire.gexplore.core.gfa.reference.cache.Chunk
 import com.clemaire.gexplore.core.gfa.reference.data.StructuralNode
-import com.clemaire.gexplore.core.gfa.reference.index.SRIndex
+import com.clemaire.gexplore.core.gfa.reference.index.SRChunkIndex
 
-case class SNChunk(override val index: SRIndex,
-                   override val data: Map[Int, StructuralNode])
-  extends Chunk[SRIndex, StructuralNode] {
+case class SNChunk(index: SRChunkIndex,
+                   data: Map[Int, StructuralNode])
+  extends Chunk[SRChunkIndex, StructuralNode] {
 
   val byLayer: Map[Int, Iterable[StructuralNode]] =
     data.values.groupBy(_.layer)

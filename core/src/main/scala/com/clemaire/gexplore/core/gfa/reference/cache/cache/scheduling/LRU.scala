@@ -12,7 +12,7 @@ trait LRU[I <: AbstractIndex[CI], D, CI <: ChunkIndex]
 
   private val order: mutable.TreeMap[Long, Int] = mutable.TreeMap()
 
-  override protected def add(id: Int, chunk: Chunk[I, D]): Unit = {
+  override protected def add(id: Int, chunk: Chunk[CI, D]): Unit = {
     super.add(id, chunk)
 
     currInstance += 1

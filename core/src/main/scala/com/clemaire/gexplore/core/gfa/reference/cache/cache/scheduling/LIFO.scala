@@ -10,7 +10,7 @@ trait LIFO[I <: AbstractIndex[CI], D, CI <: ChunkIndex]
 
   private val queue: mutable.Queue[Int] = mutable.Queue()
 
-  override protected def add(id: Int, chunk: Chunk[I, D]): Unit = {
+  override protected def add(id: Int, chunk: Chunk[CI, D]): Unit = {
     super.add(id, chunk)
 
     queue.enqueue(id)

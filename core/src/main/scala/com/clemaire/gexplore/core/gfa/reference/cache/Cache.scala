@@ -21,7 +21,7 @@ trait Cache[I <: AbstractIndex[CI], D, CI <: ChunkIndex] {
 
   val index: I
 
-  protected val loadedChunks: mutable.HashMap[Int, Chunk[I, D]] =
+  protected val loadedChunks: mutable.HashMap[Int, Chunk[CI, D]] =
     mutable.HashMap()
 
   /**
@@ -42,7 +42,7 @@ trait Cache[I <: AbstractIndex[CI], D, CI <: ChunkIndex] {
     * @param chunk The chunk to add itself.
     */
   protected def add(id: Int,
-                    chunk: Chunk[I, D]): Unit =
+                    chunk: Chunk[CI, D]): Unit =
     loadedChunks(id) = chunk
 
   /**
@@ -59,7 +59,7 @@ trait Cache[I <: AbstractIndex[CI], D, CI <: ChunkIndex] {
     * @param chunks The indexes of the chunks to load into memory.
     * @return A mapping of chunk ids to chunks.
     */
-  protected def fetch(chunks: Set[CI]): Map[Int, Chunk[I, D]]
+  protected def fetch(chunks: Set[CI]): Map[Int, Chunk[CI, D]]
 
   /**
     * Loads the requested chunks into memory if they weren't
@@ -69,7 +69,7 @@ trait Cache[I <: AbstractIndex[CI], D, CI <: ChunkIndex] {
     * @param chunksToLoad The indexes of the chunks to load.
     * @return A mapping of chunk ids to chunks.
     */
-  def load(chunksToLoad: Set[CI]): Map[Int, Chunk[I, D]] = {
+  def load(chunksToLoad: Set[CI]): Map[Int, Chunk[CI, D]] = {
     val chunksAlreadyFetched = chunksToLoad
       .filter(ci => loadedChunks.contains(ci.id))
       .map(ci => ci.id -> loadedChunks(ci.id))
