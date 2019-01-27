@@ -21,7 +21,7 @@ trait Cache[I <: AbstractIndex[CI], D, CI <: ChunkIndex] {
 
   val index: I
 
-  private val loadedChunks: mutable.HashMap[Int, Chunk[I, D]] =
+  protected val loadedChunks: mutable.HashMap[Int, Chunk[I, D]] =
     mutable.HashMap()
 
   /**
@@ -35,11 +35,21 @@ trait Cache[I <: AbstractIndex[CI], D, CI <: ChunkIndex] {
   protected def reachedMax(): Boolean
 
   /**
-    * Decides the next chunk to unload.
+    * Adds a chunk to the loaded chunks map and performs
+    * any necessary cache scheduling activities.
     *
-    * @return The id of the next chunk to unload.
+    * @param id    The index of the chunk to add.
+    * @param chunk The chunk to add itself.
     */
-  protected def nextToRemove(): Int
+  protected def add(id: Int,
+                    chunk: Chunk[I, D]): Unit =
+    loadedChunks(id) = chunk
+
+  /**
+    * Decides the next chunk to unload and removes it
+    * from the loadedChunk map.
+    */
+  protected def removeNext(): Unit
 
   /**
     * Calls the appropriate functions to fetch chunks from
@@ -68,9 +78,8 @@ trait Cache[I <: AbstractIndex[CI], D, CI <: ChunkIndex] {
     val fetchedChunks = fetch(chunksToLoad
       .filterNot(ci => loadedChunks.contains(ci.id)))
     fetchedChunks.foreach(t => {
-      val (id, chunk) = t
-      while (reachedMax()) loadedChunks.remove(nextToRemove())
-      loadedChunks(id) = chunk
+      while (reachedMax()) removeNext()
+      add(t._1, t._2)
     })
 
     chunksAlreadyFetched ++ fetchedChunks
