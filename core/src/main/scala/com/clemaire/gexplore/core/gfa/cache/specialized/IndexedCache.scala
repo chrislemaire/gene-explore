@@ -1,7 +1,7 @@
 package com.clemaire.gexplore.core.gfa.cache.specialized
 
 import com.clemaire.gexplore.core.gfa.cache.Cache
-import com.clemaire.gexplore.core.gfa.reference.data.Indexed
+import com.clemaire.gexplore.core.gfa.data.Indexed
 import com.clemaire.gexplore.core.gfa.reference.index.{AbstractIndex, ChunkIndex}
 
 trait IndexedCache[I <: AbstractIndex[CI], CI <: ChunkIndex, D <: Indexed]

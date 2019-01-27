@@ -1,5 +1,7 @@
 package com.clemaire.gexplore.core.gfa.reference.data
 
+import com.clemaire.gexplore.core.gfa.data.Positional
+
 import scala.collection.mutable
 
 case class BuilderReferenceNode(name: String,

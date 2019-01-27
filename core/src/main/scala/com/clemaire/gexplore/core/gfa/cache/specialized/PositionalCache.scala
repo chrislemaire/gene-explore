@@ -1,7 +1,7 @@
 package com.clemaire.gexplore.core.gfa.cache.specialized
 
 import com.clemaire.gexplore.core.gfa.cache.Cache
-import com.clemaire.gexplore.core.gfa.reference.data.Positional
+import com.clemaire.gexplore.core.gfa.data.Positional
 import com.clemaire.gexplore.core.gfa.reference.index.{AbstractIndex, ChunkIndex}
 
 trait PositionalCache[I <: AbstractIndex[CI], CI <: ChunkIndex, D <: Positional]
