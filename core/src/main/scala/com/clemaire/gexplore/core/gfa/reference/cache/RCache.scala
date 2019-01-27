@@ -5,7 +5,7 @@ import com.clemaire.gexplore.core.gfa.reference.index.{GCIndex, SRIndex}
 
 import scala.collection.mutable
 
-class SRCache extends ReferenceCache {
+class RCache extends ReferenceCache {
 
   /**
     * The index of reference nodes used to retrieve

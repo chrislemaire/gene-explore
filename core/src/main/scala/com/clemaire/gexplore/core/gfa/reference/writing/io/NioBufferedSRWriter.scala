@@ -1,7 +1,7 @@
 package com.clemaire.gexplore.core.gfa.reference.writing.io
 
 import com.clemaire.gexplore.core.gfa.CachePathList
-import com.clemaire.gexplore.core.gfa.reference.cache.SRCacheBuilder
+import com.clemaire.gexplore.core.gfa.reference.cache.RCacheBuilder
 import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.index.{GCIndex, SRIndex}
 import com.clemaire.gexplore.core.gfa.reference.writing.additional.{AdditionalReferenceWriter, SingleFlushHeatMapWriter}
@@ -10,7 +10,7 @@ import com.clemaire.gexplore.core.gfa.reference.writing.index.NioBufferedSRIndex
 import com.clemaire.gexplore.util.io.{AsyncNioBufferedWriter, NioBufferedWriter}
 
 class NioBufferedSRWriter(paths: CachePathList,
-                          builder: SRCacheBuilder)
+                          builder: RCacheBuilder)
   extends AsyncNioBufferedWriter[(ReferenceNode, Int)]
     with SRDataWriter
     with AdditionalSRWriterWorkBuffer {

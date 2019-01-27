@@ -7,13 +7,13 @@ import com.clemaire.gexplore.core.gfa.reference.writing.io.NioBufferedSRWriter
 
 import scala.collection.mutable
 
-class SRCacheBuilder(private val pathsIn: CachePathList)
-  extends ReferenceCacheBuilder[SRCache](pathsIn) {
+class RCacheBuilder(private val pathsIn: CachePathList)
+  extends ReferenceCacheBuilder[RCache](pathsIn) {
 
   /**
-    * The cache being built by this [[SRCacheBuilder]].
+    * The cache being built by this [[RCacheBuilder]].
     */
-  private val cache: SRCache = new SRCache()
+  private val cache: RCache = new RCache()
 
   /**
     * The segments that are to come paired with the
@@ -164,7 +164,7 @@ class SRCacheBuilder(private val pathsIn: CachePathList)
       currentNode = None
     })
 
-  override final def finish(): SRCache = {
+  override final def finish(): RCache = {
     try {
       writeCurrentNode()
       writer.flush()
