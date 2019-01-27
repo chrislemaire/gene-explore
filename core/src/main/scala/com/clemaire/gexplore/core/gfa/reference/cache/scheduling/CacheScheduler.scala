@@ -1,4 +1,4 @@
-package com.clemaire.gexplore.core.gfa.reference.cache.cache.scheduling
+package com.clemaire.gexplore.core.gfa.reference.cache.scheduling
 
 import com.clemaire.gexplore.core.gfa.reference.cache.{CacheData, Chunk}
 

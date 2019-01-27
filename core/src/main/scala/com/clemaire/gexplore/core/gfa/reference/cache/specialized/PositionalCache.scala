@@ -1,4 +1,4 @@
-package com.clemaire.gexplore.core.gfa.reference.cache.cache
+package com.clemaire.gexplore.core.gfa.reference.cache.specialized
 
 import com.clemaire.gexplore.core.gfa.reference.cache.Cache
 import com.clemaire.gexplore.core.gfa.reference.data.Positional

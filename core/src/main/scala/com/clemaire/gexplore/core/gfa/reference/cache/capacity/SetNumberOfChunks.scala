@@ -1,4 +1,4 @@
-package com.clemaire.gexplore.core.gfa.reference.cache.cache.capacity
+package com.clemaire.gexplore.core.gfa.reference.cache.capacity
 
 import com.clemaire.gexplore.core.gfa.reference.cache.{CacheData, Chunk}
 

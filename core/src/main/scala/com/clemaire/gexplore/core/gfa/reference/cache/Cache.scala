@@ -1,7 +1,7 @@
 package com.clemaire.gexplore.core.gfa.reference.cache
 
-import com.clemaire.gexplore.core.gfa.reference.cache.cache.capacity.CapacityLimiter
-import com.clemaire.gexplore.core.gfa.reference.cache.cache.scheduling.CacheScheduler
+import com.clemaire.gexplore.core.gfa.reference.cache.capacity.CapacityLimiter
+import com.clemaire.gexplore.core.gfa.reference.cache.scheduling.CacheScheduler
 import com.clemaire.gexplore.core.gfa.reference.index.{AbstractIndex, ChunkIndex}
 
 /**
