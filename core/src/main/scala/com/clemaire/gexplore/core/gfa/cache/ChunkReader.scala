@@ -2,8 +2,8 @@ package com.clemaire.gexplore.core.gfa.cache
 
 import com.clemaire.gexplore.core.gfa.reference.index.{AbstractIndex, ChunkIndex}
 
-case class ReadFragments(fragments: List[(Long, Long)],
-                         stitchedFragments: List[(Long, Long)])
+case class ReadFragments(original: List[(Long, Long)],
+                         stitched: List[(Long, Long)])
 
 trait ChunkReader[I <: AbstractIndex[CI], CI <: ChunkIndex, D]
   extends AutoCloseable {
