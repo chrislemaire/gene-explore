@@ -16,7 +16,8 @@ class RNReader(val paths: CachePathList)
   private val _fc: FileChannel = FileChannel.open(paths.referencePath)
 
   override protected def readFragment(fragment: (Long, Long),
-                                      indices: Traversable[NodeChunkIndex]): Map[Int, RNChunk] = {
+                                      indices: Traversable[NodeChunkIndex])
+  : Map[Int, RNChunk] = {
     val result: ByteBuffer = ByteBuffer
       .allocateDirect((fragment._2 - fragment._1).toInt)
 
