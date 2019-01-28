@@ -1,11 +1,11 @@
 package com.clemaire.gexplore.core.gfa.cache
 
-import com.clemaire.gexplore.core.gfa.reference.index.{AbstractIndex, ChunkIndex}
+import com.clemaire.gexplore.core.gfa.reference.index.ChunkIndex
 
 case class ReadFragments(original: List[(Long, Long)],
                          stitched: List[(Long, Long)])
 
-trait ChunkReader[I <: AbstractIndex[CI], CI <: ChunkIndex, D]
+trait ChunkReader[C <: Chunk[CI, _], CI <: ChunkIndex]
   extends AutoCloseable {
 
   protected def determineReadFragments(indices: Set[CI]): ReadFragments = {
@@ -20,6 +20,6 @@ trait ChunkReader[I <: AbstractIndex[CI], CI <: ChunkIndex, D]
     ReadFragments(fragments, stitchedFragments)
   }
 
-  def readChunks(indices: Set[CI]): Map[Int, Chunk[CI, D]]
+  def readChunks(indices: Set[CI]): Map[Int, C]
 
 }

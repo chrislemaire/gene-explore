@@ -1,12 +1,12 @@
 package com.clemaire.gexplore.core.gfa.cache
 
-import com.clemaire.gexplore.core.gfa.reference.index.{AbstractIndex, ChunkIndex}
+import com.clemaire.gexplore.core.gfa.reference.index.ChunkIndex
 
-trait ChunkFetcher[I <: AbstractIndex[CI], CI <: ChunkIndex, D]
+trait ChunkFetcher[C <: Chunk[CI, _], CI <: ChunkIndex]
   extends Object
-    with CacheData[Chunk[CI, D]] {
+    with CacheData[C] {
 
-  val reader: ChunkReader[I, CI, D]
+  val reader: ChunkReader[C, CI]
 
   /**
     * Calls the appropriate functions to fetch chunks from
@@ -16,7 +16,7 @@ trait ChunkFetcher[I <: AbstractIndex[CI], CI <: ChunkIndex, D]
     * @param chunks The indexes of the chunks to load into memory.
     * @return A mapping of chunk ids to chunks.
     */
-  protected def fetch(chunks: Set[CI]): Map[Int, Chunk[CI, D]] =
+  protected def fetch(chunks: Set[CI]): Map[Int, C] =
     reader.readChunks(chunks)
 
 }

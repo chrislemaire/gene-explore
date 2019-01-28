@@ -4,14 +4,13 @@ import java.nio.channels.FileChannel
 import java.nio.ByteBuffer
 
 import com.clemaire.gexplore.core.gfa.cache.reader.StitchedFragmentReader
-import com.clemaire.gexplore.core.gfa.data.StructuralNode
-import com.clemaire.gexplore.core.gfa.reference.index.{NodeChunkIndex, NodeIndex}
+import com.clemaire.gexplore.core.gfa.reference.index.NodeChunkIndex
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.reference.cache.chunk.SNChunk
 import com.clemaire.gexplore.core.gfa.reference.reading.io.data.SNDataReader
 
 class SNReader(val paths: CachePathList)
-  extends StitchedFragmentReader[NodeIndex, NodeChunkIndex, StructuralNode]
+  extends StitchedFragmentReader[SNChunk, NodeChunkIndex]
     with SNDataReader {
 
   private val _fc: FileChannel = FileChannel.open(paths.referencePath)

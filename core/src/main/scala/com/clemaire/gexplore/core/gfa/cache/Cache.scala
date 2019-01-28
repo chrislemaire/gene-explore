@@ -14,17 +14,17 @@ import com.clemaire.gexplore.core.gfa.reference.index.{AbstractIndex, ChunkIndex
   * any requested item regardless of whether it was previously
   * loaded.
   *
-  * @tparam I The type of [[AbstractIndex]] used.
-  * @tparam D The type of data returned upon retrieval calls.
+  * @tparam C The type of chunk stored in the cache.
+  * @tparam CI The type of index used to fetch chunks.
   */
-trait Cache[I <: AbstractIndex[CI], CI <: ChunkIndex, D]
+abstract class Cache[C <: Chunk[CI, _], CI <: ChunkIndex]
   extends Object
-    with CacheData[Chunk[CI, D]]
+    with CacheData[C]
     with CapacityLimiter
-    with CacheScheduler[Chunk[CI, D]]
-    with ChunkFetcher[I, CI, D] {
+    with CacheScheduler[C]
+    with ChunkFetcher[C, CI] {
 
-  val index: I
+  val index: AbstractIndex[CI]
 
   /**
     * Loads the requested chunks into memory if they weren't
@@ -34,7 +34,7 @@ trait Cache[I <: AbstractIndex[CI], CI <: ChunkIndex, D]
     * @param chunksToLoad The indexes of the chunks to load.
     * @return A mapping of chunk ids to chunks.
     */
-  def load(chunksToLoad: Set[CI]): Map[Int, Chunk[CI, D]] = {
+  def load(chunksToLoad: Set[CI]): Map[Int, C] = {
     val chunksAlreadyFetched = chunksToLoad
       .filter(ci => loadedChunks.contains(ci.id))
       .map(ci => ci.id -> loadedChunks(ci.id))

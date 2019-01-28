@@ -8,7 +8,7 @@ case class SNChunk(index: NodeChunkIndex,
                    data: Map[Int, StructuralNode])
   extends Chunk[NodeChunkIndex, StructuralNode] {
 
-  val byLayer: Map[Int, Iterable[StructuralNode]] =
+  val byLayer: Map[Int, Traversable[StructuralNode]] =
     data.values.groupBy(_.layer)
 
 }
