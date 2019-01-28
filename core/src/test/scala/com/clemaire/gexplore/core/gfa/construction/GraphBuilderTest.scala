@@ -1,8 +1,9 @@
-package com.clemaire.gexplore.core.gfa.parsing
+package com.clemaire.gexplore.core.gfa.construction
 
 import java.nio.file.Paths
 
 import com.clemaire.gexplore.core.gfa.CachePathList
+import com.clemaire.gexplore.core.gfa.parsing.BufferedGfa1Parser
 import org.scalatest.{BeforeAndAfter, FunSuite}
 
 import scala.collection.immutable.HashSet
