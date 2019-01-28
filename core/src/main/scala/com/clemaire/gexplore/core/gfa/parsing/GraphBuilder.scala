@@ -219,7 +219,8 @@ class GraphBuilder(val paths: CachePathList) {
       writeCurrentNode()
       writer.flush()
 
-      GraphData(writer.index,
+      GraphData(paths,
+        writer.index,
         writer.coordinatesIndex,
         genomes.toMap)
     } finally {
