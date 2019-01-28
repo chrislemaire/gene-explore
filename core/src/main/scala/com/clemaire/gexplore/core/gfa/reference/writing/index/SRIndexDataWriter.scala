@@ -4,15 +4,15 @@ import java.io.DataOutputStream
 import java.nio.ByteBuffer
 
 import com.clemaire.gexplore.core.gfa.{DataWriter, StaticLength}
-import com.clemaire.gexplore.core.gfa.reference.index.SRChunkIndex
+import com.clemaire.gexplore.core.gfa.reference.index.NodeChunkIndex
 
 trait SRIndexDataWriter
-  extends DataWriter[SRChunkIndex]
+  extends DataWriter[NodeChunkIndex]
     with StaticLength {
 
   override val LENGTH: Int = 4 * 6 + 8
 
-  override def write(indexChunk: SRChunkIndex,
+  override def write(indexChunk: NodeChunkIndex,
                      os: DataOutputStream): Unit = {
     os.writeInt(indexChunk.id)
     os.writeLong(indexChunk.filePos)
@@ -23,7 +23,7 @@ trait SRIndexDataWriter
     os.writeInt(indexChunk.segmentIds.getEnd)
   }
 
-  override def write(indexChunk: SRChunkIndex,
+  override def write(indexChunk: NodeChunkIndex,
                      ob: ByteBuffer): Unit = {
     ob.putInt(indexChunk.id)
     ob.putLong(indexChunk.filePos)

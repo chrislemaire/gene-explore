@@ -6,7 +6,7 @@ import java.nio.ByteBuffer
 import com.clemaire.gexplore.core.gfa.DataReader
 import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
 
-class RNDataReader
+trait RNDataReader
   extends DataReader[ReferenceNode] {
 
   override protected def read(is: DataInputStream): ReferenceNode = {

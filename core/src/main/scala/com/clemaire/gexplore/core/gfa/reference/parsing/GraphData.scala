@@ -1,6 +1,6 @@
 package com.clemaire.gexplore.core.gfa.reference.parsing
 
-import com.clemaire.gexplore.core.gfa.reference.index.{GCIndex, SRIndex}
+import com.clemaire.gexplore.core.gfa.reference.index.{GCIndex, NodeIndex}
 
 import scala.collection.mutable
 
@@ -10,7 +10,7 @@ class GraphData {
     * The index of reference nodes used to retrieve
     * chunks of nodes by their layer or segment overlap.
     */
-  private[parsing] var _index: SRIndex = _
+  private[parsing] var _index: NodeIndex = _
 
   /**
     * The index of genome coordinates used to retrieve

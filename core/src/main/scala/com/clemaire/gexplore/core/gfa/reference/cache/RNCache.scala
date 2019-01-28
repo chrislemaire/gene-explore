@@ -1,26 +1,15 @@
 package com.clemaire.gexplore.core.gfa.reference.cache
 
-import com.clemaire.gexplore.core.gfa.cache.{Cache, Chunk, ChunkReader}
+import com.clemaire.gexplore.core.gfa.cache.{Cache, Chunk}
 import com.clemaire.gexplore.core.gfa.cache.capacity.SetNumberOfChunks
 import com.clemaire.gexplore.core.gfa.cache.scheduling.LRU
-import com.clemaire.gexplore.core.gfa.reference.cache.Types.{C, CI, D, I}
 import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
-import com.clemaire.gexplore.core.gfa.reference.index.{SRChunkIndex, SRIndex}
+import com.clemaire.gexplore.core.gfa.reference.index.{NodeChunkIndex, NodeIndex}
+import com.clemaire.gexplore.core.gfa.reference.reading.io.RNReader
 
-private object Types {
-  type I = SRIndex
-  type CI = SRChunkIndex
-  type D = ReferenceNode
-
-  type C = Chunk[CI, D]
-}
-
-case class RNCache(index: I,
+case class RNCache(index: NodeIndex,
+                   reader: RNReader,
                    max: Int = 25)
-  extends Cache[I, CI, D]
-    with SetNumberOfChunks
-    with LRU[C] {
-
-  override val reader: ChunkReader[I, CI, D] = ???
-
-}
+  extends Cache[NodeIndex, NodeChunkIndex, ReferenceNode]
+    with SetNumberOfChunks[NodeChunkIndex, ReferenceNode]
+    with LRU[Chunk[NodeChunkIndex, ReferenceNode]]

@@ -4,16 +4,16 @@ import java.io.DataInputStream
 import java.nio.ByteBuffer
 
 import com.clemaire.gexplore.core.gfa.DataReader
-import com.clemaire.gexplore.core.gfa.reference.index.SRChunkIndex
+import com.clemaire.gexplore.core.gfa.reference.index.NodeChunkIndex
 import com.lodborg.intervaltree.IntegerInterval
 import com.lodborg.intervaltree.Interval.Bounded
 
-trait SRIndexDataReader
-  extends DataReader[SRChunkIndex] {
+trait NodeIndexDataReader
+  extends DataReader[NodeChunkIndex] {
 
   override protected def read(is: DataInputStream)
-  : SRChunkIndex =
-    SRChunkIndex(
+  : NodeChunkIndex =
+    NodeChunkIndex(
       is.readInt(),
       is.readLong(),
       is.readInt(),
@@ -22,8 +22,8 @@ trait SRIndexDataReader
     )
 
   override protected def read(ib: ByteBuffer)
-  : SRChunkIndex =
-    SRChunkIndex(
+  : NodeChunkIndex =
+    NodeChunkIndex(
       ib.getInt,
       ib.getLong,
       ib.getInt,

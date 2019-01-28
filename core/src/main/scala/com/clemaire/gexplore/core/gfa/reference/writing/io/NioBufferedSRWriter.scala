@@ -2,7 +2,7 @@ package com.clemaire.gexplore.core.gfa.reference.writing.io
 
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.reference.data.BuilderReferenceNode
-import com.clemaire.gexplore.core.gfa.reference.index.{GCIndex, SRIndex}
+import com.clemaire.gexplore.core.gfa.reference.index.{GCIndex, NodeIndex}
 import com.clemaire.gexplore.core.gfa.reference.parsing.GraphBuilder
 import com.clemaire.gexplore.core.gfa.reference.writing.additional.{AdditionalReferenceWriter, SingleFlushHeatMapWriter}
 import com.clemaire.gexplore.core.gfa.reference.writing.coordinates.GCWriter
@@ -27,7 +27,7 @@ class NioBufferedSRWriter(builder: GraphBuilder)
 
   /**
     * The [[AdditionalReferenceWriter]] responsible for
-    * writing the [[SRIndex]] to file while building
+    * writing the [[NodeIndex]] to file while building
     * it constantly as well.
     */
   private val indexWriter =
@@ -66,7 +66,7 @@ class NioBufferedSRWriter(builder: GraphBuilder)
     additionalWriters.foreach(_.close())
   }
 
-  override def index: SRIndex =
+  override def index: NodeIndex =
     indexWriter.index
 
   override def coordinatesIndex: GCIndex =
