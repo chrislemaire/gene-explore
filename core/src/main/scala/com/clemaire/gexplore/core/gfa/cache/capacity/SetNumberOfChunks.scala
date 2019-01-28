@@ -1,11 +1,10 @@
 package com.clemaire.gexplore.core.gfa.cache.capacity
 
 import com.clemaire.gexplore.core.gfa.cache.{CacheData, Chunk}
-import com.clemaire.gexplore.core.gfa.reference.index.ChunkIndex
 
-trait SetNumberOfChunks[CI <: ChunkIndex, D]
+trait SetNumberOfChunks[C <: Chunk[_, _]]
   extends CapacityLimiter
-    with CacheData[Chunk[CI, D]] {
+    with CacheData[C] {
 
   val max: Int
 
