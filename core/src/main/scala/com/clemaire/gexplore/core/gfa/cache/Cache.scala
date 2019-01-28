@@ -21,19 +21,10 @@ trait Cache[I <: AbstractIndex[CI], CI <: ChunkIndex, D]
   extends Object
     with CacheData[Chunk[CI, D]]
     with CapacityLimiter
-    with CacheScheduler[Chunk[CI, D]] {
+    with CacheScheduler[Chunk[CI, D]]
+    with ChunkFetcher[I, CI, D] {
 
   val index: I
-
-  /**
-    * Calls the appropriate functions to fetch chunks from
-    * disk and returns them as a mapping of their respective
-    * chunk ids mapped to the chunks themselves.
-    *
-    * @param chunks The indexes of the chunks to load into memory.
-    * @return A mapping of chunk ids to chunks.
-    */
-  protected def fetch(chunks: Set[CI]): Map[Int, Chunk[CI, D]]
 
   /**
     * Loads the requested chunks into memory if they weren't
