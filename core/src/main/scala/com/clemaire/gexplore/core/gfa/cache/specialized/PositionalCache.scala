@@ -4,8 +4,8 @@ import com.clemaire.gexplore.core.gfa.cache.{Cache, Chunk}
 import com.clemaire.gexplore.core.gfa.data.Positional
 import com.clemaire.gexplore.core.gfa.reference.index.ChunkIndex
 
-trait PositionalCache[CI <: ChunkIndex, D <: Positional]
-  extends Cache[Chunk[CI, D], CI] {
+trait PositionalCache[C <: Chunk[CI, D], CI <: ChunkIndex, D <: Positional]
+  extends Cache[C, CI] {
 
   def betweenLayers(left: Int,
                     right: Int): Map[Int, D] =
