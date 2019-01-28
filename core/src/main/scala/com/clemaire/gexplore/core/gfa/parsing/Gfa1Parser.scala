@@ -1,9 +1,9 @@
-package com.clemaire.gexplore.core.gfa.reference.parsing
+package com.clemaire.gexplore.core.gfa.parsing
 
 import java.util.InputMismatchException
 
 import com.clemaire.gexplore.core.gfa.CachePathList
-import com.clemaire.gexplore.core.gfa.reference.parsing.Gfa1Parser._
+import com.clemaire.gexplore.core.gfa.parsing.Gfa1Parser._
 import com.clemaire.gexplore.util.SimpleCheck.checkThatOrThrow
 
 /**

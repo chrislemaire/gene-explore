@@ -1,4 +1,4 @@
-package com.clemaire.gexplore.core.gfa.reference.parsing
+package com.clemaire.gexplore.core.gfa.parsing
 
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.util.io.NioBufferedReader

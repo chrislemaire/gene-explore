@@ -1,7 +1,8 @@
-package com.clemaire.gexplore.core.gfa.reference.parsing
+package com.clemaire.gexplore.core.gfa.parsing
 
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.cache.Cache
+import com.clemaire.gexplore.core.gfa.data.GraphData
 import com.clemaire.gexplore.core.gfa.reference.data.BuilderReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.writing.ReferenceNodeWriter
 import com.clemaire.gexplore.core.gfa.reference.writing.io.NioBufferedSRWriter
@@ -11,9 +12,18 @@ import scala.collection.mutable
 class GraphBuilder(val paths: CachePathList) {
 
   /**
-    * The data being built by this [[GraphBuilder]].
+    * The mapping of genomes to their indices, or
+    * identifiers.
     */
-  private val data: GraphData = new GraphData()
+  private val genomeNames: mutable.Map[String, Int] =
+    mutable.HashMap()
+
+  /**
+    * The mapping of genomes to their indices, or
+    * identifiers.
+    */
+  private val genomes: mutable.Map[Int, String] =
+    mutable.HashMap()
 
   /**
     * The segments that are to come paired with the
@@ -69,14 +79,14 @@ class GraphBuilder(val paths: CachePathList) {
     */
   final def registerHeader(options: Traversable[(String, String)]): Unit =
     options.filter(_._1 == "ORI").foreach(_._2.split(";")
-        .filterNot(gen => data.genomeNames.contains(gen))
-        .filterNot(_.isEmpty)
-        .foreach(gen => {
-          genomeIndex += 1
-          data._genomeNames += gen -> genomeIndex
-          data._genomes += genomeIndex -> gen
-          genomeCoordinates(genomeIndex) = 0
-        }))
+      .filterNot(gen => genomeNames.contains(gen))
+      .filterNot(_.isEmpty)
+      .foreach(gen => {
+        genomeIndex += 1
+        genomeNames += gen -> genomeIndex
+        genomes += genomeIndex -> gen
+        genomeCoordinates(genomeIndex) = 0
+      }))
 
   /**
     * Registers a link that is identified by its position
@@ -93,9 +103,9 @@ class GraphBuilder(val paths: CachePathList) {
     * @param options  The options provided to the edge.
     */
   final def registerLink(atOffset: Long,
-                                  from: String,
-                                  to: String,
-                                  options: Traversable[(String, String)]): Unit = {
+                         from: String,
+                         to: String,
+                         options: Traversable[(String, String)]): Unit = {
     val (fromId, fromLayer) = lookupNode(from)
     val (toId, toLayer) = if (lookAheadSegments.contains(to)) {
       val (toId, toLayer) = lookupNode(to)
@@ -147,9 +157,9 @@ class GraphBuilder(val paths: CachePathList) {
     * @param options  The options provided to the node.
     */
   final def registerSegment(atOffset: Long,
-                                     name: String,
-                                     content: String,
-                                     options: Traversable[(String, String)]): Unit = {
+                            name: String,
+                            content: String,
+                            options: Traversable[(String, String)]): Unit = {
     writeCurrentNode()
 
     val nodeGenomes = getGenomes(options)
@@ -181,7 +191,7 @@ class GraphBuilder(val paths: CachePathList) {
         if (s forall Character.isDigit) {
           s.toInt
         } else {
-          data._genomeNames(s)
+          genomeNames(s)
         }
       })).getOrElse(Array.empty)
 
@@ -201,34 +211,31 @@ class GraphBuilder(val paths: CachePathList) {
     })
 
   /**
-    * Finishes building the [[GraphData]] and closes this
+    * Finishes building the graph and closes this
     * [[GraphBuilder]].
-    *
-    * @return The built [[Cache]].
     */
-  final def finish(): GraphData = {
+  final def finish(): Unit = {
     try {
       writeCurrentNode()
       writer.flush()
 
-      data._index = writer.index
-      data._coordinatesIndex = writer.coordinatesIndex
-
-      data
+      GraphData(writer.index,
+        writer.coordinatesIndex,
+        genomes.toMap)
     } finally {
       close()
     }
   }
 
   /**
-    * Builds this [[GraphData]] with the given [[Gfa1Parser]]
+    * Builds the graph with the given [[Gfa1Parser]]
     * as its parser and the given [[CachePathList]] to find the
     * source and output files.
     *
     * @param parser The parser to use for parsing the GFA file.
     * @return The finished cache.
     */
-  def buildWith(parser: Gfa1Parser): GraphData = {
+  def buildWith(parser: Gfa1Parser): Unit = {
     parser.withBuilder(this).parse(paths)
     finish()
   }

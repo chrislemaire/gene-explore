@@ -1,9 +1,9 @@
 package com.clemaire.gexplore.core.gfa.reference.writing.io
 
 import com.clemaire.gexplore.core.gfa.CachePathList
+import com.clemaire.gexplore.core.gfa.parsing.GraphBuilder
 import com.clemaire.gexplore.core.gfa.reference.data.BuilderReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.index.{GCIndex, NodeIndex}
-import com.clemaire.gexplore.core.gfa.reference.parsing.GraphBuilder
 import com.clemaire.gexplore.core.gfa.reference.writing.additional.{AdditionalReferenceWriter, SingleFlushHeatMapWriter}
 import com.clemaire.gexplore.core.gfa.reference.writing.coordinates.GCWriter
 import com.clemaire.gexplore.core.gfa.reference.writing.index.NioBufferedSRIndexWriter
