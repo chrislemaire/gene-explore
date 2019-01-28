@@ -7,10 +7,13 @@ import com.clemaire.gexplore.core.gfa.reference.cache.chunk.GCChunk
 import com.clemaire.gexplore.core.gfa.reference.data.GenomeCoordinate
 import com.clemaire.gexplore.core.gfa.reference.index.{GCChunkIndex, GCIndex}
 import com.clemaire.gexplore.core.gfa.reference.reading.coordinates.GCReader
+import com.clemaire.gexplore.core.gfa.CachePathList
 
-class GCCache(val index: GCIndex,
-              val reader: GCReader,
+class GCCache(val paths: CachePathList,
+              val index: GCIndex,
               val max: Int = 20)
   extends IndexedCache[GCChunk, GCChunkIndex, GenomeCoordinate]
     with SetNumberOfChunks[GCChunk]
-    with LRU[GCChunk]
+    with LRU[GCChunk] {
+  val reader: GCReader = new GCReader(paths)
+}

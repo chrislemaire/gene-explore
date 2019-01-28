@@ -7,10 +7,13 @@ import com.clemaire.gexplore.core.gfa.reference.cache.chunk.RNChunk
 import com.clemaire.gexplore.core.gfa.reference.data.ReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.index.{NodeChunkIndex, NodeIndex}
 import com.clemaire.gexplore.core.gfa.reference.reading.io.RNReader
+import com.clemaire.gexplore.core.gfa.CachePathList
 
-class RNCache(val index: NodeIndex,
-              val reader: RNReader,
+class RNCache(val paths: CachePathList,
+              val index: NodeIndex,
               val max: Int = 25)
   extends NodeCache[RNChunk, NodeChunkIndex, ReferenceNode]
     with SetNumberOfChunks[RNChunk]
-    with LRU[RNChunk]
+    with LRU[RNChunk] {
+  val reader: RNReader = new RNReader(paths)
+}
