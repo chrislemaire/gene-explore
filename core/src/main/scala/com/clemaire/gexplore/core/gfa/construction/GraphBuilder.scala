@@ -6,6 +6,7 @@ import com.clemaire.gexplore.core.gfa.data.GraphData
 import com.clemaire.gexplore.core.gfa.parsing.Gfa1Parser
 import com.clemaire.gexplore.core.gfa.reference.data.BuilderReferenceNode
 import com.clemaire.gexplore.core.gfa.reference.writing.ReferenceNodeWriter
+import com.clemaire.gexplore.core.gfa.reference.writing.additional.HeaderWriter
 import com.clemaire.gexplore.core.gfa.reference.writing.io.NioBufferedSRWriter
 
 import scala.collection.mutable
@@ -52,6 +53,9 @@ class GraphBuilder(val paths: CachePathList) {
   private val writer: ReferenceNodeWriter =
     new NioBufferedSRWriter(this)
 
+  private val headerWriter: HeaderWriter =
+    new HeaderWriter(paths)
+
   /**
     * The number of genomes currently counted.
     */
@@ -78,16 +82,20 @@ class GraphBuilder(val paths: CachePathList) {
     * @param options The options defining
     *                the header.
     */
-  final def registerHeader(options: Traversable[(String, String)]): Unit =
-    options.filter(_._1 == "ORI").foreach(_._2.split(";")
-      .filterNot(gen => genomeNames.contains(gen))
-      .filterNot(_.isEmpty)
-      .foreach(gen => {
-        genomeIndex += 1
-        genomeNames += gen -> genomeIndex
-        genomes += genomeIndex -> gen
-        genomeCoordinates(genomeIndex) = 0
-      }))
+  final def registerHeader(options: Traversable[(String, String)]): Unit = {
+    headerWriter.write(options)
+
+    options.filter(_._1 == "ORI")
+      .foreach(_._2.split(";")
+        .filterNot(gen => genomeNames.contains(gen))
+        .filterNot(_.isEmpty)
+        .foreach(gen => {
+          genomeIndex += 1
+          genomeNames += gen -> genomeIndex
+          genomes += genomeIndex -> gen
+          genomeCoordinates(genomeIndex) = 0
+        }))
+  }
 
   /**
     * Registers a link that is identified by its position
@@ -215,15 +223,19 @@ class GraphBuilder(val paths: CachePathList) {
     * Finishes building the graph and closes this
     * [[GraphBuilder]].
     */
-  final def finish(): Unit = {
+  final def finish(): GraphData = {
     try {
       writeCurrentNode()
       writer.flush()
 
+      headerWriter.write(genomes.toMap)
+      headerWriter.writeMaxCoords(genomeCoordinates.toMap)
+      headerWriter.flush()
+
       GraphData(paths,
         writer.index,
         writer.coordinatesIndex,
-        genomes.toMap)
+        headerWriter.data)
     } finally {
       close()
     }
@@ -237,12 +249,14 @@ class GraphBuilder(val paths: CachePathList) {
     * @param parser The parser to use for parsing the GFA file.
     * @return The finished cache.
     */
-  def buildWith(parser: Gfa1Parser): Unit = {
+  def buildWith(parser: Gfa1Parser): GraphData = {
     parser.withBuilder(this).parse(paths)
     finish()
   }
 
-  def close(): Unit =
+  def close(): Unit = {
     writer.close()
+    headerWriter.close()
+  }
 
 }

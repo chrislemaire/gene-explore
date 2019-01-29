@@ -5,6 +5,7 @@ import java.nio.ByteBuffer
 
 import com.clemaire.gexplore.core.gfa.reference.index.GCChunkIndex
 import com.clemaire.gexplore.core.gfa.DataReader
+import com.clemaire.gexplore.util.io.NioBufferedDataReader
 import com.lodborg.intervaltree.IntegerInterval
 import com.lodborg.intervaltree.Interval.Bounded
 
@@ -26,6 +27,16 @@ trait GCIndexDataReader
     _n = n
     this
   }
+
+  protected def read(br: NioBufferedDataReader)
+  : GCChunkIndex = GCChunkIndex(
+    br.readInt,
+    br.readLong,
+    br.readInt,
+    new IntegerInterval(br.readInt, br.readInt, Bounded.CLOSED),
+    new IntegerInterval(br.readInt, br.readInt, Bounded.CLOSED),
+    (1 to _n).map(_ => (br.readInt, br.readLong)).toMap
+  )
 
   override protected def read(is: DataInputStream)
   : GCChunkIndex = GCChunkIndex(

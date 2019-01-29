@@ -99,6 +99,8 @@ class CachePathList(val gfaPath: Path)
     */
   private val COORDINATES_INDEX_EXT = ".gci"
 
+  private val HEADER_EXT = ".h"
+
   /**
     * Path to the reference-level cache file.
     */
@@ -123,6 +125,8 @@ class CachePathList(val gfaPath: Path)
     * Path to the coordinates index file.
     */
   val coordinatesIndexPath: Path = APP_DATA.resolve(GFA_NAME + COORDINATES_INDEX_EXT)
+
+  val headerPath: Path = APP_DATA.resolve(GFA_NAME + HEADER_EXT)
 
   /**
     * List of paths used as the underlying structure

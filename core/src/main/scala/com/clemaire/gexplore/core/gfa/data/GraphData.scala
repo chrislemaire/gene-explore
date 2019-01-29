@@ -7,8 +7,12 @@ import com.clemaire.gexplore.core.gfa.reference.cache.{GCCache, RNCache, SNCache
 case class GraphData(paths: CachePathList,
                      referenceIndex: NodeIndex,
                      coordinateIndex: GCIndex,
-                     genomes: Map[Int, String]) {
+                     header: GraphHeader) {
+  val headerOptions: Map[String, String] = header.options
+
+  val genomes: Map[Int, String] = header.genomes
   val genomeNames: Map[String, Int] = genomes.map(_.swap)
+  val genomeMaxes: Map[Int, Long] = header.coordinateMax
 
   val snCache = new SNCache(paths, referenceIndex)
   val rnCache = new RNCache(paths, referenceIndex)
