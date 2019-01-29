@@ -2,8 +2,8 @@ package com.clemaire.gexplore.core.gfa.reference.writing
 
 import java.io.Writer
 
-import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
-import com.clemaire.gexplore.core.gfa.reference.index.{GenomeCoordinateIndex, ReferenceIndex}
+import com.clemaire.gexplore.core.gfa.reference.data.BuilderReferenceNode
+import com.clemaire.gexplore.core.gfa.reference.index.{GCIndex, NodeIndex}
 
 trait ReferenceNodeWriter
   extends Writer {
@@ -13,21 +13,21 @@ trait ReferenceNodeWriter
   /**
     * Writes a single ReferenceNode to file.
     *
-    * @param node The [[ReferenceNode]] to write
+    * @param node The [[BuilderReferenceNode]] to write
     *             to file.
     */
-  def write(node: ReferenceNode): Unit
+  def write(node: BuilderReferenceNode): Unit
 
   /**
-    * @return The built [[ReferenceIndex]] resulting
-    *         from writing all [[ReferenceNode]]s to disk.
+    * @return The built [[NodeIndex]] resulting
+    *         from writing all [[BuilderReferenceNode]]s to disk.
     */
-  def index: ReferenceIndex
+  def index: NodeIndex
 
   /**
-    * @return The built [[GenomeCoordinateIndex]] resulting
+    * @return The built [[GCIndex]] resulting
     *         from writing all genome coordinates to disk.
     */
-  def coordinatesIndex: GenomeCoordinateIndex
+  def coordinatesIndex: GCIndex
 
 }

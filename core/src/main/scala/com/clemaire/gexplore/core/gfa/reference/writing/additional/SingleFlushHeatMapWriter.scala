@@ -1,7 +1,7 @@
 package com.clemaire.gexplore.core.gfa.reference.writing.additional
 
 import com.clemaire.gexplore.core.gfa.CachePathList
-import com.clemaire.gexplore.core.gfa.reference.ReferenceNode
+import com.clemaire.gexplore.core.gfa.reference.data.BuilderReferenceNode
 import com.clemaire.gexplore.util.io.NioBufferedWriter
 
 import scala.collection.mutable
@@ -27,7 +27,7 @@ class SingleFlushHeatMapWriter(val paths: CachePathList)
   private val nodesPerLayer: mutable.Map[Int, Int] =
     mutable.HashMap()
 
-  override def writeNode(node: ReferenceNode,
+  override def writeNode(node: BuilderReferenceNode,
                          byteLength: Int): Unit =
     if (nodesPerLayer.contains(node.layer)) {
       nodesPerLayer(node.layer) += 1

@@ -2,6 +2,7 @@ package com.clemaire.gexplore.core.gfa.reference.index
 
 import com.clemaire.gexplore.core.gfa.interval.IntervalTreeMap
 import com.lodborg.intervaltree.IntegerInterval
+import com.lodborg.intervaltree.Interval.Bounded
 
 import scala.collection.mutable
 
@@ -30,7 +31,17 @@ class AbstractIndex[T <: ChunkIndex]
   private[this] val segmentChunkMap =
     new IntervalTreeMap[Integer, T]()
 
-  override def +=:(elem: T): this.type = {
+
+  def betweenLayers(left: Int,
+                    right: Int): Set[T] =
+    layerChunkMap.valuesIntersecting(new IntegerInterval(left, right, Bounded.CLOSED))
+
+  def betweenSegmentIds(leftId: Int,
+                    rightId: Int): Set[T] =
+    segmentChunkMap.valuesIntersecting(new IntegerInterval(leftId, rightId, Bounded.CLOSED))
+
+
+  override def +=(elem: T): this.type = {
     layerChunkMap.put(elem.layers, elem)
     segmentChunkMap.put(elem.segmentIds, elem)
 

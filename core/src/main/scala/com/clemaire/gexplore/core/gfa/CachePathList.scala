@@ -26,14 +26,45 @@ class CachePathList(val gfaPath: Path)
   extends AbstractSeq[Path] {
 
   /**
+    * Whether the application data directory should be the
+    * same directory as the original GFA file.
+    */
+  private val PREFER_LOCAL: Boolean = true
+
+  /**
+    * Whether or not to prefer a separate directory per each
+    * cache.
+    */
+  private val PREFER_CACHE_DIRECTORY: Boolean = true
+
+  /**
+    * The name of the GFA file without extension.
+    */
+  private val GFA_NAME: String = {
+    val name = gfaPath.getFileName.toString
+    if (name.contains('.')) {
+      name.substring(0, name.lastIndexOf('.'))
+    } else {
+      name
+    }
+  }
+
+  /**
     * The application data directory for Gene Explore.
     */
-  private val APP_DATA = Paths.get(
-    if (System.getProperty("os.name").toLowerCase.contains("win")) {
-      System.getenv("AppData") + "/Gene Explore/cache"
-    } else {
-      System.getProperty("user.home") + "/.gexplore/cache"
-    })
+  private val APP_DATA: Path = {
+    val p = Paths.get(
+      if (PREFER_LOCAL) {
+        gfaPath.getParent.toString
+      } else if (System.getProperty("os.name").toLowerCase.contains("win")) {
+        System.getenv("AppData") + "/Gene Explore/cache"
+      } else {
+        System.getProperty("user.home") + "/.gexplore/cache"
+      })
+
+    if (PREFER_CACHE_DIRECTORY) p.resolve(s".$GFA_NAME.cache")
+    else p
+  }
 
   /**
     * Initializes the app-data directory by checking if
@@ -41,18 +72,6 @@ class CachePathList(val gfaPath: Path)
     */
   private val _: Unit = if (!APP_DATA.toFile.exists()) {
     Files.createDirectories(APP_DATA)
-  }
-
-  /**
-    * The name of the GFA file without extension.
-    */
-  private val gfaName: String = {
-    val name = gfaPath.getFileName.toString
-    if (name.contains('.')) {
-      name.substring(0, name.lastIndexOf('.'))
-    } else {
-      name
-    }
   }
 
   /**
@@ -80,38 +99,46 @@ class CachePathList(val gfaPath: Path)
     */
   private val COORDINATES_INDEX_EXT = ".gci"
 
-  /**
-    * Path to the reference-level cache file.
-    */
-  val referencePath: Path = APP_DATA.resolve(gfaName + REFERENCE_EXT)
+  private val HEADER_EXT = ".h"
 
   /**
     * Path to the reference-level cache file.
     */
-  val referenceIndexPath: Path = APP_DATA.resolve(gfaName + REFERENCE_INDEX_EXT)
+  val referencePath: Path = APP_DATA.resolve(GFA_NAME + REFERENCE_EXT)
 
   /**
     * Path to the reference-level cache file.
     */
-  val heatMapPath: Path = APP_DATA.resolve(gfaName + HEAT_MAP_EXT)
+  val referenceIndexPath: Path = APP_DATA.resolve(GFA_NAME + REFERENCE_INDEX_EXT)
+
+  /**
+    * Path to the reference-level cache file.
+    */
+  val heatMapPath: Path = APP_DATA.resolve(GFA_NAME + HEAT_MAP_EXT)
 
   /**
     * Path to the coordinates cache file.
     */
-  val coordinatesPath: Path = APP_DATA.resolve(gfaName + COORDINATES_EXT)
+  val coordinatesPath: Path = APP_DATA.resolve(GFA_NAME + COORDINATES_EXT)
 
   /**
     * Path to the coordinates index file.
     */
-  val coordinatesIndexPath: Path = APP_DATA.resolve(gfaName + COORDINATES_INDEX_EXT)
+  val coordinatesIndexPath: Path = APP_DATA.resolve(GFA_NAME + COORDINATES_INDEX_EXT)
+
+  val headerPath: Path = APP_DATA.resolve(GFA_NAME + HEADER_EXT)
 
   /**
     * List of paths used as the underlying structure
     * that is used when querying this [[CachePathList]]
     * as a [[List]].
     */
-  private val listOfPaths: List[Path] =
-    List(referencePath, referenceIndexPath)
+  private val listOfPaths: List[Path] = List(
+    referencePath,
+    referenceIndexPath,
+    heatMapPath,
+    coordinatesPath,
+    coordinatesIndexPath)
 
   override def length: Int = listOfPaths.length
 
