@@ -3,7 +3,7 @@ package com.clemaire.gexplore.gui.javafx.common
 import com.clemaire.gexplore.gui.javafx.common.Side.Side
 import com.clemaire.gexplore.gui.javafx.Controller
 import javafx.fxml.FXML
-import javafx.scene.layout.{AnchorPane, HBox, VBox}
+import javafx.scene.layout.{HBox, Pane, VBox}
 import javafx.scene.Node
 import javafx.scene.control.{Button, SplitPane}
 
@@ -33,7 +33,7 @@ class CollapsablePane
   private var editableTop: HBox = _
 
   @FXML
-  private var content: AnchorPane = _
+  private var content: Pane = _
 
   @FXML
   private var collapseBtn: Button = _
@@ -61,13 +61,6 @@ class CollapsablePane
   }
 
   def getTopBar: Node = topBar
-
-  def setContent(addedContent: Node): Unit = {
-    content.getChildren.clear()
-    content.getChildren.add(content)
-  }
-
-  def getContent: Node = content
 
   @FXML
   def collapse(): Unit = {

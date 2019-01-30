@@ -2,14 +2,13 @@ package com.clemaire.gexplore.gui.javafx
 
 import com.clemaire.gexplore.gui.javafx.main.MainScreen
 import javafx.application.Application
-import javafx.scene.layout.Pane
 import javafx.scene.Scene
 import javafx.stage.Stage
 
 class MainApplication
   extends Application {
 
-  val root: Pane = new MainScreen()
+  val root = new MainScreen()
 
   override def start(stage: Stage): Unit = {
     val scene = new Scene(root, 900, 600)
