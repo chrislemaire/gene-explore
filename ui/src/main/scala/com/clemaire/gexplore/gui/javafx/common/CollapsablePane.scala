@@ -1,10 +1,11 @@
 package com.clemaire.gexplore.gui.javafx.common
 
 import com.clemaire.gexplore.gui.javafx.common.Side.Side
-import com.jfoenix.controls.JFXButton
-import javafx.fxml.{FXML, FXMLLoader}
-import javafx.scene.layout.{AnchorPane, HBox, Pane}
+import com.clemaire.gexplore.gui.javafx.Controller
+import javafx.fxml.FXML
+import javafx.scene.layout.{AnchorPane, HBox, VBox}
 import javafx.scene.Node
+import javafx.scene.control.{Button, SplitPane}
 
 object Side {
 
@@ -17,18 +18,13 @@ object Side {
 }
 
 //noinspection VarCouldBeVal
-class CollapsablePane(side: Side = Side.Left)
-  extends Pane {
+class CollapsablePane
+  extends VBox
+    with Controller {
 
-  private val _: Unit = {
-    val loader = new FXMLLoader()
-    loader.setRoot(this)
-    loader.setController(this)
+  override val path: String = "common/collapsable-pane.fxml"
 
-    loader.load(getClass.getResourceAsStream("/javafx/fxml/common/collapsable-pane.fxml"))
-
-    setSide(side)
-  }
+  private val _: Unit = init()
 
   @FXML
   private var topBar: HBox = _
@@ -40,9 +36,11 @@ class CollapsablePane(side: Side = Side.Left)
   private var content: AnchorPane = _
 
   @FXML
-  private var collapseBtn: JFXButton = _
+  private var collapseBtn: Button = _
 
   private var lastIndex: Int = _
+
+  var parentSP: SplitPane = _
 
   def setSide(side: Side): Unit = {
     topBar.getChildren.clear()
@@ -62,19 +60,23 @@ class CollapsablePane(side: Side = Side.Left)
     topBar.getChildren.add(addedContent)
   }
 
+  def getTopBar: Node = topBar
+
   def setContent(addedContent: Node): Unit = {
     content.getChildren.clear()
     content.getChildren.add(content)
   }
 
+  def getContent: Node = content
+
   @FXML
   def collapse(): Unit = {
-    lastIndex = getParent.getChildrenUnmodifiable.indexOf(this)
-    getParent.asInstanceOf[Pane].getChildren.remove(this)
+    lastIndex = parentSP.getItems.indexOf(this)
+    parentSP.getItems.remove(this)
   }
 
   def show(index: Int = lastIndex): Unit = {
-    getParent.asInstanceOf[Pane].getChildren.add(index, this)
+    parentSP.getItems.add(index, this)
   }
 
 }
