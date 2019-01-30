@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <fx:root xmlns:fx="http://javafx.com/fxml/1" type="javafx.scene.control.MenuBar"
-         xmlns="http://javafx.com/javafx/8.0.172-ea">
+         xmlns="http://javafx.com/javafx/8.0.172-ea" styleClass="gex-bg-primary">
     <menus>
         <Menu mnemonicParsing="false" text="File">
             <items>

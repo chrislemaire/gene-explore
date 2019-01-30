@@ -12,9 +12,9 @@ class MainApplication
 
   override def start(stage: Stage): Unit = {
     val scene = new Scene(root, 900, 600)
-    root.getStyleClass.add("panel-primary")
 
     scene.getStylesheets.add("org/kordamp/bootstrapfx/bootstrapfx.css")
+    scene.getStylesheets.add("css/bootstrapfx-custom.css")
 
     stage.setTitle("G-Explore")
     stage.setMinWidth(500.0)

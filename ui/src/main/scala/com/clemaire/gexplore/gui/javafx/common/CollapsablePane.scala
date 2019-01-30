@@ -30,13 +30,13 @@ class CollapsablePane
   private var topBar: HBox = _
 
   @FXML
-  private var editableTop: HBox = _
-
-  @FXML
-  private var content: Pane = _
-
-  @FXML
   private var collapseBtn: Button = _
+
+  @FXML
+  private var _top: Pane = _
+
+  @FXML
+  private var _content: Pane = _
 
   private var lastIndex: Int = _
 
@@ -47,20 +47,23 @@ class CollapsablePane
 
     side match {
       case Side.Left =>
-        topBar.getChildren.addAll(editableTop, collapseBtn)
+        topBar.getChildren.addAll(_top, collapseBtn)
       case Side.Right =>
-        topBar.getChildren.addAll(collapseBtn, editableTop)
+        topBar.getChildren.addAll(collapseBtn, _top)
       case _ =>
         throw new RuntimeException(s"Invalid Side: $side")
     }
   }
 
-  def setTopBar(addedContent: Node): Unit = {
-    topBar.getChildren.clear()
-    topBar.getChildren.add(addedContent)
-  }
+  def setTop(top: Pane): Unit =
+    _top = top
 
-  def getTopBar: Node = topBar
+  def getTop: Node = _top
+
+  def setContent(content: Pane): Unit =
+    _content = content
+
+  def getContent: Node = _content
 
   @FXML
   def collapse(): Unit = {

@@ -12,16 +12,20 @@
          xmlns="http://javafx.com/javafx/8.0.172-ea">
     <GEXMenuBar/>
     <SplitPane fx:id="mainSplitPane" dividerPositions="0.2" focusTraversable="true" minWidth="400.0"
-               VBox.vgrow="ALWAYS">
+               style="-fx-padding: 0px 0px 0px 0px;" VBox.vgrow="ALWAYS">
         <items>
-            <CollapsablePane fx:id="leftCollapsable" maxWidth="300.0" minWidth="25.0" VBox.vgrow="ALWAYS"
-                             SplitPane.resizableWithParent="false"/>
+            <CollapsablePane fx:id="leftCollapsable" minWidth="25.0" SplitPane.resizableWithParent="false"
+                             VBox.vgrow="ALWAYS">
+                <content>
+
+                </content>
+            </CollapsablePane>
             <AnchorPane>
                 <GraphCanvas/>
             </AnchorPane>
         </items>
     </SplitPane>
-    <HBox alignment="CENTER_LEFT" minHeight="20.0" spacing="5.0" VBox.vgrow="NEVER">
+    <HBox alignment="CENTER_LEFT" minHeight="20.0" spacing="5.0" VBox.vgrow="NEVER" styleClass="gex-footer">
         <children>
             <Pane HBox.hgrow="ALWAYS"/>
         </children>
