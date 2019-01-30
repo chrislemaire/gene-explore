@@ -17,9 +17,11 @@ lazy val ui = project
   .settings(
     name := "ui",
     libraryDependencies ++= commonDependencies ++ Set(
-      dependencies.jmetro,
-//      dependencies.preferencesfx,
-      dependencies.miglayout
+      dependencies.miglayout,
+      dependencies.jfoenix,
+
+      dependencies.ikonli,
+      dependencies.ikonliDashicons
     ))
 
 lazy val util = project
@@ -31,16 +33,18 @@ lazy val dependencies = new {
   val scalatestV = "3.0.4"
   val scalacheckV = "1.13.5"
   val intervalTreeV = "1.0.0"
-  val preferencesfxV = "2.1.0"
   val miglayoutV = "5.2"
-  val jmetroV = "5.2"
+  val jfoenixV = "8.0.8"
+  val ikonliV = "2.4.0"
 
   val scalatest = "org.scalatest" %% "scalatest" % scalatestV
   val scalacheck = "org.scalacheck" %% "scalacheck" % scalacheckV
   val intervalTree = "com.lodborg" % "interval-tree" % intervalTreeV
-//  val preferencesfx = "com.dlsc.preferencesfx" % "preferencesfx-core" % preferencesfxV
   val miglayout = "com.miglayout" % "miglayout-javafx" % miglayoutV
-  val jmetro = "org.jfxtras" % "jmetro" % jmetroV
+  val jfoenix = "com.jfoenix" % "jfoenix" % jfoenixV
+
+  val ikonli = "org.kordamp.ikonli" % "ikonli-javafx" % ikonliV
+  val ikonliDashicons = "org.kordamp.ikonli" % "ikonli-dashicons-pack" % ikonliV
 }
 
 lazy val commonDependencies = Seq(

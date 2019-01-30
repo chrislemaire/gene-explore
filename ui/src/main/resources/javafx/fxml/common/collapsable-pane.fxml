@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<?import javafx.scene.layout.HBox?>
+<!--suppress JavaFxDefaultTag -->
+<fx:root type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+   <BorderPane prefHeight="221.0" prefWidth="365.0">
+      <top>
+         <HBox fx:id="topBar" alignment="TOP_CENTER" style="-fx-background-color: #BDBDBD;">
+            <children>
+               <HBox fx:id="editableTop" HBox.hgrow="ALWAYS">
+                  <children>
+                     <AnchorPane />
+                  </children>
+               </HBox>
+               <JFXButton fx:id="collapseBtn" onAction="#collapse" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" textAlignment="CENTER">
+                  <graphic>
+                     <FontIcon iconLiteral="dashicons-minus" />
+                  </graphic>
+               </JFXButton>
+            </children>
+            <effect>
+               <Glow />
+            </effect>
+         </HBox>
+      </top>
+      <center>
+         <AnchorPane fx:id="content" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #E0E0E0;" BorderPane.alignment="CENTER" />
+      </center>
+   </BorderPane>
+</fx:root>
