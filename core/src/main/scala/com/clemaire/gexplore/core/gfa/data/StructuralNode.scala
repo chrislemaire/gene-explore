@@ -6,4 +6,3 @@ case class StructuralNode(id: Int,
                           incomingEdges: Set[Int],
                           outgoingEdges: Set[Int])
   extends Indexed
-    with Positional
