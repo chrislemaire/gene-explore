@@ -17,14 +17,14 @@ class HeaderWriter(val paths: CachePathList)
 
   private[this] val _options: mutable.Map[String, String] =
     mutable.HashMap()
-
   private[this] val _genomes: mutable.Map[Int, String] =
     mutable.HashMap()
-
   private[this] val _genomeMaxes: mutable.Map[Int, Long] =
     mutable.HashMap()
 
+
   def data = GraphHeader(_options.toMap, _genomes.toMap, _genomeMaxes.toMap)
+
 
   private[this] def stringifyOptions(): String =
     _options.map(kv => s"${kv._1}\t${kv._2}")

@@ -23,6 +23,8 @@ lazy val ui = project
       dependencies.ikonli,
       dependencies.ikonliDashicons
     ))
+  .dependsOn(core)
+  .dependsOn(util)
 
 lazy val util = project
   .settings(

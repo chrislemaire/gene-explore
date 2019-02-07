@@ -5,9 +5,9 @@ import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.reference.cache.{GCCache, RNCache, SNCache}
 
 case class GraphData(paths: CachePathList,
+                     header: GraphHeader,
                      referenceIndex: NodeIndex,
-                     coordinateIndex: GCIndex,
-                     header: GraphHeader) {
+                     coordinateIndex: GCIndex) {
   val headerOptions: Map[String, String] = header.options
 
   val genomes: Map[Int, String] = header.genomes
