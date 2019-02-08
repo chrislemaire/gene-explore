@@ -1,15 +1,16 @@
 package com.clemaire.gexplore.core.gfa.reference.coordinates.data
 
+import com.clemaire.gexplore.core.gfa.data.Identifiable
 import com.clemaire.gexplore.core.gfa.reference.coordinates.crossing.AlternatingEntry
 import com.clemaire.gexplore.core.gfa.reference.coordinates.data.splay.Container
 
-trait Node
-  extends AlternatingEntry[Container, Node]
+trait AlternatingNode
+  extends AlternatingEntry[Container, AlternatingNode]
     with Identifiable {
 
   var _measure: Double = -1.0
 
-  override implicit def self2c(self: Node.this.type): Node = this
+  override implicit def self2c(self: AlternatingNode.this.type): AlternatingNode = this
 
   def measure_=(m: Double): Unit = _measure = m
   override def measure: Double = _measure
@@ -22,15 +23,15 @@ trait Node
       prev.get.join(next.get)
   }
 
-  def replace(other: Node): Unit = {
+  def replace(other: AlternatingNode): Unit = {
     other.prev = prev
     other.next = next
   }
 
   val id: Int
   val layer: Int
-  val incoming: Traversable[Node]
-  val outgoing: Traversable[Node]
+  val incoming: Traversable[AlternatingNode]
+  val outgoing: Traversable[AlternatingNode]
 
   def isPNode: Boolean = false
   def isQNode: Boolean = false

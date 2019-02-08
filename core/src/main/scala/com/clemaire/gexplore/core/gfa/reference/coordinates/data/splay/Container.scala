@@ -1,11 +1,11 @@
 package com.clemaire.gexplore.core.gfa.reference.coordinates.data.splay
 
 import com.clemaire.gexplore.core.gfa.reference.coordinates.crossing.AlternatingEntry
-import com.clemaire.gexplore.core.gfa.reference.coordinates.data.{Node, Segment}
+import com.clemaire.gexplore.core.gfa.reference.coordinates.data.{AlternatingNode, Segment}
 
 class Container(var root: Option[SplayNode[Segment]] = None)
   extends Object
-    with AlternatingEntry[Node, Container] {
+    with AlternatingEntry[AlternatingNode, Container] {
 
   def this(elem: Segment) = this(Some(new SplayNode(elem)))
   def this(node: SplayNode[Segment]) = this(Some(node))

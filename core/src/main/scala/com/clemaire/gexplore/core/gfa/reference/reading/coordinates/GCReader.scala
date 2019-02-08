@@ -16,13 +16,14 @@ class GCReader(val paths: CachePathList)
 
   private val _fc: FileChannel = FileChannel.open(paths.coordinatesPath)
 
-  override protected def readFragment(fragment: (Long, Long),
+  override protected def readFragment(start: Long,
+                                      end: Long,
                                       indices: Traversable[GCChunkIndex])
   : Map[Int, GCChunk] = {
     val result: ByteBuffer = ByteBuffer
-      .allocateDirect((fragment._2 - fragment._1).toInt)
+      .allocateDirect((end - start).toInt)
 
-    _fc.read(result, fragment._1)
+    _fc.read(result, start)
 
     indices.map(index =>
       index.id -> GCChunk(index,

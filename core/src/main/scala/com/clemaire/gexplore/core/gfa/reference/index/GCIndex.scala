@@ -11,4 +11,4 @@ case class GCChunkIndex private
  referenceCoordinates: Map[Int, Long]) extends ChunkIndex
 
 class GCIndex
-  extends AbstractIndex[GCChunkIndex]
+  extends Index[GCChunkIndex]

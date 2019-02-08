@@ -2,7 +2,7 @@ package com.clemaire.gexplore.core.gfa.cache
 
 import com.clemaire.gexplore.core.gfa.cache.capacity.CapacityLimiter
 import com.clemaire.gexplore.core.gfa.cache.scheduling.CacheScheduler
-import com.clemaire.gexplore.core.gfa.reference.index.{AbstractIndex, ChunkIndex}
+import com.clemaire.gexplore.core.gfa.reference.index.{Index, ChunkIndex}
 
 /**
   * Keeps track of some fragmented data. Data is
@@ -24,7 +24,7 @@ abstract class Cache[C <: Chunk[CI, _], CI <: ChunkIndex]
     with CacheScheduler[C]
     with ChunkFetcher[C, CI] {
 
-  val index: AbstractIndex[CI]
+  val index: Index[CI]
 
   /**
     * Loads the requested chunks into memory if they weren't

@@ -10,4 +10,4 @@ case class NodeChunkIndex private[index]
  segmentIds: IntegerInterval) extends ChunkIndex
 
 class NodeIndex
-  extends AbstractIndex[NodeChunkIndex]
+  extends Index[NodeChunkIndex]

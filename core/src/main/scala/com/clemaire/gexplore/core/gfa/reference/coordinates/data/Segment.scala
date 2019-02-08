@@ -1,10 +1,11 @@
 package com.clemaire.gexplore.core.gfa.reference.coordinates.data
 
+import com.clemaire.gexplore.core.gfa.data.Identifiable
 import com.clemaire.gexplore.core.gfa.reference.coordinates.data.splay.SplayNode
 
 class Segment(val id: Int,
-              val p: Node,
-              val q: Node)
+              val p: AlternatingNode,
+              val q: AlternatingNode)
   extends Identifiable {
 
   /**

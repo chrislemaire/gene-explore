@@ -1,5 +1,5 @@
 package com.clemaire.gexplore.core.gfa.data
 
-trait Indexed {
+trait Identifiable {
   val id: Int
 }

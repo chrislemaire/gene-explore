@@ -2,41 +2,35 @@ package com.clemaire.gexplore.core.gfa.reference.coordinates.crossing.algorithm.
 
 import com.clemaire.gexplore.core.gfa.reference.coordinates.crossing.algorithm.ALData
 import com.clemaire.gexplore.core.gfa.reference.coordinates.crossing.Measure
-import com.clemaire.gexplore.core.gfa.reference.coordinates.data.Node
+import com.clemaire.gexplore.core.gfa.reference.coordinates.data.AlternatingNode
 
 trait LayerMeasurer
   extends Object
     with ALData
     with Measure {
 
-  def measure(): Unit = {
-    assignPositions()
-  }
+  def measure(): Unit =
+    assignPositionsAndMeasures()
 
-  private def assignPositionAndMeasure(current: Option[Node],
+  def assignNodePositions(): Unit =
+    first.foreach(identity)(node => {
+      node.position = node.prev.map(seg =>
+        seg.prev.fold(0)(_.position) + seg.size + 1).get
+    })
+
+  private def assignPositionAndMeasure(current: Option[AlternatingNode],
                                        position: Int): Unit =
     current.foreach(nodeEntry => {
       nodeEntry.position = position
       nodeEntry.measure = calculateMeasure(nodeEntry)
 
       nodeEntry.next.foreach(segmentEntry => {
-        segmentEntry.position =
-          if (segmentEntry.size == 0) -1
-          else nodeEntry.position + 1
-
         assignPositionAndMeasure(segmentEntry.next,
           position + segmentEntry.size + 1)
       })
     })
 
-  private def assignPositions(): Unit = {
-    if (first.size > 0) {
-      first.position = 0
-    } else {
-      first.position = -1
-    }
-
+  private def assignPositionsAndMeasures(): Unit =
     assignPositionAndMeasure(first.next, first.size)
-  }
 
 }

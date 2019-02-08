@@ -1,6 +1,6 @@
 package com.clemaire.gexplore.core.gfa.reference.data
 
-import com.clemaire.gexplore.core.gfa.data.{Indexed, Positional}
+import com.clemaire.gexplore.core.gfa.data.{Identifiable, Positional}
 
 case class ReferenceNode(id: Int,
                          layer: Int,
@@ -8,5 +8,5 @@ case class ReferenceNode(id: Int,
                          contentLength: Int,
                          incomingEdges: Traversable[(Int, Long)],
                          outgoingEdges: Traversable[(Int, Long)])
-  extends Indexed
+  extends Identifiable
     with Positional

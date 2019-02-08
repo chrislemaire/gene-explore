@@ -1,7 +1,7 @@
 package com.clemaire.gexplore.core.gfa.reference.coordinates.crossing.algorithm.phase
 
 import com.clemaire.gexplore.core.gfa.reference.coordinates.crossing.algorithm.ALData
-import com.clemaire.gexplore.core.gfa.reference.coordinates.data.Node
+import com.clemaire.gexplore.core.gfa.reference.coordinates.data.AlternatingNode
 import com.clemaire.gexplore.core.gfa.reference.coordinates.data.splay.Container
 
 import scala.collection.mutable
@@ -10,7 +10,7 @@ trait MeasuredLayerSorter
   extends Object
     with ALData {
 
-  val vertices: mutable.ArrayStack[Node] = mutable.ArrayStack()
+  val vertices: mutable.ArrayStack[AlternatingNode] = mutable.ArrayStack()
   val segments: mutable.ArrayStack[Container] = mutable.ArrayStack()
 
   def sort(): Unit = {
@@ -22,7 +22,7 @@ trait MeasuredLayerSorter
     vertices.clear()
     segments.clear()
 
-    val nodes = mutable.Buffer[Node]()
+    val nodes = mutable.Buffer[AlternatingNode]()
     val reverseSegments = mutable.Buffer[Container]()
 
     first.foreach(segEntry => {
@@ -36,7 +36,7 @@ trait MeasuredLayerSorter
 
   private def popBack(): Unit = {
     first = new Container()
-    var current: Either[Container, Node] = Left(first)
+    var current: Either[Container, AlternatingNode] = Left(first)
 
     while (vertices.nonEmpty && segments.nonEmpty) {
       if (vertices.head.measure <= segments.head.position) {

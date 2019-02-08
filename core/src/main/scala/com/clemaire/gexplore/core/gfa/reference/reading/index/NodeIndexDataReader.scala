@@ -3,20 +3,20 @@ package com.clemaire.gexplore.core.gfa.reference.reading.index
 import java.io.DataInputStream
 import java.nio.ByteBuffer
 
-import com.clemaire.gexplore.core.gfa.{DataReader, StaticLength}
+import com.clemaire.gexplore.core.gfa.{NioDataReader, StaticLength}
 import com.clemaire.gexplore.core.gfa.reference.index.NodeChunkIndex
 import com.clemaire.gexplore.util.io.NioBufferedDataReader
 import com.lodborg.intervaltree.IntegerInterval
 import com.lodborg.intervaltree.Interval.Bounded
 
 trait NodeIndexDataReader
-  extends DataReader[NodeChunkIndex]
-with StaticLength {
+  extends NioDataReader[NodeChunkIndex]
+    with StaticLength {
 
   override protected[this] val LENGTH: Int =
     4 + 8 + 4 + 4 * 2 * 2
 
-  protected def read(dr: NioBufferedDataReader)
+  override protected def read(dr: NioBufferedDataReader)
   : NodeChunkIndex =
     NodeChunkIndex(
       dr.readInt,

@@ -14,7 +14,7 @@ trait ChunkIndex {
   val segmentIds: IntegerInterval
 }
 
-class AbstractIndex[T <: ChunkIndex]
+class Index[T <: ChunkIndex]
   extends mutable.ArrayBuffer[T] {
 
   /**
