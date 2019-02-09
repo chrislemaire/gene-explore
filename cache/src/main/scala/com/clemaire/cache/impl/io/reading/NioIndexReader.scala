@@ -4,7 +4,6 @@ import java.nio.file.Path
 
 import com.clemaire.cache.definitions.index.{ChunkIndex, Index, ReadOnlyIndex}
 import com.clemaire.cache.definitions.io.reading.IndexReader
-import com.clemaire.cache.impl.index.BasicReadOnlyIndex
 import com.clemaire.interval.IntervalTreeMap
 import com.clemaire.io.reading.NioBufferedReader
 
@@ -25,7 +24,7 @@ abstract class NioIndexReader[CI <: ChunkIndex](val path: Path)
       val ic = readData(this)
       map.addBinding(ic.ids, ic)
     }
-    new BasicReadOnlyIndex(map)
+    ReadOnlyIndex(map)
   }
 
 }

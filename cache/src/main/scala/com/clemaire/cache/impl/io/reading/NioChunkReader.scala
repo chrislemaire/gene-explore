@@ -8,7 +8,6 @@ import com.clemaire.cache.definitions.index.ChunkIndex
 import com.clemaire.cache.definitions.io.reading.ChunkReader
 import com.clemaire.cache.definitions.Identifiable
 import com.clemaire.cache.definitions.chunk.Chunk
-import com.clemaire.cache.impl.chunk.BasicChunk
 import com.clemaire.io.fixture.ByteBufferFixture.bb2fixtureIn
 
 import scala.collection.mutable
@@ -30,7 +29,7 @@ abstract class NioChunkReader[D <: Identifiable, CI <: ChunkIndex](val path: Pat
     * @return The constructed [[Chunk]].
     */
   def constructChunk(id: Int, data: Map[Int, D]): Chunk[D] =
-    BasicChunk(id, data)
+    Chunk(id, data)
 
   /**
     * Reads a single chunk from the input source starting
@@ -42,7 +41,7 @@ abstract class NioChunkReader[D <: Identifiable, CI <: ChunkIndex](val path: Pat
     */
   override def read(index: CI): Chunk[D] = {
     val buffer = ByteBuffer.allocateDirect(index.length.toInt)
-    fc.read(buffer, index.filePos)
+    fc.read(buffer, index.filePosition)
     buffer.flip()
 
     val data = mutable.HashMap[Int, D]()

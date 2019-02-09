@@ -1,19 +1,14 @@
-package com.clemaire.cache.impl.io.writing
+package com.clemaire.gexplore.core.gfa.cache.io
 
-import com.clemaire.cache.definitions.index.ChunkIndex
 import com.clemaire.cache.definitions.io.writing.DataWriter
+import com.clemaire.gexplore.core.gfa.cache.index.PositionalChunkIndex
 import com.clemaire.io.fixture.OutputFixture
 
-trait BasicIndexDataWriter[CI <: ChunkIndex]
-  extends DataWriter[CI] {
+trait PositionalIndexDataWriter
+  extends DataWriter[PositionalChunkIndex] {
 
   /**
-    * The constant length of some object.
-    */
-  override val length: Int = 4 + 8 + 8 + 4 + 4
-
-  /**
-    * Writes the given data object of type [[ChunkIndex]]
+    * Writes the given data object of type [[PositionalChunkIndex]]
     * to the given source represented as an
     * [[OutputFixture]].
     *
@@ -21,12 +16,14 @@ trait BasicIndexDataWriter[CI <: ChunkIndex]
     * @param out  The source to write to represented
     *             as an [[OutputFixture]].
     */
-  override def writeData(data: CI, out: OutputFixture): Unit = {
+  def writeData(data: PositionalChunkIndex, out: OutputFixture): Unit = {
     out.writeInt(data.id)
     out.writeLong(data.filePosition)
     out.writeLong(data.length)
     out.writeInt(data.ids.getStart)
     out.writeInt(data.ids.getEnd)
+    out.writeInt(data.layers.getStart)
+    out.writeInt(data.layers.getEnd)
   }
 
 }

@@ -19,18 +19,6 @@ trait ReadOnlyCache[D <: Identifiable, CI <: ChunkIndex]
   protected[this] val reader: ChunkReader[D, CI]
 
   /**
-    * Gets a data entry by its id from the underlying
-    * Cache implementation.
-    *
-    * @param id The identifier to lookup a data entry
-    *           from.
-    * @return An [[Option]] containing the data entry
-    *         if one exists with the given id.
-    */
-  def get(id: Int): Option[D] =
-    getRange(id, id).find(_._1 == id).map(_._2)
-
-  /**
     * Adds a given chunk to the chunk list after first
     * checking whether the current cache is full.
     *
@@ -43,6 +31,39 @@ trait ReadOnlyCache[D <: Identifiable, CI <: ChunkIndex]
     while (full) removeNext()
     add(c)
   }
+
+  /**
+    * Converts a range of indexes into a range of chunks
+    * and adds the new chunks to the [[Cache]] if possible.
+    *
+    * @param indexes The [[ChunkIndex]] values to get the
+    *                chunks of.
+    * @return The chunks represented by the given indexes.
+    */
+  protected[this] def getChunksByIndexes(indexes: Traversable[CI]): Traversable[Chunk[D]] = {
+    val loaded = indexes
+      .filter(ic => loadedChunks.contains(ic.id))
+      .map(ic => loadedChunks(ic.id))
+
+    val read = reader.read(indexes.filterNot(ic =>
+      loadedChunks.contains(ic.id)))
+
+    read.foreach(checkAndAdd)
+
+    loaded ++ read
+  }
+
+  /**
+    * Gets a data entry by its id from the underlying
+    * Cache implementation.
+    *
+    * @param id The identifier to lookup a data entry
+    *           from.
+    * @return An [[Option]] containing the data entry
+    *         if one exists with the given id.
+    */
+  def get(id: Int): Option[D] =
+    getRange(id, id).find(_._1 == id).map(_._2)
 
   /**
     * Gets a range of data entries by their ids from
@@ -58,22 +79,11 @@ trait ReadOnlyCache[D <: Identifiable, CI <: ChunkIndex]
     * @return A [[Map]] containing all existing data entries
     *         mapped by their id with an id in the given range.
     */
-  def getRange(left: Int, right: Int): Map[Int, D] = {
-    val indexes = index.getRange(left, right)
-    val loaded = indexes
-      .filter(ic => loadedChunks.contains(ic.id))
-      .map(ic => loadedChunks(ic.id))
-
-    val read = reader.read(indexes.filterNot(ic =>
-      loadedChunks.contains(ic.id)))
-
-    read.foreach(checkAndAdd)
-
-    (loaded ++ read)
+  def getRange(left: Int, right: Int): Map[Int, D] =
+    getChunksByIndexes(index.getRange(left, right))
       .flatMap(_.data)
       .filter(data => left <= data._1 && data._1 <= right)
       .toMap
-  }
 
   override def close(): Unit = {
     reader.close()

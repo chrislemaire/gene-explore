@@ -1,5 +1,7 @@
 package com.clemaire.gexplore.core.gfa.reference.coordinates.crossing
 
+import scala.language.implicitConversions
+
 trait AlternatingEntry[N <: AlternatingEntry[C, N], C <: AlternatingEntry[N, C]] {
   var prev: Option[N] = None
   var next: Option[N] = None
@@ -9,7 +11,7 @@ trait AlternatingEntry[N <: AlternatingEntry[C, N], C <: AlternatingEntry[N, C]]
 
   implicit def self2c(self: this.type): C = self.asInstanceOf[C]
 
-  def append(entry: N): N = append(Option(entry)).orNull(null[N])
+  def append(entry: N): N = append(Option(entry)).orNull[N](null)
   def append(entry: Option[N]): Option[N] = {
     entry.foreach(_.prev = Some(this))
     next = entry

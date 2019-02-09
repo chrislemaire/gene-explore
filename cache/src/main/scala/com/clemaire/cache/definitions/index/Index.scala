@@ -33,13 +33,12 @@ trait Index[CI <: ChunkIndex]
   }
 
   /**
-    * Finishes the current [[Index]] by flushing all
-    * writing operations and returns a safe immutable
+    * Constructs and returns a safe immutable
     * [[ReadOnlyIndex]] for further use.
     *
     * @return Immutable [[ReadOnlyIndex]] for further use.
     */
-  def finish: ReadOnlyIndex[CI]
+  def readOnly: ReadOnlyIndex[CI]
 
   def flush(): Unit = {
     writer.flush()

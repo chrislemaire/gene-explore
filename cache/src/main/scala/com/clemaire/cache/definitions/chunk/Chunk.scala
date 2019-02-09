@@ -10,5 +10,15 @@ trait Chunk[D <: Identifiable]
     * its individual ids.
     */
   val data: Map[Int, D]
-  
+
+}
+
+object Chunk {
+  private case class BasicChunk[D <: Identifiable]
+  (id: Int,
+   data: Map[Int, D]) extends Chunk[D]
+
+  def apply[D <: Identifiable](id: Int,
+                               data: Map[Int, D]): Chunk[D] =
+    BasicChunk(id, data)
 }

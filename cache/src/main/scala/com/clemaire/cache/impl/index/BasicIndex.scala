@@ -14,13 +14,12 @@ class BasicIndex[CI <: ChunkIndex](val writer: IndexWriter[CI])
       with BasicIndexDataWriter[CI])
 
   /**
-    * Finishes the current [[Index]] by flushing all
-    * writing operations and returns a safe immutable
+    * Constructs and returns a safe immutable
     * [[ReadOnlyIndex]] for further use.
     *
     * @return Immutable [[ReadOnlyIndex]] for further use.
     */
-  override def finish: ReadOnlyIndex[CI] =
-    new BasicReadOnlyIndex[CI](this)
+  override def readOnly: ReadOnlyIndex[CI] =
+    ReadOnlyIndex[CI](this)
 
 }

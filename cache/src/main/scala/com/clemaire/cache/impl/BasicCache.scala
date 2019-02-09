@@ -12,10 +12,10 @@ import com.clemaire.cache.impl.index.BasicIndex
 
 class BasicCache[D <: Identifiable]
 (val writer: ChunkWriter[D],
- _reader: ChunkReader[D, ChunkIndex],
+ override val reader: ChunkReader[D, ChunkIndex],
  override val index: Index[ChunkIndex],
  override val max: Int = 25)
-  extends BasicReadOnlyCache[D](_reader, index)
+  extends BasicReadOnlyCache[D](reader, index)
     with Cache[D, ChunkIndex] {
 
   def this(writer: ChunkWriter[D], reader: ChunkReader[D, ChunkIndex], indexPath: Path) =
@@ -37,6 +37,6 @@ class BasicCache[D <: Identifiable]
     * @return The constructed [[ReadOnlyCache]].
     */
   override def readOnly: ReadOnlyCache[D, ChunkIndex] =
-    new BasicReadOnlyCache[D](reader, index, max)
+    new BasicReadOnlyCache[D](reader, index.readOnly, max)
 
 }
