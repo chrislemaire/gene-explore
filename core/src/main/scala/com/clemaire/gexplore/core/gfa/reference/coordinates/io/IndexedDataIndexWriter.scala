@@ -1,35 +1,29 @@
-package com.clemaire.gexplore.core.gfa.reference.writing.index
+package com.clemaire.gexplore.core.gfa.reference.coordinates.io
 
-import com.clemaire.gexplore.core.gfa.CachePathList
+import java.nio.file.Path
+
+import com.clemaire.gexplore.core.gfa.{DataWriter, StaticLength}
 import com.clemaire.gexplore.core.gfa.interval.IntInterval
-import com.clemaire.gexplore.core.gfa.reference.index.{NodeChunkIndex, NodeIndex}
-import com.clemaire.gexplore.core.gfa.reference.writing.additional.AdditionalReferenceWriter
+import com.clemaire.gexplore.core.gfa.reference.coordinates.io.IndexedDataIndexWriter._
+import com.clemaire.gexplore.core.gfa.reference.index.{ChunkIndex, Index, NodeChunkIndex, NodeIndex}
 import com.clemaire.gexplore.util.io.NioBufferedWriter
-import NioBufferedSRIndexWriter._
-import com.clemaire.gexplore.core.gfa.cache.IndexDataWriter
-import com.clemaire.gexplore.core.gfa.reference.data.BuilderReferenceNode
 
-object NioBufferedSRIndexWriter {
+object IndexedDataIndexWriter {
   /**
     * The size of each index chunk in bytes.
     */
   private val MAX_CHUNK_LENGTH = 1024 * 1024
 }
 
-class NioBufferedSRIndexWriter(val paths: CachePathList)
-  extends AdditionalReferenceWriter
-    with NioBufferedWriter
-    with IndexDataWriter[NodeChunkIndex] {
+abstract class IndexedDataIndexWriter(val index: Index[ChunkIndex],
+                                      val path: Path)
+  extends NioBufferedWriter
+    with DataWriter[ChunkIndex]
+    with StaticLength {
 
   private val _: Unit = {
-    withPath(paths.referenceIndexPath)
+    withPath(path)
   }
-
-  /**
-    * The in-memory representation of the [[NodeIndex]]
-    * that is created during writing of the index to file.
-    */
-  val index: NodeIndex = new NodeIndex()
 
   /**
     * The id of the chunk currently being worked on.
@@ -89,14 +83,15 @@ class NioBufferedSRIndexWriter(val paths: CachePathList)
     write(chunkIndex, buffer)
   }
 
-  override def writeNode(node: BuilderReferenceNode,
-                         byteLength: Int): Unit = {
+  def write(data: IndexedData[_],
+            layer: Int,
+            byteLength: Int): Unit = {
     if (bytesWritten >= MAX_CHUNK_LENGTH) {
       flushIndex()
     }
 
-    layers.pushBoundaries(node.layer)
-    segmentIds.pushBoundaries(node.id)
+    layers.pushBoundaries(layer)
+    segmentIds.pushBoundaries(data.id)
 
     nodesProcessed += 1
     bytesWritten += byteLength

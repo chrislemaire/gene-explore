@@ -1,9 +1,10 @@
-package com.clemaire.gexplore.core.gfa.reference.coordinates.io
+package com.clemaire.gexplore.core.gfa.reference.coordinates.io.impl
 
 import java.io.DataInputStream
 import java.nio.ByteBuffer
 
 import com.clemaire.gexplore.core.gfa.{NioDataReader, StaticLength}
+import com.clemaire.gexplore.core.gfa.reference.coordinates.io.IndexedData
 import com.clemaire.gexplore.util.io.NioBufferedDataReader
 
 trait IndexedIntDataReader

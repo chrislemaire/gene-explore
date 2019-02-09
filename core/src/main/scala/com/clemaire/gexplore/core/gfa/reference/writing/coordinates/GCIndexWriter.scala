@@ -66,6 +66,7 @@ class GCIndexWriter(paths: CachePathList,
     val chunkIndex = GCChunkIndex(chunkId, filePos, bytesWritten, layers.toInterval, segmentIds.toInterval, lastIndexedCoordinates.toMap)
 
     chunkId += 1
+    filePos += bytesWritten
     bytesWritten = 0
 
     layers = new IntInterval(Int.MaxValue, Int.MinValue)
@@ -81,8 +82,6 @@ class GCIndexWriter(paths: CachePathList,
                          byteLength: Int): Unit = {
     if (bytesWritten >= MAX_CHUNK_LENGTH) {
       flushIndex()
-
-      filePos = node.fileOffset
     }
 
     layers.pushBoundaries(node.layer)

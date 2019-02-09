@@ -7,6 +7,12 @@ import com.clemaire.gexplore.core.gfa.reference.index.ChunkIndex
 trait PositionalCache[C <: Chunk[CI, D], CI <: ChunkIndex, D <: Positional]
   extends Cache[C, CI] {
 
+  def getByLayer(layer: Int): Map[Int, D] =
+    load(index.betweenLayers(layer, layer)).values
+      .flatMap(_.data)
+      .filter(_._2.layer == layer)
+      .toMap
+
   def betweenLayers(left: Int,
                     right: Int): Map[Int, D] =
     load(index.betweenLayers(left, right)).values

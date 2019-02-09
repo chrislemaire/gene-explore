@@ -101,6 +101,8 @@ class CachePathList(val gfaPath: Path)
 
   private val HEADER_EXT = ".h"
 
+  private val ORDER_EXT = ".ord"
+
   /**
     * Path to the reference-level cache file.
     */
@@ -128,6 +130,8 @@ class CachePathList(val gfaPath: Path)
 
   val headerPath: Path = APP_DATA.resolve(GFA_NAME + HEADER_EXT)
 
+  val orderPath: Path = APP_DATA.resolve(GFA_NAME + ORDER_EXT)
+
   /**
     * List of paths used as the underlying structure
     * that is used when querying this [[CachePathList]]
@@ -138,7 +142,9 @@ class CachePathList(val gfaPath: Path)
     referenceIndexPath,
     heatMapPath,
     coordinatesPath,
-    coordinatesIndexPath)
+    coordinatesIndexPath,
+    headerPath,
+    orderPath)
 
   override def length: Int = listOfPaths.length
 

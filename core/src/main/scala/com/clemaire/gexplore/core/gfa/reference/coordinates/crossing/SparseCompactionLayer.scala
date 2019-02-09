@@ -1,27 +1,24 @@
 package com.clemaire.gexplore.core.gfa.reference.coordinates.crossing
 
 import com.clemaire.gexplore.core.gfa.reference.coordinates.crossing.algorithm.ALData
-import com.clemaire.gexplore.core.gfa.reference.coordinates.data.{AlternatingNode, Segment}
 
 import scala.collection.mutable
 
-case class SparseCompactionLayer private(order: Traversable[Either[AlternatingNode, Segment]])
-
 object SparseCompactionLayer {
 
-  def apply(al: ALData): SparseCompactionLayer = {
-    val buffer = mutable.Buffer[Either[AlternatingNode, Segment]]()
+  def apply(al: ALData): Traversable[Int] = {
+    val buffer = mutable.Buffer[Int]()
 
     al.first.foreach(c => {
       if (c.size > 0)
-        buffer += Right(c.first.get)
+        buffer += c.first.get.id
       if (c.size > 1)
-        buffer += Right(c.last.get)
+        buffer += c.last.get.id
     })(n => {
-      buffer += Left(n)
+      buffer += n.id
     })
 
-    SparseCompactionLayer(buffer)
+    buffer
   }
 
 }
