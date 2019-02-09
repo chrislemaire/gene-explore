@@ -2,6 +2,12 @@ name := "gexplore"
 version := "0.1"
 scalaVersion := "2.12.6"
 
+scalacOptions ++= Seq(
+  "-feature",
+  "-language:implicitConversions",
+  "-language:postfixOps"
+)
+
 lazy val root = project.in(file("."))
   .aggregate(core, ui, util)
 

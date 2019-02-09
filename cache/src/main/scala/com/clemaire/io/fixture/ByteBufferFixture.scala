@@ -2,6 +2,8 @@ package com.clemaire.io.fixture
 
 import java.nio.ByteBuffer
 
+import scala.language.implicitConversions
+
 object ByteBufferFixture {
   implicit def bb2fixtureOut(bb: ByteBuffer): OutputFixture =
     new ByteBufferOutputFixture(bb)

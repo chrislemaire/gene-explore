@@ -5,6 +5,8 @@ import com.clemaire.cache.definitions.scheduling.CacheScheduler
 import com.clemaire.cache.definitions.Identifiable
 import com.clemaire.cache.definitions.index.ChunkIndex
 
+import scala.language.postfixOps
+
 trait LRU[D <: Identifiable, CI <: ChunkIndex]
   extends CacheScheduler[D, CI] {
 

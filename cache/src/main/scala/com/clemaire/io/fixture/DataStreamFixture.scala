@@ -2,6 +2,8 @@ package com.clemaire.io.fixture
 
 import java.io.{DataInputStream, DataOutputStream}
 
+import scala.language.implicitConversions
+
 object DataStreamFixture {
   implicit def dos2fixtureOut(os: DataOutputStream): OutputFixture =
     new DataStreamOutputFixture(os)
