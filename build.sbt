@@ -12,6 +12,15 @@ lazy val core = project
       dependencies.intervalTree
     ))
   .dependsOn(util)
+  .dependsOn(cache)
+
+lazy val cache = project
+  .settings(
+    name := "cache",
+    libraryDependencies ++= commonDependencies ++ Set(
+      dependencies.intervalTree
+    )
+  )
 
 lazy val ui = project
   .settings(

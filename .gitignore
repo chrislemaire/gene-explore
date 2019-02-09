@@ -52,7 +52,6 @@ fabric.properties
 *.log
 
 # sbt specific
-.cache/
 .history/
 .lib/
 dist/*
