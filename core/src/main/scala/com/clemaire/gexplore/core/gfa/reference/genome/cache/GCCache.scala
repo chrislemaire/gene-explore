@@ -21,7 +21,7 @@ class GCCache
  override val reader: ChunkReader[GenomeCoordinate, GCChunkIndex],
  override val index: Index[GCChunkIndex],
  n: Int,
- override val max: Int = 25)
+ override val max: Int = 5)
   extends Cache[GenomeCoordinate, GCChunkIndex]
     with SetNumberOfChunks[GenomeCoordinate, GCChunkIndex]
     with LRU[GenomeCoordinate, GCChunkIndex] {

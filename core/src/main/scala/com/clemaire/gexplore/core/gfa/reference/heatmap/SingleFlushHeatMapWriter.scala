@@ -26,6 +26,9 @@ class SingleFlushHeatMapWriter(val path: Path)
   private val nodesPerLayer: mutable.Map[Int, Int] =
     mutable.HashMap()
 
+  def write(nodes: mutable.Traversable[BuilderReferenceNode]): Unit =
+    nodes.foreach(write)
+
   def write(node: BuilderReferenceNode): Unit =
     if (nodesPerLayer.contains(node.layer)) {
       nodesPerLayer(node.layer) += 1

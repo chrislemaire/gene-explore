@@ -27,6 +27,7 @@ lazy val cache = project
       dependencies.intervalTree
     )
   )
+  .dependsOn(util)
 
 lazy val ui = project
   .settings(

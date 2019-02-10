@@ -8,6 +8,8 @@ import com.clemaire.gexplore.core.gfa.reference.genome.cache.{GCCache, GCReadOnl
 import com.clemaire.gexplore.core.gfa.reference.heatmap.SingleFlushHeatMapWriter
 import com.clemaire.gexplore.core.gfa.reference.node.cache.NodeReadOnlyCache.NodeReadOnlyCache
 
+import scala.collection.mutable
+
 class ReferenceCacheBuilder(paths: CachePathList,
                             nGenomes: Int) {
   private[this] val nodes: NodeCache = NodeCache(paths.referencePath, paths.referenceIndexPath)
@@ -15,20 +17,33 @@ class ReferenceCacheBuilder(paths: CachePathList,
 
   private[this] val heatMapWriter: SingleFlushHeatMapWriter = new SingleFlushHeatMapWriter(paths)
 
+  private[this] val workBuffer: mutable.Buffer[BuilderReferenceNode] = mutable.Buffer()
+
   def toData(header: GraphHeader): GraphData =
     new GraphData(paths, header) {
       override val nodeCache: NodeReadOnlyCache = nodes.readOnly
       override val gcCache: GCReadOnlyCache = ReferenceCacheBuilder.this.genomes.readOnly
     }
 
-  def +=(node: BuilderReferenceNode): Unit = {
-    nodes += node
-    genomes += node
+  private def doWork(): Unit = {
+    nodes ++= workBuffer
+    genomes ++= workBuffer
 
-    heatMapWriter.write(node)
+    heatMapWriter.write(workBuffer)
+
+    workBuffer.clear()
+  }
+
+  def +=(node: BuilderReferenceNode): Unit = {
+    workBuffer += node
+
+    if (workBuffer.size > 8192)
+      doWork()
   }
 
   def flush(): Unit = {
+    doWork()
+
     nodes.flush()
     genomes.flush()
 

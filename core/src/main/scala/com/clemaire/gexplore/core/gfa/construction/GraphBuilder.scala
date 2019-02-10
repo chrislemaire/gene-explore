@@ -5,6 +5,7 @@ import com.clemaire.gexplore.core.gfa.data.GraphData
 import com.clemaire.gexplore.core.gfa.parsing.Gfa1Parser
 import com.clemaire.gexplore.core.gfa.reference.{BuilderReferenceNode, ReferenceCacheBuilder}
 import com.clemaire.gexplore.core.gfa.reference.header.HeaderWriter
+import com.clemaire.gexplore.util.Stopwatch
 
 import scala.collection.mutable
 
@@ -170,18 +171,28 @@ class GraphBuilder(val paths: CachePathList) {
                             name: String,
                             content: String,
                             options: Traversable[(String, String)]): Unit = {
+    Stopwatch.start("inner")
+    Stopwatch.start("write current")
     currentNode.foreach(writeNode)
+    Stopwatch.stop("write current")
 
+    Stopwatch.start("get genomes")
     val nodeGenomes = getGenomes(options)
+    Stopwatch.stop("get genomes")
 
     val (id, layer) = lookupNode(name)
-    currentNode = Some(BuilderReferenceNode(name,
+    Stopwatch.start("build ref node")
+    currentNode = Some(new BuilderReferenceNode(name,
       id, layer, atOffset, content.length,
-      incomingEdges.getOrElse(id, mutable.Buffer()),
-      mutable.Buffer(),
+      incomingEdges.getOrElse(id, mutable.Buffer.empty),
+      mutable.Buffer.empty,
       nodeGenomes.map(gen => gen -> genomeCoordinates(gen)).toMap))
+    Stopwatch.stop("build ref node")
 
+    Stopwatch.start("update gen coords")
     nodeGenomes.foreach(gen => genomeCoordinates(gen) += content.length)
+    Stopwatch.stop("update gen coords")
+    Stopwatch.stop("inner")
   }
 
   /**

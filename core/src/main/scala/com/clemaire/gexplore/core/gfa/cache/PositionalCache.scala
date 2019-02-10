@@ -1,6 +1,6 @@
 package com.clemaire.gexplore.core.gfa.cache
 
-import com.clemaire.cache.definitions.{Cache, Identifiable, ReadOnlyCache}
+import com.clemaire.cache.definitions.{Cache, Identifiable}
 import com.clemaire.cache.definitions.chunk.ChunkBuilder
 import com.clemaire.cache.definitions.io.reading.ChunkReader
 import com.clemaire.cache.definitions.io.writing.ChunkWriter
@@ -12,7 +12,7 @@ class PositionalCache[D <: Identifiable with Positional]
 (val writer: ChunkWriter[D],
  override val reader: ChunkReader[D, PositionalChunkIndex],
  override val index: PositionalIndex[PositionalChunkIndex],
- override val max: Int = 25)
+ override val max: Int = 5)
   extends PositionalReadOnlyCache[D, PositionalChunkIndex](reader, index, max)
     with Cache[D, PositionalChunkIndex] {
 
