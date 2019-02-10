@@ -6,3 +6,4 @@ case class StructuralNode(id: Int,
                           incomingEdges: Set[Int],
                           outgoingEdges: Set[Int])
   extends Identifiable
+    with Positional
