@@ -21,11 +21,11 @@ class PositionalIndexReader(override val path: Path)
   override def read: PositionalReadOnlyIndex[PositionalChunkIndex] = {
     val indexMap = new IntervalTreeMap[Integer, PositionalChunkIndex]()
     val layerMap = new IntervalTreeMap[Integer, PositionalChunkIndex]()
-    while (!eofReached) {
+    do {
       val ic = readData(this)
       indexMap.addBinding(ic.ids, ic)
       layerMap.addBinding(ic.layers, ic)
-    }
+    } while (!eofReached)
     PositionalReadOnlyIndex(indexMap, layerMap)
   }
 

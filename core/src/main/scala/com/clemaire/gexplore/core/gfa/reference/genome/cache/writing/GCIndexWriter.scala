@@ -14,7 +14,7 @@ class GCIndexWriter(path: Path, n: Int)
   /**
     * @return The length of some object.
     */
-  override val length: Int = 4 + 8 + 8 + 4 + 4 + 12 * n
+  override val length: Int = 4 + 8 + 8 + 4 + 4 + 8 * n
 
   /**
     * Writes the given data object of type [[GCChunkIndex]]
@@ -32,9 +32,8 @@ class GCIndexWriter(path: Path, n: Int)
     out.writeInt(data.ids.getStart)
     out.writeInt(data.ids.getEnd)
 
-    data.relativeCoordinates.foreach(kv => {
-      out.writeInt(kv._1)
-      out.writeLong(kv._2)
+    (0 until n).foreach(i => {
+      out.writeLong(data.relativeCoordinates(i))
     })
   }
 

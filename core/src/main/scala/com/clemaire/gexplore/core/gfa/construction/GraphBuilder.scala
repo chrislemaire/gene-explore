@@ -3,7 +3,7 @@ package com.clemaire.gexplore.core.gfa.construction
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.data.GraphData
 import com.clemaire.gexplore.core.gfa.parsing.Gfa1Parser
-import com.clemaire.gexplore.core.gfa.reference.BuilderReferenceNode
+import com.clemaire.gexplore.core.gfa.reference.{BuilderReferenceNode, ReferenceCacheBuilder}
 import com.clemaire.gexplore.core.gfa.reference.header.HeaderWriter
 
 import scala.collection.mutable
@@ -47,11 +47,12 @@ class GraphBuilder(val paths: CachePathList) {
   /**
     * Writer to write the node-reference data to file.
     */
-//  private val writer: ReferenceNodeWriter =
-//    new NioBufferedSRWriter(this)
+  private var cacheBuilder: ReferenceCacheBuilder = _
 
-  private val headerWriter: HeaderWriter =
-    new HeaderWriter(paths)
+  /**
+    * Writer to write header data to a header file.
+    */
+  private val headerWriter: HeaderWriter = new HeaderWriter(paths)
 
   /**
     * The number of genomes currently counted.
@@ -83,15 +84,18 @@ class GraphBuilder(val paths: CachePathList) {
     headerWriter.write(options)
 
     options.filter(_._1 == "ORI")
-      .foreach(_._2.split(";")
-        .filterNot(gen => genomeNames.contains(gen))
-        .filterNot(_.isEmpty)
-        .foreach(gen => {
-          genomeIndex += 1
-          genomeNames += gen -> genomeIndex
-          genomes += genomeIndex -> gen
-          genomeCoordinates(genomeIndex) = 0
-        }))
+      .foreach(opt => {
+        opt._2.split(";")
+          .filterNot(gen => genomeNames.contains(gen))
+          .filterNot(_.isEmpty)
+          .foreach(gen => {
+            genomeIndex += 1
+            genomeNames += gen -> genomeIndex
+            genomes += genomeIndex -> gen
+            genomeCoordinates(genomeIndex) = 0
+          })
+        cacheBuilder = new ReferenceCacheBuilder(paths, genomes.size)
+      })
   }
 
   /**
@@ -153,7 +157,7 @@ class GraphBuilder(val paths: CachePathList) {
   /**
     * Registers a segment that is identified by its position
     * in the source file, its name, its content, and the options
-    * provided to it. The build [[Cache]] should hereafter
+    * provided to it. The built Caches should hereafter
     * recognize the segment provided as such.
     *
     * @param atOffset The position in the file at which the
@@ -166,7 +170,7 @@ class GraphBuilder(val paths: CachePathList) {
                             name: String,
                             content: String,
                             options: Traversable[(String, String)]): Unit = {
-    writeCurrentNode()
+    currentNode.foreach(writeNode)
 
     val nodeGenomes = getGenomes(options)
 
@@ -203,18 +207,17 @@ class GraphBuilder(val paths: CachePathList) {
 
   /**
     * Writes node reference data to file through the
-    * accompanying [[writer]] and clears any auxiliary
+    * accompanying [[cacheBuilder]] and clears any auxiliary
     * data kept on the current node.
     */
-  protected def writeCurrentNode(): Unit =
-    currentNode.foreach(node => {
-//      writer.write(node)
+  protected def writeNode(node: BuilderReferenceNode): Unit = {
+    cacheBuilder += node
 
-      incomingEdges.remove(node.id)
-      lookAheadSegments.remove(node.name)
+    incomingEdges.remove(node.id)
+    lookAheadSegments.remove(node.name)
 
-      currentNode = None
-    })
+    currentNode = None
+  }
 
   /**
     * Finishes building the graph and closes this
@@ -222,14 +225,14 @@ class GraphBuilder(val paths: CachePathList) {
     */
   final def finish(): GraphData = {
     try {
-      writeCurrentNode()
-//      writer.flush()
+      currentNode.foreach(writeNode)
+      cacheBuilder.flush()
 
       headerWriter.write(genomes.toMap)
       headerWriter.writeMaxCoords(genomeCoordinates.toMap)
       headerWriter.flush()
 
-      GraphData(paths,
+      new GraphData(paths,
         headerWriter.data)
     } finally {
       close()
@@ -250,7 +253,7 @@ class GraphBuilder(val paths: CachePathList) {
   }
 
   def close(): Unit = {
-//    writer.close()
+    cacheBuilder.close()
     headerWriter.close()
   }
 

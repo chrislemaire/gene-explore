@@ -2,7 +2,7 @@ package com.clemaire.gexplore.core.gfa.reference.genome.cache
 
 import java.nio.file.Path
 
-import com.clemaire.cache.definitions.Cache
+import com.clemaire.cache.definitions.{Cache, ReadOnlyCache}
 import com.clemaire.cache.definitions.chunk.ChunkBuilder
 import com.clemaire.cache.definitions.index.Index
 import com.clemaire.cache.definitions.io.reading.ChunkReader
@@ -16,10 +16,11 @@ import com.clemaire.gexplore.core.gfa.reference.genome.cache.index.GCChunkIndex
 import com.clemaire.gexplore.core.gfa.reference.genome.cache.reading.GCReader
 import com.clemaire.gexplore.core.gfa.reference.genome.cache.writing.{GCIndexWriter, GCWriter}
 
-abstract class GCCache
+class GCCache
 (val writer: ChunkWriter[GenomeCoordinate],
  override val reader: ChunkReader[GenomeCoordinate, GCChunkIndex],
  override val index: Index[GCChunkIndex],
+ n: Int,
  override val max: Int = 25)
   extends Cache[GenomeCoordinate, GCChunkIndex]
     with SetNumberOfChunks[GenomeCoordinate, GCChunkIndex]
@@ -31,7 +32,16 @@ abstract class GCCache
     * is complete and constructs it when it is ready.
     */
   override val chunkBuilder: ChunkBuilder[GenomeCoordinate, GCChunkIndex] =
-    new GCChunkBuilder(max = 8192)
+    new GCChunkBuilder(n, max = 1024 * 1024)
+
+  /**
+    * Constructs a read-only [[Cache]] from this
+    * [[Cache]].
+    *
+    * @return The constructed [[ReadOnlyCache]].
+    */
+  override def readOnly: GCReadOnlyCache =
+    new GCReadOnlyCache(reader, index.readOnly, max)
 
 }
 
@@ -43,11 +53,7 @@ object GCCache {
     new GCCache(
       writer = new GCWriter(dataPath),
       reader = new GCReader(dataPath, n),
-      index = new BasicIndex(new GCIndexWriter(indexPath, n)), n) {
-
-      override def readOnly: GCReadOnlyCache =
-        new GCReadOnlyCache(reader, index.readOnly, max)
-
-    }
+      index = new BasicIndex(new GCIndexWriter(indexPath, n)),
+      n)
 
 }

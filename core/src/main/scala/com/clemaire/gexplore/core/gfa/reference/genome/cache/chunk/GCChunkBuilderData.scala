@@ -12,14 +12,14 @@ trait GCChunkBuilderData
     * updated each node by adding the length of
     * the node for each of its genomes.
     */
-  protected[this] val currentCoordinates: mutable.HashMap[Int, Long] =
+  protected[this] val currentCoordinates: mutable.Map[Int, Long] =
     mutable.HashMap()
 
   /**
     * The current relative coordinates. These are
     * updated only once when reset happens.
     */
-  protected[this] val relativeCoordinates: mutable.HashMap[Int, Long] =
+  protected[this] val relativeCoordinates: mutable.Map[Int, Long] =
     mutable.HashMap()
 
 }

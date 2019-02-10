@@ -8,5 +8,5 @@ class GraphReader(paths: CachePathList) {
   private val header = new HeaderReader(paths).read()
 
   def readGraphData(): GraphData =
-    GraphData(paths, header)
+    new GraphData(paths, header)
 }

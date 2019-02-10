@@ -26,9 +26,9 @@ class GCIndexReader(path: Path, n: Int)
     GCChunkIndex(
       source.getInt,
       source.getLong,
-      source.getInt,
+      source.getLong,
       new IntegerInterval(source.getInt, source.getInt, Bounded.CLOSED),
-      (1 to n).map(_ => (source.getInt, source.getLong)).toMap
+      (0 until n).map(i => (i, source.getLong)).toMap
     )
 
 }

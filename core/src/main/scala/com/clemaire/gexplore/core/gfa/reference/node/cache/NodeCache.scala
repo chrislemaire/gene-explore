@@ -15,6 +15,6 @@ object NodeCache {
     writer = new NodeWriter(dataPath),
     reader = new NodeReader(dataPath),
     index = new PositionalIndex(new PositionalIndexWriter(indexPath)),
-    max = 25
+    max = 20
   )
 }

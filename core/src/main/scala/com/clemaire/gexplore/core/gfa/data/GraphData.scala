@@ -5,8 +5,8 @@ import com.clemaire.gexplore.core.gfa.reference.genome.cache.GCReadOnlyCache
 import com.clemaire.gexplore.core.gfa.reference.node.cache.NodeReadOnlyCache
 import com.clemaire.gexplore.core.gfa.reference.node.cache.NodeReadOnlyCache.NodeReadOnlyCache
 
-case class GraphData(paths: CachePathList,
-                     header: GraphHeader) {
+class GraphData(val paths: CachePathList,
+                val header: GraphHeader) {
   val headerOptions: Map[String, String] = header.options
 
   val genomes: Map[Int, String] = header.genomes

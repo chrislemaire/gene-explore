@@ -2,16 +2,16 @@ package com.clemaire.gexplore.core.gfa.reference.heatmap
 
 import java.nio.file.Path
 
-import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.reference.BuilderReferenceNode
+import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.io.writing.NioBufferedWriter
 
 import scala.collection.mutable
 
-class SingleFlushHeatMapWriter(val paths: CachePathList)
+class SingleFlushHeatMapWriter(val path: Path)
   extends NioBufferedWriter {
 
-  val path: Path = paths.heatMapPath
+  def this(paths: CachePathList) = this(paths.heatMapPath)
 
   /**
     * The size of the entry that is written to disk.

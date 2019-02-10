@@ -70,6 +70,8 @@ trait NioBufferedReader
     */
   def eofReached: Boolean = _eofReached
 
+  private val _: Unit = loadNextBuffer()
+
   /**
     * Loads the next chunk of size [[bufferSize]] into
     * [[_buffer]]. This also
@@ -101,7 +103,7 @@ trait NioBufferedReader
     *                     reading from file.
     */
   @throws[IOException]
-  private def checkBuffer(margin: Int): Boolean = {
+  protected[this] def checkBuffer(margin: Int): Boolean = {
     val eofReached = _eofReached
     if (_buffer.position + margin >= _buffer.limit && !_eofReached)
       loadNextBuffer()

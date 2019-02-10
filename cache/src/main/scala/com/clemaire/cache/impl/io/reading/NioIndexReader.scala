@@ -20,10 +20,10 @@ abstract class NioIndexReader[CI <: ChunkIndex](val path: Path)
     */
   override def read: ReadOnlyIndex[CI] = {
     val map = new IntervalTreeMap[Integer, CI]()
-    while (!eofReached) {
+    do {
       val ic = readData(this)
       map.addBinding(ic.ids, ic)
-    }
+    } while (!eofReached)
     ReadOnlyIndex(map)
   }
 

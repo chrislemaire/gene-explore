@@ -4,10 +4,21 @@ import com.clemaire.cache.impl.chunk.BasicChunkBuilder
 import com.clemaire.gexplore.core.gfa.reference.genome.GenomeCoordinate
 import com.clemaire.gexplore.core.gfa.reference.genome.cache.index.GCChunkIndex
 
-class GCChunkBuilder(override val max: Int = 8192)
+import scala.collection.mutable
+
+class GCChunkBuilder(val n: Int,
+                     override val max: Int = 8192)
   extends BasicChunkBuilder[GenomeCoordinate, GCChunkIndex](max)
     with GCChunkBuilderData
     with GCChunkIndexConstructor {
+
+  /**
+    * The current total coordinates. These are
+    * updated each node by adding the length of
+    * the node for each of its genomes.
+    */
+  override protected[this] val currentCoordinates: mutable.Map[Int, Long] =
+    mutable.HashMap() ++ (0 until n).map(i => i -> 0L).toMap
 
   /**
     * Resets the current chunk construction and increments
@@ -33,7 +44,7 @@ class GCChunkBuilder(override val max: Int = 8192)
     */
   override def register(data: GenomeCoordinate, length: Int): Option[GCChunkIndex] = {
     data.coordinates.foreach(c =>
-      currentCoordinates.put(c._1, currentCoordinates(c._1) + c._2))
+      relativeCoordinates.put(c._1, currentCoordinates(c._1) + c._2))
 
     super.register(data, length)
   }
