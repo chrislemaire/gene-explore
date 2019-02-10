@@ -6,7 +6,7 @@ import com.clemaire.cache.definitions.io.reading.ChunkReader
 import com.clemaire.cache.definitions.io.writing.ChunkWriter
 import com.clemaire.gexplore.core.gfa.cache.chunk.{PositionalChunkBuilder, PositionalChunkIndexConstructor}
 import com.clemaire.gexplore.core.gfa.cache.index.{PositionalChunkIndex, PositionalIndex}
-import com.clemaire.gexplore.core.gfa.data.Positional
+import com.clemaire.gexplore.core.gfa.Positional
 
 class PositionalCache[D <: Identifiable with Positional]
 (val writer: ChunkWriter[D],

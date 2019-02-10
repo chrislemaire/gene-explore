@@ -1,7 +1,7 @@
 package com.clemaire.gexplore.core.gfa.reference.node
 
 import com.clemaire.cache.definitions.Identifiable
-import com.clemaire.gexplore.core.gfa.data.Positional
+import com.clemaire.gexplore.core.gfa.Positional
 
 trait ReferenceNode
   extends Identifiable

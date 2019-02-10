@@ -1,9 +1,9 @@
 package com.clemaire.gexplore.core.gfa.data
 
 import com.clemaire.gexplore.core.gfa.CachePathList
-import com.clemaire.gexplore.core.gfa.reference.genome.cache.GCCache
-import com.clemaire.gexplore.core.gfa.reference.node.cache.NodeCache
-import com.clemaire.gexplore.core.gfa.reference.node.cache.NodeCache.NodeCache
+import com.clemaire.gexplore.core.gfa.reference.genome.cache.GCReadOnlyCache
+import com.clemaire.gexplore.core.gfa.reference.node.cache.NodeReadOnlyCache
+import com.clemaire.gexplore.core.gfa.reference.node.cache.NodeReadOnlyCache.NodeReadOnlyCache
 
 case class GraphData(paths: CachePathList,
                      header: GraphHeader) {
@@ -13,6 +13,6 @@ case class GraphData(paths: CachePathList,
   val genomeNames: Map[String, Int] = genomes.map(_.swap)
   val genomeMaxes: Map[Int, Long] = header.coordinateMax
 
-  val nodeCache: NodeCache = NodeCache(paths.referencePath, paths.referenceIndexPath)
-  val gcCache: GCCache = GCCache(paths.coordinatesPath, paths.coordinatesIndexPath, genomes.size)
+  val nodeCache: NodeReadOnlyCache = NodeReadOnlyCache(paths.referencePath, paths.referenceIndexPath)
+  val gcCache: GCReadOnlyCache = new GCReadOnlyCache(paths.coordinatesPath, paths.coordinatesIndexPath, genomes.size)
 }

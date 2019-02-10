@@ -5,7 +5,7 @@ import com.clemaire.cache.definitions.io.reading.ChunkReader
 import com.clemaire.cache.impl.capacity.SetNumberOfChunks
 import com.clemaire.cache.impl.scheduling.LRU
 import com.clemaire.gexplore.core.gfa.cache.index.{PositionalChunkIndex, PositionalReadOnlyIndex}
-import com.clemaire.gexplore.core.gfa.data.Positional
+import com.clemaire.gexplore.core.gfa.Positional
 
 class PositionalReadOnlyCache[D <: Identifiable with Positional, PCI <: PositionalChunkIndex]
 (val reader: ChunkReader[D, PCI],

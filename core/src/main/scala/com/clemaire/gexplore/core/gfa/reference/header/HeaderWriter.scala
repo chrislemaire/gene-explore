@@ -1,4 +1,4 @@
-package com.clemaire.gexplore.core.gfa.reference.writing.additional
+package com.clemaire.gexplore.core.gfa.reference.header
 
 import java.nio.channels.FileChannel
 import java.nio.file.StandardOpenOption

@@ -7,8 +7,7 @@ import com.clemaire.cache.impl.io.writing.NioIndexWriter
 import com.clemaire.gexplore.core.gfa.reference.genome.cache.index.GCChunkIndex
 import com.clemaire.io.fixture.OutputFixture
 
-class GCIndexWriter(path: Path,
-                    n: Int)
+class GCIndexWriter(path: Path, n: Int)
   extends NioIndexWriter[GCChunkIndex](path)
     with DataWriter[GCChunkIndex] {
 

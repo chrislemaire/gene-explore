@@ -1,4 +1,4 @@
-package com.clemaire.gexplore.core.gfa.reference.reading.additional
+package com.clemaire.gexplore.core.gfa.reference.header
 
 import java.nio.file.Files
 

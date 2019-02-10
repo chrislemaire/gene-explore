@@ -43,4 +43,15 @@ class GCWriter(path: Path)
     })
   }
 
+  /**
+    * Writes the given data entry to the underlying
+    * source.
+    *
+    * @param data The data to write to a source.
+    */
+  override def write(data: GenomeCoordinate): Unit = {
+    forObj(data.coordinates)
+    super.write(data)
+  }
+
 }

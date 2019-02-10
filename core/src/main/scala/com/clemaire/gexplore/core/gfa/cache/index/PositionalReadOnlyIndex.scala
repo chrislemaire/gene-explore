@@ -59,6 +59,10 @@ object PositionalReadOnlyIndex {
     * @return The constructed [[ReadOnlyIndex]].
     */
   def apply[PCI <: PositionalChunkIndex](index: PositionalIndex[PCI]): PositionalReadOnlyIndex[PCI] =
-    BasicPositionalReadOnlyIndex(index, index.layerIndex)
+    apply(index, index.layerIndex)
+
+  def apply[PCI <: PositionalChunkIndex](index: IntervalTreeMap[Integer, PCI],
+                                         layerIndex: IntervalTreeMap[Integer, PCI]): PositionalReadOnlyIndex[PCI] =
+    BasicPositionalReadOnlyIndex(index, layerIndex)
 
 }

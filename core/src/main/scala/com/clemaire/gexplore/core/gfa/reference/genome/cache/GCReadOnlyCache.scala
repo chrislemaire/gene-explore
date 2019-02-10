@@ -9,7 +9,7 @@ import com.clemaire.cache.impl.capacity.SetNumberOfChunks
 import com.clemaire.cache.impl.scheduling.LRU
 import com.clemaire.gexplore.core.gfa.reference.genome.GenomeCoordinate
 import com.clemaire.gexplore.core.gfa.reference.genome.cache.index.GCChunkIndex
-import com.clemaire.gexplore.core.gfa.reference.genome.cache.reading.GCIndexReader
+import com.clemaire.gexplore.core.gfa.reference.genome.cache.reading.{GCIndexReader, GCReader}
 
 class GCReadOnlyCache
 (val reader: ChunkReader[GenomeCoordinate, GCChunkIndex],
@@ -21,5 +21,8 @@ class GCReadOnlyCache
 
   def this(reader: ChunkReader[GenomeCoordinate, GCChunkIndex], indexPath: Path, n: Int) =
     this(reader, new GCIndexReader(indexPath, n).read, n)
+
+  def this(dataPath: Path, indexPath: Path, n: Int) =
+    this(new GCReader(dataPath, n), indexPath, n)
 
 }
