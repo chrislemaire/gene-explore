@@ -1,8 +1,9 @@
 package com.clemaire.gexplore.core.gfa.cache.chunk
 
+import com.clemaire.cache.definitions.Identifiable
 import com.clemaire.cache.impl.chunk.BasicChunkBuilder
 import com.clemaire.gexplore.core.gfa.cache.index.PositionalChunkIndex
-import com.clemaire.gexplore.core.gfa.data.{Identifiable, Positional}
+import com.clemaire.gexplore.core.gfa.data.Positional
 import com.clemaire.interval.IntInterval
 
 abstract class PositionalChunkBuilder[D <: Identifiable with Positional, PCI <: PositionalChunkIndex]

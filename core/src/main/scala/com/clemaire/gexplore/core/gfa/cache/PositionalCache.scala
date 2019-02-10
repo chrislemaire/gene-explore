@@ -31,7 +31,7 @@ class PositionalCache[D <: Identifiable with Positional]
     *
     * @return The constructed [[PositionalReadOnlyCache]].
     */
-  override def readOnly: ReadOnlyCache[D, PositionalChunkIndex] =
+  override def readOnly: PositionalReadOnlyCache[D, PositionalChunkIndex] =
     new PositionalReadOnlyCache[D, PositionalChunkIndex](reader, index, max)
 
 }

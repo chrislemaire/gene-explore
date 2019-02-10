@@ -1,20 +1,19 @@
 package com.clemaire.gexplore.core.gfa.cache
 
-import com.clemaire.cache.definitions.ReadOnlyCache
-import com.clemaire.cache.definitions.index.ChunkIndex
+import com.clemaire.cache.definitions.{Identifiable, ReadOnlyCache}
 import com.clemaire.cache.definitions.io.reading.ChunkReader
 import com.clemaire.cache.impl.capacity.SetNumberOfChunks
 import com.clemaire.cache.impl.scheduling.LRU
 import com.clemaire.gexplore.core.gfa.cache.index.{PositionalChunkIndex, PositionalReadOnlyIndex}
-import com.clemaire.gexplore.core.gfa.data.{Identifiable, Positional}
+import com.clemaire.gexplore.core.gfa.data.Positional
 
 class PositionalReadOnlyCache[D <: Identifiable with Positional, PCI <: PositionalChunkIndex]
 (val reader: ChunkReader[D, PCI],
  val index: PositionalReadOnlyIndex[PCI],
  val max: Int = 25)
   extends ReadOnlyCache[D, PCI]
-    with SetNumberOfChunks[D, ChunkIndex]
-    with LRU[D, ChunkIndex] {
+    with SetNumberOfChunks[D, PCI]
+    with LRU[D, PCI] {
 
   /**
     * Gets a data entry by its layer from the underlying

@@ -8,6 +8,12 @@ trait PositionalIndexDataWriter
   extends DataWriter[PositionalChunkIndex] {
 
   /**
+    * @return The length of some object.
+    */
+  override def length: Int =
+    4 + 8 + 8 + 4 + 4 + 4 + 4
+
+  /**
     * Writes the given data object of type [[PositionalChunkIndex]]
     * to the given source represented as an
     * [[OutputFixture]].

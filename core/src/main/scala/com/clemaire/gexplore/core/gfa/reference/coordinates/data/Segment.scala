@@ -1,6 +1,6 @@
 package com.clemaire.gexplore.core.gfa.reference.coordinates.data
 
-import com.clemaire.gexplore.core.gfa.data.Identifiable
+import com.clemaire.cache.definitions.Identifiable
 import com.clemaire.gexplore.core.gfa.reference.coordinates.data.splay.SplayNode
 
 class Segment(val id: Int,

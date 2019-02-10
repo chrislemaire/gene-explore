@@ -6,8 +6,8 @@ import com.clemaire.interval.IntervalTreeMap
 
 class PositionalIndex[PCI <: PositionalChunkIndex]
 (val writer: IndexWriter[PCI])
-  extends PositionalReadOnlyIndex[PCI](this)
-    with Index[PCI] {
+  extends Index[PCI]
+    with PositionalReadOnlyIndex[PCI] {
 
   /**
     * The interval index mapping layer ranges to their
@@ -16,6 +16,13 @@ class PositionalIndex[PCI <: PositionalChunkIndex]
   val layerIndex: IntervalTreeMap[Integer, PCI] =
     new IntervalTreeMap()
 
+  /**
+    * Appends a given [[PositionalChunkIndex]] to this [[Index]].
+    * If needed, it also writes the added [[PositionalChunkIndex]]
+    * to disk using the supplied [[IndexWriter]]
+    *
+    * @param pci The [[PositionalChunkIndex]] to add.
+    */
   override def +=(pci: PCI): Unit = {
     layerIndex.addBinding(pci.layers, pci)
     super.+=(pci)
@@ -27,7 +34,7 @@ class PositionalIndex[PCI <: PositionalChunkIndex]
     *
     * @return Immutable [[ReadOnlyIndex]] for further use.
     */
-  def readOnly: ReadOnlyIndex[PCI] =
+  def readOnly: PositionalReadOnlyIndex[PCI] =
     PositionalReadOnlyIndex(this)
 
 }

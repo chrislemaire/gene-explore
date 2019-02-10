@@ -12,7 +12,7 @@ trait LayerBuilder
 
   private val pVertices: mutable.Buffer[AlternatingNode] = mutable.Buffer()
 
-  private val appendToLast: AlternatingNode => Unit = node =>
+  private def appendToLast(node: AlternatingNode): Unit =
     last = last.append(node).append(new Container())
 
   def buildLayer(layer: mutable.ArrayStack[AlternatingNode]): Unit = {
@@ -22,7 +22,7 @@ trait LayerBuilder
       if (next.isQNode)
         qVertices += next
 
-      curr.fold[Unit](appendToLast)(node => {
+      curr.fold[Unit](appendToLast(next))(node => {
         if (node.isPNode) {
           node.prev.get.append(node.segment)
           node.remove()

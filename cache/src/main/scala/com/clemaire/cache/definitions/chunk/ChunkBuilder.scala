@@ -2,12 +2,26 @@ package com.clemaire.cache.definitions.chunk
 
 import com.clemaire.cache.definitions.{CapacityLimiter, Identifiable}
 import com.clemaire.cache.definitions.index.ChunkIndex
+import com.clemaire.interval.IntInterval
 
 trait ChunkBuilder[D <: Identifiable, CI <: ChunkIndex]
   extends Object
     with ChunkIndexConstructor[CI]
     with ChunkBuilderData
     with CapacityLimiter {
+
+  /**
+    * Resets the current chunk construction and increments
+    * counters where necessary.
+    */
+  protected[this] def reset(): Unit = {
+    chunkId += 1
+    noEntries = 0
+    filePosition += dataLength
+    dataLength = 0
+
+    ids = new IntInterval(Int.MaxValue, Int.MinValue)
+  }
 
   /**
     * Registers a data entry to the chunk. This
@@ -20,7 +34,20 @@ trait ChunkBuilder[D <: Identifiable, CI <: ChunkIndex]
     * @return The resulting [[ChunkIndex]] or none if
     *         none was created.
     */
-  def register(data: D, length: Int): Option[CI]
+  def register(data: D, length: Int): Option[CI] = {
+    ids.pushBoundaries(data.id)
+
+    noEntries += 1
+    dataLength += length
+
+    if (full) {
+      val result = Some(constructChunkIndex)
+      reset()
+      result
+    } else {
+      None
+    }
+  }
 
   /**
     * Finishes the last remaining chunk and returns

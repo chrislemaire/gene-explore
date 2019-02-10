@@ -1,13 +1,10 @@
 package com.clemaire.gexplore.core.gfa.construction
 
 import com.clemaire.gexplore.core.gfa.CachePathList
-import com.clemaire.gexplore.core.gfa.cache.Cache
 import com.clemaire.gexplore.core.gfa.data.GraphData
 import com.clemaire.gexplore.core.gfa.parsing.Gfa1Parser
 import com.clemaire.gexplore.core.gfa.reference.data.BuilderReferenceNode
-import com.clemaire.gexplore.core.gfa.reference.writing.ReferenceNodeWriter
 import com.clemaire.gexplore.core.gfa.reference.writing.additional.HeaderWriter
-import com.clemaire.gexplore.core.gfa.reference.writing.io.NioBufferedSRWriter
 
 import scala.collection.mutable
 
@@ -50,8 +47,8 @@ class GraphBuilder(val paths: CachePathList) {
   /**
     * Writer to write the node-reference data to file.
     */
-  private val writer: ReferenceNodeWriter =
-    new NioBufferedSRWriter(this)
+//  private val writer: ReferenceNodeWriter =
+//    new NioBufferedSRWriter(this)
 
   private val headerWriter: HeaderWriter =
     new HeaderWriter(paths)
@@ -178,7 +175,7 @@ class GraphBuilder(val paths: CachePathList) {
       id, layer, atOffset, content.length,
       incomingEdges.getOrElse(id, mutable.Buffer()),
       mutable.Buffer(),
-      nodeGenomes.map(gen => gen -> genomeCoordinates(gen))))
+      nodeGenomes.map(gen => gen -> genomeCoordinates(gen)).toMap))
 
     nodeGenomes.foreach(gen => genomeCoordinates(gen) += content.length)
   }
@@ -211,7 +208,7 @@ class GraphBuilder(val paths: CachePathList) {
     */
   protected def writeCurrentNode(): Unit =
     currentNode.foreach(node => {
-      writer.write(node)
+//      writer.write(node)
 
       incomingEdges.remove(node.id)
       lookAheadSegments.remove(node.name)
@@ -226,15 +223,13 @@ class GraphBuilder(val paths: CachePathList) {
   final def finish(): GraphData = {
     try {
       writeCurrentNode()
-      writer.flush()
+//      writer.flush()
 
       headerWriter.write(genomes.toMap)
       headerWriter.writeMaxCoords(genomeCoordinates.toMap)
       headerWriter.flush()
 
       GraphData(paths,
-        writer.index,
-        writer.coordinatesIndex,
         headerWriter.data)
     } finally {
       close()
@@ -255,7 +250,7 @@ class GraphBuilder(val paths: CachePathList) {
   }
 
   def close(): Unit = {
-    writer.close()
+//    writer.close()
     headerWriter.close()
   }
 

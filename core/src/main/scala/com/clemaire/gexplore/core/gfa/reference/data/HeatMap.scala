@@ -1,5 +1,7 @@
 package com.clemaire.gexplore.core.gfa.reference.data
 
+import scala.language.implicitConversions
+
 object HeatMap {
   type HeatMap = Map[Int, Int]
 

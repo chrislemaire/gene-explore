@@ -1,8 +1,10 @@
 package com.clemaire.gexplore.core.gfa.reference.coordinates.data
 
-import com.clemaire.gexplore.core.gfa.data.Identifiable
+import com.clemaire.cache.definitions.Identifiable
 import com.clemaire.gexplore.core.gfa.reference.coordinates.crossing.AlternatingEntry
 import com.clemaire.gexplore.core.gfa.reference.coordinates.data.splay.Container
+
+import scala.language.implicitConversions
 
 trait AlternatingNode
   extends AlternatingEntry[Container, AlternatingNode]

@@ -1,13 +1,18 @@
 package com.clemaire.gexplore.core.gfa.cache.index
 
 import com.clemaire.cache.definitions.index.{ChunkIndex, ReadOnlyIndex}
+import com.clemaire.interval.IntervalTreeMap
 import com.lodborg.intervaltree.IntegerInterval
 import com.lodborg.intervaltree.Interval.Bounded
 
 trait PositionalReadOnlyIndex[PCI <: PositionalChunkIndex]
   extends ReadOnlyIndex[PCI] {
 
-  override val index: PositionalIndex[PCI]
+  /**
+    * The interval index mapping layer ranges to their
+    * respective [[PositionalChunkIndex]]es.
+    */
+  val layerIndex: IntervalTreeMap[Integer, PCI]
 
   /**
     * Gets the [[ChunkIndex]]es with the given layer
@@ -33,14 +38,15 @@ trait PositionalReadOnlyIndex[PCI <: PositionalChunkIndex]
     *         with the given range in their respective layer range.
     */
   def getLayerRange(left: Int, right: Int): Traversable[PCI] =
-    index.layerIndex.valuesIntersecting(new IntegerInterval(left, right, Bounded.CLOSED))
+    layerIndex.valuesIntersecting(new IntegerInterval(left, right, Bounded.CLOSED))
 
 }
 
 object PositionalReadOnlyIndex {
   private case class BasicPositionalReadOnlyIndex[PCI <: PositionalChunkIndex]
-  (override val index: PositionalIndex[PCI])
-    extends PositionalReadOnlyIndex[PCI](index)
+  (index: IntervalTreeMap[Integer, PCI],
+   layerIndex: IntervalTreeMap[Integer, PCI])
+    extends PositionalReadOnlyIndex[PCI]
 
   /**
     * Constructs a new [[ReadOnlyIndex]] from the given
@@ -52,6 +58,7 @@ object PositionalReadOnlyIndex {
     *             in this read-only index.
     * @return The constructed [[ReadOnlyIndex]].
     */
-  def apply[PCI <: PositionalChunkIndex](index: PositionalIndex[PCI]): ReadOnlyIndex[PCI] =
-    BasicPositionalReadOnlyIndex(index)
+  def apply[PCI <: PositionalChunkIndex](index: PositionalIndex[PCI]): PositionalReadOnlyIndex[PCI] =
+    BasicPositionalReadOnlyIndex(index, index.layerIndex)
+
 }
