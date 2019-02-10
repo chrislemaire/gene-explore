@@ -1,11 +1,11 @@
-package com.clemaire.gexplore.core.gfa.reference.reading.additional
+package com.clemaire.gexplore.core.gfa.reference.heatmap
 
 import java.nio.channels.FileChannel
 import java.nio.file.StandardOpenOption
 import java.nio.ByteBuffer
 
 import com.clemaire.gexplore.core.gfa.CachePathList
-import com.clemaire.gexplore.core.gfa.reference.data.HeatMap.HeatMap
+import HeatMap.HeatMap
 
 class SingleFlushHeatMapReader(val paths: CachePathList) {
 

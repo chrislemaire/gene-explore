@@ -1,11 +1,16 @@
 package com.clemaire.gexplore.core.gfa.reference.node.cache
 
+import java.nio.file.Path
+
 import com.clemaire.cache.definitions.io.reading.DataReader
+import com.clemaire.cache.impl.io.reading.NioChunkReader
+import com.clemaire.gexplore.core.gfa.cache.index.PositionalChunkIndex
 import com.clemaire.gexplore.core.gfa.reference.node.ReferenceNode
 import com.clemaire.io.fixture.InputFixture
 
-trait NodeDataReader
-  extends DataReader[ReferenceNode] {
+class NodeReader(path: Path)
+  extends NioChunkReader[ReferenceNode, PositionalChunkIndex](path)
+    with DataReader[ReferenceNode] {
 
   /**
     * Reads the data object of type [[ReferenceNode]] from an

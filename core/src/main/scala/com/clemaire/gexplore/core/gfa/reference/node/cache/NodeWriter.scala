@@ -1,12 +1,16 @@
 package com.clemaire.gexplore.core.gfa.reference.node.cache
 
+import java.nio.file.Path
+
 import com.clemaire.cache.definitions.io.writing.DataWriter
 import com.clemaire.cache.impl.io.InstanceLength
+import com.clemaire.cache.impl.io.writing.NioChunkWriter
 import com.clemaire.gexplore.core.gfa.reference.node.ReferenceNode
 import com.clemaire.io.fixture.OutputFixture
 
-trait NodeDataWriter
-  extends DataWriter[ReferenceNode]
+class NodeWriter(path: Path)
+  extends NioChunkWriter[ReferenceNode](path)
+    with DataWriter[ReferenceNode]
     with InstanceLength[ReferenceNode] {
 
   /**
@@ -46,4 +50,16 @@ trait NodeDataWriter
       out.writeLong(kv._2)
     })
   }
+
+  /**
+    * Writes the given data entry to the underlying
+    * source.
+    *
+    * @param data The data to write to a source.
+    */
+  override def write(data: ReferenceNode): Unit = {
+    forObj(data)
+    super.write(data)
+  }
+
 }

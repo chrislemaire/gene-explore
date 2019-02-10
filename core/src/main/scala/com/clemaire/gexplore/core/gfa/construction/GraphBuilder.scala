@@ -3,8 +3,8 @@ package com.clemaire.gexplore.core.gfa.construction
 import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.data.GraphData
 import com.clemaire.gexplore.core.gfa.parsing.Gfa1Parser
-import com.clemaire.gexplore.core.gfa.reference.data.BuilderReferenceNode
-import com.clemaire.gexplore.core.gfa.reference.writing.additional.HeaderWriter
+import com.clemaire.gexplore.core.gfa.reference.BuilderReferenceNode
+import com.clemaire.gexplore.core.gfa.reference.header.HeaderWriter
 
 import scala.collection.mutable
 

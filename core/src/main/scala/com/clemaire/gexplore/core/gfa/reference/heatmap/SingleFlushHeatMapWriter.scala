@@ -1,18 +1,17 @@
-package com.clemaire.gexplore.core.gfa.reference.writing.additional
+package com.clemaire.gexplore.core.gfa.reference.heatmap
+
+import java.nio.file.Path
 
 import com.clemaire.gexplore.core.gfa.CachePathList
-import com.clemaire.gexplore.core.gfa.reference.data.BuilderReferenceNode
-import com.clemaire.gexplore.util.io.NioBufferedWriter
+import com.clemaire.gexplore.core.gfa.reference.BuilderReferenceNode
+import com.clemaire.io.writing.NioBufferedWriter
 
 import scala.collection.mutable
 
 class SingleFlushHeatMapWriter(val paths: CachePathList)
-  extends AdditionalReferenceWriter
-    with NioBufferedWriter {
+  extends NioBufferedWriter {
 
-  private val _: Unit = {
-    withPath(paths.heatMapPath)
-  }
+  val path: Path = paths.heatMapPath
 
   /**
     * The size of the entry that is written to disk.
@@ -27,8 +26,7 @@ class SingleFlushHeatMapWriter(val paths: CachePathList)
   private val nodesPerLayer: mutable.Map[Int, Int] =
     mutable.HashMap()
 
-  override def writeNode(node: BuilderReferenceNode,
-                         byteLength: Int): Unit =
+  def write(node: BuilderReferenceNode): Unit =
     if (nodesPerLayer.contains(node.layer)) {
       nodesPerLayer(node.layer) += 1
     } else {

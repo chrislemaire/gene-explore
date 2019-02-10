@@ -1,4 +1,4 @@
-package com.clemaire.gexplore.core.gfa.reference.data
+package com.clemaire.gexplore.core.gfa.reference
 
 import com.clemaire.gexplore.core.gfa.reference.genome.GenomeCoordinate
 import com.clemaire.gexplore.core.gfa.reference.node.ReferenceNode

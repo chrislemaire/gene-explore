@@ -1,4 +1,4 @@
-package com.clemaire.gexplore.core.gfa.reference.data
+package com.clemaire.gexplore.core.gfa.reference.heatmap
 
 import scala.language.implicitConversions
 
