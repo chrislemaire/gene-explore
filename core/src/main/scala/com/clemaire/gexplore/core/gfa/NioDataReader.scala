@@ -16,8 +16,8 @@ trait NioDataReader[T]
     */
   protected[this] def read(br: NioBufferedDataReader): T
 
-  override protected def read(is: DataInputStream): T = _
+  override protected def read(is: DataInputStream): T = ???
 
-  override protected def read(ib: ByteBuffer): T = _
+  override protected def read(ib: ByteBuffer): T = ???
 
 }

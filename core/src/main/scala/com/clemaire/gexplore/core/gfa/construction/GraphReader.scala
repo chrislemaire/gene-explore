@@ -14,8 +14,8 @@ class GraphReader(paths: CachePathList) {
 
   def readGraphData(): GraphData =
     GraphData(paths,
+      header,
       referenceIndexReader.readIndex(),
-      coordinateIndexReader.readIndex(),
-      header
+      coordinateIndexReader.readIndex()
     )
 }

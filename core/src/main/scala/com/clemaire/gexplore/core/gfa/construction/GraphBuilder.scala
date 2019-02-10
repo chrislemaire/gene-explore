@@ -233,9 +233,9 @@ class GraphBuilder(val paths: CachePathList) {
       headerWriter.flush()
 
       GraphData(paths,
+        headerWriter.data,
         writer.index,
-        writer.coordinatesIndex,
-        headerWriter.data)
+        writer.coordinatesIndex)
     } finally {
       close()
     }
