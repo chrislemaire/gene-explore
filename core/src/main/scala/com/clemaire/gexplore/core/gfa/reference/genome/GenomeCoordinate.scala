@@ -6,14 +6,14 @@ trait GenomeCoordinate
   extends Identifiable {
 
   val id: Int
-  val coordinates: Map[Int, Long]
+  val coordinates: metal.immutable.HashMap[Int, Long]
 }
 
 object GenomeCoordinate {
   private case class GenomeCoordinateImpl
   (id: Int,
-   coordinates: Map[Int, Long]) extends GenomeCoordinate
+   coordinates: metal.immutable.HashMap[Int, Long]) extends GenomeCoordinate
 
-  def apply(id: Int, coordinates: Map[Int, Long]): GenomeCoordinate =
+  def apply(id: Int, coordinates: metal.immutable.HashMap[Int, Long]): GenomeCoordinate =
     GenomeCoordinateImpl(id, coordinates)
 }

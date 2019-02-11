@@ -7,11 +7,12 @@ import com.clemaire.cache.impl.io.InstanceLength
 import com.clemaire.cache.impl.io.writing.NioChunkWriter
 import com.clemaire.gexplore.core.gfa.reference.genome.GenomeCoordinate
 import com.clemaire.io.fixture.OutputFixture
+import metal.syntax._
 
 class GCWriter(path: Path)
   extends NioChunkWriter[GenomeCoordinate](path)
     with DataWriter[GenomeCoordinate]
-    with InstanceLength[Traversable[(Int, Long)]] {
+    with InstanceLength[metal.immutable.HashMap[Int, Long]] {
 
   /**
     * Sets the object to find the length of and
@@ -21,7 +22,7 @@ class GCWriter(path: Path)
     * @param t The object to calculate the length
     *          for.
     */
-  override def forObj(t: Traversable[(Int, Long)]): Unit =
+  override def forObj(t: metal.immutable.HashMap[Int, Long]): Unit =
     _length = 4 + 4 + 8 * t.size
 
   /**
@@ -37,9 +38,9 @@ class GCWriter(path: Path)
     out.writeInt(data.coordinates.size)
     out.writeInt(data.id)
 
-    data.coordinates.foreach(kv => {
-      out.writeInt(kv._1)
-      out.writeInt(kv._2.toInt)
+    data.coordinates.foreach((id, v) => {
+      out.writeInt(id)
+      out.writeInt(v.toInt)
     })
   }
 

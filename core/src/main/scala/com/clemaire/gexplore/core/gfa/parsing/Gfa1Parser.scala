@@ -6,7 +6,6 @@ import com.clemaire.gexplore.core.gfa.CachePathList
 import com.clemaire.gexplore.core.gfa.construction.GraphBuilder
 import com.clemaire.gexplore.core.gfa.parsing.Gfa1Parser._
 import com.clemaire.gexplore.util.SimpleCheck.checkThatOrThrow
-import com.clemaire.gexplore.util.Stopwatch
 
 /**
   * Exception thrown when the length of some
@@ -221,12 +220,10 @@ abstract class Gfa1Parser(val tags: Set[String]) {
     checkThatOrThrow(split.length >= SEG_MIN_LENGTH,
       Gfa1SegmentColumnLengthException(split.length, segString))
 
-    Stopwatch.start("outer")
     cacheBuilder.registerSegment(fileOffset,
       split(SEG_NAME_INDEX),
       split(SEG_CONTENT_INDEX),
       parseOptionsWithFilter(split, SEG_OPTIONS_INDEX))
-    Stopwatch.stop("outer")
   }
 
   /**

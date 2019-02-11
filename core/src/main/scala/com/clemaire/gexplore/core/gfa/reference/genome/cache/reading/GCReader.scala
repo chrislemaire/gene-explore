@@ -8,6 +8,7 @@ import com.clemaire.cache.impl.io.reading.NioChunkReader
 import com.clemaire.gexplore.core.gfa.reference.genome.GenomeCoordinate
 import com.clemaire.gexplore.core.gfa.reference.genome.cache.index.GCChunkIndex
 import com.clemaire.io.fixture.InputFixture
+import metal.syntax._
 
 class GCReader(path: Path,
                val n: Int)
@@ -29,13 +30,16 @@ class GCReader(path: Path,
     *         the source input.
     */
   override def readData(source: InputFixture): GenomeCoordinate = {
-    val k = source.getInt
+    var k = source.getInt
+    val id = source.getInt
 
-    GenomeCoordinate(source.getInt,
-      (1 to k).map(_ => {
-        val genome = source.getInt
-        (genome, relativeCoordinates(genome) + source.getInt)
-      }).toMap)
+    val coordinates = metal.mutable.HashMap[Int, Long]()
+    do {
+      coordinates.update(source.getInt, source.getLong)
+      k -= 1
+    } while (k > 0)
+
+    GenomeCoordinate(id, coordinates.toImmutable)
   }
 
   /**

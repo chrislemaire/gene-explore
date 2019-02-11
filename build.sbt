@@ -2,6 +2,8 @@ name := "gexplore"
 version := "0.1"
 scalaVersion := "2.12.6"
 
+resolvers in ThisBuild += Resolver.bintrayRepo("denisrosset", "maven")
+
 scalacOptions ++= Seq(
   "-feature",
   "-language:implicitConversions",
@@ -15,7 +17,10 @@ lazy val core = project
   .settings(
     name := "core",
     libraryDependencies ++= commonDependencies ++ Set(
-      dependencies.intervalTree
+      dependencies.intervalTree,
+
+      dependencies.metalCore,
+      dependencies.metalLib
     ))
   .dependsOn(util)
   .dependsOn(cache)
@@ -54,6 +59,7 @@ lazy val dependencies = new {
   val miglayoutV = "5.2"
   val bootstrapfxV = "0.2.4"
   val ikonliV = "2.4.0"
+  val metalV = "0.16.0.0"
 
   val scalatest = "org.scalatest" %% "scalatest" % scalatestV
   val scalacheck = "org.scalacheck" %% "scalacheck" % scalacheckV
@@ -63,6 +69,9 @@ lazy val dependencies = new {
 
   val ikonli = "org.kordamp.ikonli" % "ikonli-javafx" % ikonliV
   val ikonliDashicons = "org.kordamp.ikonli" % "ikonli-dashicons-pack" % ikonliV
+
+  val metalCore = "org.scala-metal" %% "metal-core" % metalV
+  val metalLib = "org.scala-metal" %% "metal-library" % metalV
 }
 
 lazy val commonDependencies = Seq(

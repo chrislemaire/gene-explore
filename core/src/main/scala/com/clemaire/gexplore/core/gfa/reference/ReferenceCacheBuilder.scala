@@ -17,7 +17,7 @@ class ReferenceCacheBuilder(paths: CachePathList,
 
   private[this] val heatMapWriter: SingleFlushHeatMapWriter = new SingleFlushHeatMapWriter(paths)
 
-  private[this] val workBuffer: mutable.Buffer[BuilderReferenceNode] = mutable.Buffer()
+  private[this] var workBuffer: mutable.Buffer[BuilderReferenceNode] = mutable.Buffer()
 
   def toData(header: GraphHeader): GraphData =
     new GraphData(paths, header) {

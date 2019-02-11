@@ -19,7 +19,7 @@ trait NioBufferedWriter
   /**
     * The size of the buffer to allocate and use.
     */
-  protected[this] val bufferSize: Int = 8192
+  protected[this] val bufferSize: Int = 32 * 1024
 
   /**
     * The [[FileChannel]] used to write the current

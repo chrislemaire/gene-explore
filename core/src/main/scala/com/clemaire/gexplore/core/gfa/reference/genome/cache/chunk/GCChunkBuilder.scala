@@ -6,6 +6,8 @@ import com.clemaire.gexplore.core.gfa.reference.genome.cache.index.GCChunkIndex
 
 import scala.collection.mutable
 
+import metal.syntax._
+
 class GCChunkBuilder(val n: Int,
                      override val max: Int = 8192)
   extends BasicChunkBuilder[GenomeCoordinate, GCChunkIndex](max)
@@ -27,8 +29,8 @@ class GCChunkBuilder(val n: Int,
   override protected def reset(): Unit = {
     super.reset()
 
-    relativeCoordinates.clear()
-    relativeCoordinates ++= currentCoordinates
+    currentCoordinates.foreach(t =>
+      relativeCoordinates.update(t._1, t._2))
   }
 
   /**
@@ -43,8 +45,8 @@ class GCChunkBuilder(val n: Int,
     *         none was created.
     */
   override def register(data: GenomeCoordinate, length: Int): Option[GCChunkIndex] = {
-    data.coordinates.foreach(c =>
-      relativeCoordinates.put(c._1, currentCoordinates(c._1) + c._2))
+    data.coordinates.foreach((id, v) =>
+      relativeCoordinates.put(id, currentCoordinates(id) + v))
 
     super.register(data, length)
   }
