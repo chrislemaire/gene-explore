@@ -66,6 +66,21 @@ trait ReadOnlyCache[D <: Identifiable, CI <: ChunkIndex]
     getRange(id, id).find(_._1 == id).map(_._2)
 
   /**
+    * Gets data entries by their ids from the underlying
+    * Cache implementation.
+    *
+    * @param ids The identifiers to lookup data entries
+    *           from.
+    * @return A [[Map]] containing all existing data entries
+    *         mapped by their id with an id in the given set.
+    */
+  def get(ids: Set[Int]): Map[Int, D] =
+    getChunksByIndexes(index.get(ids))
+    .flatMap(_.data)
+    .filter(t => ids.contains(t._1))
+    .toMap
+
+  /**
     * Gets a range of data entries by their ids from
     * the underlying Cache implementation.
     *

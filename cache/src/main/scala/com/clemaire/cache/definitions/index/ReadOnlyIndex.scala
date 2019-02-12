@@ -23,6 +23,17 @@ trait ReadOnlyIndex[CI <: ChunkIndex] {
     getRange(id, id)
 
   /**
+    * Gets the [[ChunkIndex]]es that have one of the
+    * given ids in their index ranges.
+    *
+    * @param ids The ids to lookup.
+    * @return A [[Traversable]] with all [[ChunkIndex]]es
+    *         with one of the given ids in their respective range.
+    */
+  def get(ids: Traversable[Int]): Traversable[CI] =
+    ids.flatMap(get)
+
+  /**
     * Gets the [[ChunkIndex]]es with the given index range
     * in their index ranges.
     *

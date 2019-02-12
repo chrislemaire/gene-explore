@@ -113,6 +113,17 @@ trait NioBufferedReader
   }
 
   /**
+    * Skips the given  number of bytes in the input.
+    *
+    * @param nBytes The number of bytes to skip.
+    */
+  override def skip(nBytes: Int): Unit =
+    if (!checkBuffer(nBytes))
+      _buffer.position(_buffer.position + nBytes)
+    else
+      throw new BufferOverflowException
+
+  /**
     * Reads the next byte and returns it.
     *
     * @return The next read Byte.

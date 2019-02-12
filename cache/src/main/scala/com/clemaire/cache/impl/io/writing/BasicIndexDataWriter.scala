@@ -4,8 +4,8 @@ import com.clemaire.cache.definitions.index.ChunkIndex
 import com.clemaire.cache.definitions.io.writing.DataWriter
 import com.clemaire.io.fixture.OutputFixture
 
-trait BasicIndexDataWriter[CI <: ChunkIndex]
-  extends DataWriter[CI] {
+trait BasicIndexDataWriter
+  extends DataWriter[ChunkIndex] {
 
   /**
     * The constant length of some object.
@@ -21,7 +21,7 @@ trait BasicIndexDataWriter[CI <: ChunkIndex]
     * @param out  The source to write to represented
     *             as an [[OutputFixture]].
     */
-  override def writeData(data: CI, out: OutputFixture): Unit = {
+  override def writeData(data: ChunkIndex, out: OutputFixture): Unit = {
     out.writeInt(data.id)
     out.writeLong(data.filePosition)
     out.writeLong(data.length)

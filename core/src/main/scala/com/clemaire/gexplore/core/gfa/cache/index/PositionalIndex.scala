@@ -1,7 +1,10 @@
 package com.clemaire.gexplore.core.gfa.cache.index
 
+import java.nio.file.Path
+
 import com.clemaire.cache.definitions.index.{Index, ReadOnlyIndex}
 import com.clemaire.cache.definitions.io.writing.IndexWriter
+import com.clemaire.gexplore.core.gfa.cache.io.PositionalIndexWriter
 import com.clemaire.interval.IntervalTreeMap
 
 class PositionalIndex[PCI <: PositionalChunkIndex]
@@ -37,4 +40,10 @@ class PositionalIndex[PCI <: PositionalChunkIndex]
   def readOnly: PositionalReadOnlyIndex[PCI] =
     PositionalReadOnlyIndex(this)
 
+}
+
+object PositionalIndex {
+  def apply(indexPath: Path): PositionalIndex[PositionalChunkIndex] =
+    new PositionalIndex[PositionalChunkIndex](
+      new PositionalIndexWriter(indexPath))
 }

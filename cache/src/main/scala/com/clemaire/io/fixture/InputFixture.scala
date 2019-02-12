@@ -3,6 +3,13 @@ package com.clemaire.io.fixture
 trait InputFixture {
 
   /**
+    * Skips the given  number of bytes in the input.
+    *
+    * @param nBytes The number of bytes to skip.
+    */
+  def skip(nBytes: Int): Unit
+
+  /**
     * Reads a byte from the underlying source
     * and returns it.
     *

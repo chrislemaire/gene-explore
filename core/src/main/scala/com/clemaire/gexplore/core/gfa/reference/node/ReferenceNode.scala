@@ -7,8 +7,9 @@ trait ReferenceNode
   extends Identifiable
     with Positional {
 
-  val fileOffset: Long
-  val contentLength: Int
+  def fileOffset: Long
+  def contentLength: Int
+
   val incomingEdges: Traversable[(Int, Long)]
   val outgoingEdges: Traversable[(Int, Long)]
 }

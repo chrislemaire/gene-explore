@@ -25,6 +25,7 @@ class DataStreamOutputFixture(os: DataOutputStream)
 class DataStreamInputFixture(os: DataInputStream)
   extends InputFixture {
 
+  override def skip(nBytes: Int): Unit = os.skipBytes(nBytes)
   override def getByte: Byte = os.readByte()
   override def getChar: Char = os.readChar()
   override def getShort: Short = os.readShort()

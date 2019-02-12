@@ -4,6 +4,6 @@ import java.nio.file.Path
 
 import com.clemaire.cache.definitions.index.ChunkIndex
 
-class BasicIndexWriter[CI <: ChunkIndex](path: Path)
-  extends NioIndexWriter[CI](path)
-    with BasicIndexDataWriter[CI]
+class BasicIndexWriter(path: Path)
+  extends NioIndexWriter[ChunkIndex](path)
+    with BasicIndexDataWriter

@@ -25,6 +25,7 @@ class ByteBufferOutputFixture(bb: ByteBuffer)
 class ByteBufferInputFixture(bb: ByteBuffer)
   extends InputFixture {
 
+  override def skip(nBytes: Int): Unit = bb.position(bb.position + nBytes)
   override def getByte: Byte = bb.get()
   override def getChar: Char = bb.getChar()
   override def getShort: Short = bb.getShort()
