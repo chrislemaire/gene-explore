@@ -22,7 +22,7 @@ class NodeWriter(path: Path)
     *          for.
     */
   override def forObj(t: ReferenceNode): Unit =
-    _length = 4 + 4 + 4 + 8 + 4 + 12 * (t.outgoingEdges.size + t.incomingEdges.size)
+    _length = 4 + 4 + 4 + 4 + 8 + 4 + 12 * (t.outgoingEdges.size + t.incomingEdges.size)
 
   /**
     * Writes the given data object of type [[ReferenceNode]]
@@ -38,6 +38,7 @@ class NodeWriter(path: Path)
     out.writeInt(data.incomingEdges.size)
 
     out.writeInt(data.id)
+    out.writeInt(data.layer)
     out.writeLong(data.fileOffset)
     out.writeInt(data.contentLength)
 

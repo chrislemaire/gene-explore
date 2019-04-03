@@ -7,8 +7,11 @@ import com.clemaire.cache.definitions.index.ChunkIndex
 import com.clemaire.cache.definitions.io.reading.DataReader
 import com.clemaire.io.fixture.InputFixture
 
+import scala.reflect.ClassTag
+
 class BasicChunkReader[D <: Identifiable, CI <: ChunkIndex](path: Path,
                                                             dataReader: DataReader[D])
+                                                           (implicit D: ClassTag[D])
   extends NioChunkReader[D, CI](path) {
 
   /**

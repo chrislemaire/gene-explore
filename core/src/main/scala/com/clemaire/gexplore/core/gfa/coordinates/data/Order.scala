@@ -11,7 +11,11 @@ trait Order
 trait MutableOrder
   extends Order {
 
-  override var rank: Int
+  private[this] var _rank: Int = -1
+
+  def rank_=(r: Int): Unit = _rank = r
+
+  override def rank: Int = _rank
 }
 
 object Order {

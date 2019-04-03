@@ -37,7 +37,7 @@ class DummyNode(val id: Int,
     * The node this SegmentDummy is represented
     * by in the splay-tree.
     */
-  def splayNode: Option[SplayNode[SegmentDummy]] = None
+  var splayNode: Option[SplayNode[SegmentDummy]] = None
 
   /**
     * @return The layer this [[DummyNode]] starts in. Only

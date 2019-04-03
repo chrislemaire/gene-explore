@@ -1,6 +1,9 @@
 package com.clemaire.cache.definitions.chunk
 
 import com.clemaire.cache.definitions.Identifiable
+import metal.immutable.HashMap
+
+import scala.reflect.ClassTag
 
 trait Chunk[D <: Identifiable]
   extends Identifiable {
@@ -9,16 +12,17 @@ trait Chunk[D <: Identifiable]
     * The data held in this chunk mapped by
     * its individual ids.
     */
-  val data: Map[Int, D]
+  def data: HashMap[Int, D]
 
 }
 
 object Chunk {
   private case class BasicChunk[D <: Identifiable]
   (id: Int,
-   data: Map[Int, D]) extends Chunk[D]
+   data: HashMap[Int, D]) extends Chunk[D]
 
   def apply[D <: Identifiable](id: Int,
-                               data: Map[Int, D]): Chunk[D] =
+                               data: HashMap[Int, D])
+                              (implicit D: ClassTag[D]): Chunk[D] =
     BasicChunk(id, data)
 }

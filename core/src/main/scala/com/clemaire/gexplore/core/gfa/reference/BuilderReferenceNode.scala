@@ -15,7 +15,11 @@ class BuilderReferenceNode(val name: String,
                            val outgoingEdges: mutable.Buffer[(Int, Long)],
                            val coordinates: HashMap[Int, Long])
   extends ReferenceNode
-    with GenomeCoordinate
+    with GenomeCoordinate {
+
+  def withIdAndLayer(_id: Int, _layer: Int): BuilderReferenceNode =
+    new BuilderReferenceNode(name, _id, _layer, fileOffset, contentLength, incomingEdges, outgoingEdges, coordinates)
+}
 
 object BuilderReferenceNode {
   lazy val empty: BuilderReferenceNode = new BuilderReferenceNode("", -1, -1, -1, -1, mutable.Buffer.empty, mutable.Buffer.empty, HashMap())

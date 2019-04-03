@@ -15,4 +15,6 @@ class GraphData(val paths: CachePathList,
 
   val nodeCache: NodeReadOnlyCache = NodeReadOnlyCache(paths.referencePath, paths.referenceIndexPath)
   val gcCache: GCReadOnlyCache = new GCReadOnlyCache(paths.coordinatesPath, paths.coordinatesIndexPath, genomes.size)
+
+  val secondary: SecondaryGraphData = new SecondaryGraphData(paths, this)
 }

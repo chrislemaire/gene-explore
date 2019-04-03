@@ -15,6 +15,12 @@ trait PositionalReadOnlyIndex[PCI <: PositionalChunkIndex]
   val layerIndex: IntervalTreeMap[Integer, PCI]
 
   /**
+    * @return The maximum layer available in this index.
+    */
+  def maxLayer: Int =
+    layerIndex.flatMap(_._2.map(_.layers.getEnd)).max
+
+  /**
     * Gets the [[ChunkIndex]]es with the given layer
     * in their layer ranges.
     *

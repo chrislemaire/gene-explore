@@ -9,10 +9,13 @@ import com.clemaire.cache.definitions.io.reading.ChunkReader
 import com.clemaire.cache.definitions.Identifiable
 import com.clemaire.cache.definitions.chunk.Chunk
 import com.clemaire.io.fixture.ByteBufferFixture.bb2fixtureIn
+import metal.immutable.HashMap
+import metal.syntax._
 
-import scala.collection.mutable
+import scala.reflect.ClassTag
 
 abstract class NioChunkReader[D <: Identifiable, CI <: ChunkIndex](val path: Path)
+                                                                  (implicit D: ClassTag[D])
   extends ChunkReader[D, CI] {
 
   /**
@@ -28,7 +31,7 @@ abstract class NioChunkReader[D <: Identifiable, CI <: ChunkIndex](val path: Pat
     * @param data The data passed to the [[Chunk]].
     * @return The constructed [[Chunk]].
     */
-  def constructChunk(id: Int, data: Map[Int, D]): Chunk[D] =
+  protected[this] def constructChunk(id: Int, data: HashMap[Int, D]): Chunk[D] =
     Chunk(id, data)
 
   /**
@@ -44,13 +47,13 @@ abstract class NioChunkReader[D <: Identifiable, CI <: ChunkIndex](val path: Pat
     fc.read(buffer, index.filePosition)
     buffer.flip()
 
-    val data = mutable.HashMap[Int, D]()
+    val data = metal.mutable.HashMap[Int, D]()
     while (buffer.hasRemaining) {
       val d = readData(buffer)
-      data += d.id -> d
+      data.update(d.id, d)
     }
 
-    constructChunk(index.id, data.toMap)
+    constructChunk(index.id, data.toImmutable)
   }
 
   override def close(): Unit =

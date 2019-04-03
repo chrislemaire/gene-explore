@@ -29,7 +29,10 @@ lazy val cache = project
   .settings(
     name := "cache",
     libraryDependencies ++= commonDependencies ++ Set(
-      dependencies.intervalTree
+      dependencies.intervalTree,
+
+      dependencies.metalCore,
+      dependencies.metalLib
     )
   )
   .dependsOn(util)

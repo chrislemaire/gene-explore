@@ -6,8 +6,7 @@ import com.clemaire.cache.definitions.io.writing.ChunkWriter
 import com.clemaire.cache.definitions.Identifiable
 import com.clemaire.io.writing.NioBufferedWriter
 
-abstract class
-NioChunkWriter[D <: Identifiable](val path: Path)
+abstract class NioChunkWriter[D <: Identifiable](val path: Path)
   extends NioBufferedWriter
     with ChunkWriter[D] {
 

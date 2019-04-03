@@ -4,8 +4,14 @@ import com.clemaire.cache.definitions.chunk.Chunk
 import com.clemaire.cache.definitions.index.{ChunkIndex, ReadOnlyIndex}
 
 import scala.collection.mutable
+import scala.reflect.ClassTag
 
 trait ReadOnlyCacheData[D <: Identifiable, CI <: ChunkIndex] {
+
+  /**
+    * Implicit class tag for D.
+    */
+  protected implicit val D: ClassTag[D] = implicitly[ClassTag[D]]
 
   /**
     * The index used to lookup the right

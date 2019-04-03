@@ -8,11 +8,14 @@ import com.clemaire.gexplore.core.gfa.cache.chunk.{PositionalChunkBuilder, Posit
 import com.clemaire.gexplore.core.gfa.cache.index.{PositionalChunkIndex, PositionalIndex}
 import com.clemaire.gexplore.core.gfa.Positional
 
+import scala.reflect.ClassTag
+
 class PositionalCache[D <: Identifiable with Positional]
 (val writer: ChunkWriter[D],
  override val reader: ChunkReader[D, PositionalChunkIndex],
  override val index: PositionalIndex[PositionalChunkIndex],
  override val max: Int = 5)
+(override implicit val D: ClassTag[D])
   extends PositionalReadOnlyCache[D, PositionalChunkIndex](reader, index, max)
     with Cache[D, PositionalChunkIndex] {
 

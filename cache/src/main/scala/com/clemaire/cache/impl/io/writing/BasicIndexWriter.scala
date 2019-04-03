@@ -6,4 +6,4 @@ import com.clemaire.cache.definitions.index.ChunkIndex
 
 class BasicIndexWriter(path: Path)
   extends NioIndexWriter[ChunkIndex](path)
-    with BasicIndexDataWriter
+    with BasicIndexDataWriter[ChunkIndex]

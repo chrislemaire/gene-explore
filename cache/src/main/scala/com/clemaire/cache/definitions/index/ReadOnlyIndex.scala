@@ -12,6 +12,12 @@ trait ReadOnlyIndex[CI <: ChunkIndex] {
   protected[this] val index: IntervalTreeMap[Integer, CI]
 
   /**
+    * @return The highest id in the index chunks.
+    */
+  def maxId: Int =
+    index.flatMap(_._2.map(_.ids.getEnd)).max
+
+  /**
     * Gets the [[ChunkIndex]]es with the given index
     * in their index ranges.
     *

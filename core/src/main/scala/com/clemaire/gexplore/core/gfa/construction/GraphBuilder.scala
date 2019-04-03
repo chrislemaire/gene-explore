@@ -1,6 +1,7 @@
 package com.clemaire.gexplore.core.gfa.construction
 
 import com.clemaire.gexplore.core.gfa.CachePathList
+import com.clemaire.gexplore.core.gfa.coordinates.dummy.DummyCacheConstructor
 import com.clemaire.gexplore.core.gfa.data.GraphData
 import com.clemaire.gexplore.core.gfa.parsing.Gfa1Parser
 import com.clemaire.gexplore.core.gfa.reference.{BuilderReferenceNode, ReferenceCacheBuilder}
@@ -63,7 +64,7 @@ class GraphBuilder(val paths: CachePathList) {
   /**
     * The number of segments currently counted.
     */
-  private var segmentIndex = -1
+  private var segmentIndex = 0
 
   /**
     * The current node being built by the reference
@@ -117,16 +118,10 @@ class GraphBuilder(val paths: CachePathList) {
                          from: String,
                          to: String,
                          options: Traversable[(String, String)]): Unit = {
-    val (fromId, fromLayer) = lookupNode(from)
-    val (toId, toLayer) = if (lookAheadSegments.contains(to)) {
-      val (toId, toLayer) = lookupNode(to)
-      (toId, Math.max(toLayer, fromLayer + 1))
-    } else {
-      segmentIndex += 1
-      (segmentIndex, fromLayer + 1)
-    }
+    val (fromId, fromLayer) = lookupNode(from, 0)
+    val (toId, selectedLayer) = lookupNode(to, fromLayer + 1)
 
-    lookAheadSegments.put(to, (toId, toLayer))
+    lookAheadSegments.put(to, (toId, Math.max(selectedLayer, fromLayer + 1)))
 
     val node: BuilderReferenceNode = currentNode.get
     node.outgoingEdges += toId -> atOffset
@@ -146,13 +141,13 @@ class GraphBuilder(val paths: CachePathList) {
     * @return A tuple containing the node-ID and layer
     *         of the node.
     */
-  private def lookupNode(name: String): (Int, Int) =
+  private def lookupNode(name: String, layer: Int): (Int, Int) =
     if (lookAheadSegments.contains(name)) {
       lookAheadSegments(name)
     } else {
-      lookAheadSegments.put(name, (segmentIndex, 0))
+      lookAheadSegments.put(name, (segmentIndex, layer))
       segmentIndex += 1
-      (segmentIndex, 0)
+      (segmentIndex - 1, layer)
     }
 
   /**
@@ -175,7 +170,7 @@ class GraphBuilder(val paths: CachePathList) {
 
     val nodeGenomes = getGenomes(options)
 
-    val (id, layer) = lookupNode(name)
+    val (id, layer) = lookupNode(name, 0)
     currentNode = Some(new BuilderReferenceNode(name,
       id, layer, atOffset, content.length,
       incomingEdges.getOrElse(id, mutable.Buffer.empty),
@@ -212,7 +207,8 @@ class GraphBuilder(val paths: CachePathList) {
     * data kept on the current node.
     */
   protected def writeNode(node: BuilderReferenceNode): Unit = {
-    cacheBuilder += node
+    cacheBuilder += node//.withIdAndLayer(segmentIndex, lookAheadSegments(node.name)._2)
+//    segmentIndex += 1
 
     incomingEdges.remove(node.id)
     lookAheadSegments.remove(node.name)
@@ -232,6 +228,8 @@ class GraphBuilder(val paths: CachePathList) {
       headerWriter.write(genomes.toMap)
       headerWriter.writeMaxCoords(genomeCoordinates.toMap)
       headerWriter.flush()
+
+      new DummyCacheConstructor(paths, headerWriter.data).construct
 
       new GraphData(paths,
         headerWriter.data)

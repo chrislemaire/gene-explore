@@ -3,6 +3,7 @@ package com.clemaire.cache.definitions.io.reading
 import com.clemaire.cache.definitions.index.ChunkIndex
 import com.clemaire.cache.definitions.Identifiable
 import com.clemaire.cache.definitions.chunk.Chunk
+import metal.immutable.HashMap
 
 trait ChunkReader[D <: Identifiable, CI <: ChunkIndex]
   extends AutoCloseable
@@ -15,7 +16,7 @@ trait ChunkReader[D <: Identifiable, CI <: ChunkIndex]
     * @param data The data passed to the [[Chunk]].
     * @return The constructed [[Chunk]].
     */
-  def constructChunk(id: Int, data: Map[Int, D]): Chunk[D]
+  protected[this] def constructChunk(id: Int, data: HashMap[Int, D]): Chunk[D]
 
   /**
     * Reads a single chunk from the input source starting

@@ -7,18 +7,27 @@ import com.clemaire.cache.definitions.chunk.ChunkBuilder
 import com.clemaire.cache.definitions.index.{ChunkIndex, Index}
 import com.clemaire.cache.definitions.io.reading.ChunkReader
 import com.clemaire.cache.definitions.io.writing.ChunkWriter
+import com.clemaire.cache.impl.capacity.SetNumberOfChunks
 import com.clemaire.cache.impl.chunk.{BasicChunkBuilder, BasicChunkIndexConstructor}
 import com.clemaire.cache.impl.index.BasicIndex
+import com.clemaire.cache.impl.scheduling.LRU
+
+import scala.reflect.ClassTag
 
 class BasicCache[D <: Identifiable]
 (val writer: ChunkWriter[D],
  override val reader: ChunkReader[D, ChunkIndex],
  override val index: Index[ChunkIndex],
  override val max: Int = 25)
-  extends BasicReadOnlyCache[D](reader, index)
-    with Cache[D, ChunkIndex] {
+(override implicit val D: ClassTag[D])
+  extends Cache[D, ChunkIndex]
+    with SetNumberOfChunks[D, ChunkIndex]
+    with LRU[D, ChunkIndex] {
 
-  def this(writer: ChunkWriter[D], reader: ChunkReader[D, ChunkIndex], indexPath: Path) =
+  def this(writer: ChunkWriter[D],
+           reader: ChunkReader[D, ChunkIndex],
+           indexPath: Path)
+          (implicit D: ClassTag[D]) =
     this(writer, reader, new BasicIndex[ChunkIndex](indexPath))
 
   /**

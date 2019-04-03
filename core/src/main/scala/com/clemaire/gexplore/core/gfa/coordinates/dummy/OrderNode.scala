@@ -37,6 +37,8 @@ object OrderNode {
                               val outgoing: Set[Int])
     extends OrderNode
 
+  val empty: OrderNode = new OrderNodeImpl(-1, -1, Set.empty, Set.empty)
+
   def apply(id: Int,
             layer: Int,
             outgoing: Set[Int],

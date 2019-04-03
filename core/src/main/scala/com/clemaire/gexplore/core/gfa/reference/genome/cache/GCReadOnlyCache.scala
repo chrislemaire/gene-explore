@@ -11,10 +11,13 @@ import com.clemaire.gexplore.core.gfa.reference.genome.GenomeCoordinate
 import com.clemaire.gexplore.core.gfa.reference.genome.cache.index.GCChunkIndex
 import com.clemaire.gexplore.core.gfa.reference.genome.cache.reading.{GCIndexReader, GCReader}
 
+import scala.reflect.ClassTag
+
 class GCReadOnlyCache
 (val reader: ChunkReader[GenomeCoordinate, GCChunkIndex],
  val index: ReadOnlyIndex[GCChunkIndex],
  val max: Int = 25)
+(override protected implicit val D: ClassTag[GenomeCoordinate])
   extends ReadOnlyCache[GenomeCoordinate, GCChunkIndex]
     with SetNumberOfChunks[GenomeCoordinate, GCChunkIndex]
     with LRU[GenomeCoordinate, GCChunkIndex] {

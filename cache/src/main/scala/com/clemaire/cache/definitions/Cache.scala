@@ -2,7 +2,7 @@ package com.clemaire.cache.definitions
 
 import java.io.Flushable
 
-import com.clemaire.cache.definitions.chunk.ChunkBuilder
+import com.clemaire.cache.definitions.chunk.{Chunk, ChunkBuilder, MutableChunk}
 import com.clemaire.cache.definitions.index.{ChunkIndex, Index}
 import com.clemaire.cache.definitions.io.writing.ChunkWriter
 
@@ -31,6 +31,18 @@ trait Cache[D <: Identifiable, CI <: ChunkIndex]
   val chunkBuilder: ChunkBuilder[D, CI]
 
   /**
+    * Converts a range of indexes into a range of chunks
+    * and adds the new chunks to the [[Cache]] if possible.
+    *
+    * @param indexes The [[ChunkIndex]] values to get the
+    *                chunks of.
+    * @return The chunks represented by the given indexes.
+    */
+  override protected def getChunksByIndexes(indexes: Traversable[CI]): Traversable[Chunk[D]] = {
+    super.getChunksByIndexes(indexes)
+  }
+
+  /**
     * Adds the currently building [[com.clemaire.cache.definitions.chunk.Chunk]]
     * to the index by its constructs [[ChunkIndex]] and to
     * the current in-memory [[Cache]].
@@ -40,27 +52,9 @@ trait Cache[D <: Identifiable, CI <: ChunkIndex]
     */
   protected[this] def addCurrentChunk(ci: CI): Unit = {
     index += ci
-    checkAndAdd(reader.constructChunk(ci.id, currentChunk.toMap))
-    currentChunk.clear()
+    checkAndAdd(currentChunk)
+    currentChunk = new MutableChunk[D](ci.id + 1)
   }
-
-  /**
-    * Gets a range of data entries by their ids from
-    * the underlying Cache implementation.
-    *
-    * The given range is closed and as such will include
-    * both extremes.
-    *
-    * @param left  The left-bound for the range of data
-    *              entry ids to fetch.
-    * @param right The right-bound for the range of data
-    *              entry ids to fetch.
-    * @return A [[Map]] containing all existing data entries
-    *         mapped by their id with an id in the given range.
-    */
-  override def getRange(left: Int, right: Int): Map[Int, D] =
-    super.getRange(left, right) ++ currentChunk
-      .filter(data => left <= data._1 && data._1 <= right)
 
   /**
     * Appends a data entry to the existing [[Cache]]
@@ -70,7 +64,7 @@ trait Cache[D <: Identifiable, CI <: ChunkIndex]
     * @return This [[Cache]].
     */
   def +=(data: D): this.type = {
-    currentChunk += data.id -> data
+    currentChunk += data
     writer.write(data)
 
     chunkBuilder.register(data, writer.length)

@@ -1,8 +1,7 @@
 package com.clemaire.cache.definitions
 
+import com.clemaire.cache.definitions.chunk.MutableChunk
 import com.clemaire.cache.definitions.index.ChunkIndex
-
-import scala.collection.mutable
 
 trait CacheData[D <: Identifiable, CI <: ChunkIndex]
   extends ReadOnlyCacheData[D, CI] {
@@ -14,7 +13,6 @@ trait CacheData[D <: Identifiable, CI <: ChunkIndex]
     * This mapping is needed to lookup currently unwritten
     * data entries.
     */
-  protected val currentChunk: mutable.HashMap[Int, D] =
-    mutable.HashMap()
+  protected var currentChunk: MutableChunk[D] = new MutableChunk[D](0)
 
 }

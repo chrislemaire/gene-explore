@@ -16,12 +16,15 @@ import com.clemaire.gexplore.core.gfa.reference.genome.cache.index.GCChunkIndex
 import com.clemaire.gexplore.core.gfa.reference.genome.cache.reading.GCReader
 import com.clemaire.gexplore.core.gfa.reference.genome.cache.writing.{GCIndexWriter, GCWriter}
 
+import scala.reflect.ClassTag
+
 class GCCache
 (val writer: ChunkWriter[GenomeCoordinate],
  override val reader: ChunkReader[GenomeCoordinate, GCChunkIndex],
  override val index: Index[GCChunkIndex],
  n: Int,
  override val max: Int = 5)
+(override protected implicit val D: ClassTag[GenomeCoordinate])
   extends Cache[GenomeCoordinate, GCChunkIndex]
     with SetNumberOfChunks[GenomeCoordinate, GCChunkIndex]
     with LRU[GenomeCoordinate, GCChunkIndex] {

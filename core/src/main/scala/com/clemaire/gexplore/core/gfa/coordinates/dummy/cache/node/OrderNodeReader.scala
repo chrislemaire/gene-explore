@@ -12,6 +12,13 @@ class OrderNodeReader(path: Path)
   extends NioChunkReader[OrderNode, PositionalChunkIndex](path)
     with DataReader[OrderNode] {
 
+  def readEdges(n: Int, source: InputFixture): Set[Int] =
+    (1 to n).map(_ => {
+      val out = source.getInt
+      source.skip(8)
+      out
+    }).toSet
+
   /**
     * Reads the data object of type [[OrderNode]] from an
     * [[InputFixture]].
@@ -25,12 +32,15 @@ class OrderNodeReader(path: Path)
     val nOutgoing = source.getInt
     val nIncoming = source.getInt
 
+    val id = source.getInt
+    val layer = source.getInt
+    source.skip(12)
+
     OrderNode(
-      source.getInt,
-      source.getInt,
-      (1 to nOutgoing).map(_ => source.getInt).toSet,
-      (1 to nIncoming).map(_ => source.getInt).toSet
-    )
+      id,
+      layer,
+      readEdges(nOutgoing, source),
+      readEdges(nIncoming, source))
   }
 
 }

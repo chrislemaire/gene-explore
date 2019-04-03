@@ -1,6 +1,6 @@
 package com.clemaire.cache.definitions
 
-trait Identifiable {
+trait Identifiable extends Serializable {
 
   /**
     * The identifier of this object. An identifier

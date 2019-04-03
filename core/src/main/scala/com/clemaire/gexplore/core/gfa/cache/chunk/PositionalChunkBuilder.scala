@@ -7,7 +7,7 @@ import com.clemaire.gexplore.core.gfa.Positional
 import com.clemaire.interval.IntInterval
 
 abstract class PositionalChunkBuilder[D <: Identifiable with Positional, PCI <: PositionalChunkIndex]
-(override val max: Int = 1024 * 1024)
+(override val max: Int = 128 * 1024)
   extends BasicChunkBuilder[D, PCI](max)
     with PositionalChunkBuilderData {
 

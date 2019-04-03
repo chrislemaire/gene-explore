@@ -6,12 +6,12 @@ import com.clemaire.cache.definitions.index.{ChunkIndex, Index, ReadOnlyIndex}
 import com.clemaire.cache.definitions.io.writing.IndexWriter
 import com.clemaire.cache.impl.io.writing.{BasicIndexDataWriter, NioIndexWriter}
 
-class BasicIndex(val writer: IndexWriter[ChunkIndex])
-  extends Index[ChunkIndex] {
+class BasicIndex[CI <: ChunkIndex](val writer: IndexWriter[CI])
+  extends Index[CI] {
 
   def this(path: Path) = this(
-    new NioIndexWriter[ChunkIndex](path)
-      with BasicIndexDataWriter)
+    new NioIndexWriter[CI](path)
+      with BasicIndexDataWriter[CI])
 
   /**
     * Constructs and returns a safe immutable
@@ -19,7 +19,7 @@ class BasicIndex(val writer: IndexWriter[ChunkIndex])
     *
     * @return Immutable [[ReadOnlyIndex]] for further use.
     */
-  override def readOnly: ReadOnlyIndex[ChunkIndex] =
-    ReadOnlyIndex[ChunkIndex](this)
+  override def readOnly: ReadOnlyIndex[CI] =
+    ReadOnlyIndex[CI](this)
 
 }
