@@ -182,9 +182,12 @@ abstract class Gfa1Parser(val tags: Set[String]) {
   protected def parseLine(line: String,
                           offset: Long): Unit =
     line.trim.charAt(0) match {
-      case 'L' => parseLink(line, offset)
-      case 'S' => parseSegment(line, offset)
-      case 'H' => parseHeader(line)
+      case 'L' =>
+        parseLink(line, offset)
+      case 'S' =>
+        parseSegment(line, offset)
+      case 'H' =>
+        parseHeader(line)
       case '#' =>
       case e => throw new InputMismatchException(s"Symbol '$e' not a valid start of a GFA line.")
     }

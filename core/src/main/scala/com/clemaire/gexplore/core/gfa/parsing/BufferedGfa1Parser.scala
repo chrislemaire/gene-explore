@@ -10,10 +10,14 @@ class BufferedGfa1Parser(tags: Set[String])
   override def parse(paths: CachePathList): Unit = {
     var offset = 0
 
-    Files.lines(paths.gfaPath).forEach(line => {
+    val reader = Files.newBufferedReader(paths.gfaPath)
+    var line = reader.readLine()
+    while (line != null) {
       parseLine(line, offset)
       offset += line.length + 1
-    })
+
+      line = reader.readLine()
+    }
   }
 
 }

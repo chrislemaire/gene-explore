@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<fx:root xmlns:fx="http://javafx.com/fxml/1" type="javafx.scene.control.MenuBar"
+         xmlns="http://javafx.com/javafx/8.0.172-ea" styleClass="gex-bg-primary">
+    <menus>
+        <Menu mnemonicParsing="false" text="File">
+            <items>
+                <MenuItem mnemonicParsing="false" text="Open"/>
+                <Menu disable="true" mnemonicParsing="false" text="Open Recent"/>
+                <SeparatorMenuItem mnemonicParsing="false"/>
+                <MenuItem mnemonicParsing="false" text="Close"/>
+            </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Find">
+            <items>
+                <MenuItem mnemonicParsing="false" text="Jump to Segment"/>
+                <MenuItem disable="true" mnemonicParsing="false" text="Jump to Feature"/>
+            </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="View">
+            <items>
+                <MenuItem mnemonicParsing="false" text="Manage"/>
+                <SeparatorMenuItem mnemonicParsing="false"/>
+                <MenuItem mnemonicParsing="false" text="Last View"/>
+                <Menu disable="true" mnemonicParsing="false" text="Recent Views"/>
+                <SeparatorMenuItem mnemonicParsing="false"/>
+                <MenuItem mnemonicParsing="false" text="Export Current"/>
+                <MenuItem mnemonicParsing="false" text="Export Selection"/>
+                <SeparatorMenuItem mnemonicParsing="false"/>
+                <MenuItem mnemonicParsing="false" text="Import View"/>
+            </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+            <items>
+                <MenuItem mnemonicParsing="false" text="About"/>
+            </items>
+        </Menu>
+    </menus>
+</fx:root>

@@ -1,0 +1,18 @@
+* {
+    -fx-border-radius: 0px;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.gex-bg-primary {
+    -fx-background-color: #dadada;
+}
+
+.gex-bg-secondary {
+    -fx-background-color: #eaeaea;
+}
+
+.gex-footer {
+    -fx-border-width: 1px 0px 0px 0px;
+    -fx-border-color: #b7b7b7;
+}

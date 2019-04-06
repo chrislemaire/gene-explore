@@ -99,7 +99,22 @@ class CachePathList(val gfaPath: Path)
     */
   private val COORDINATES_INDEX_EXT = ".gci"
 
+  /**
+    * Header file extension.
+    */
   private val HEADER_EXT = ".h"
+
+  /**
+    * Dummy index file extension.
+    */
+  private val DUMMY_INDEX_EXT = ".gdi"
+
+  /**
+    * Dummy cache file extension.
+    */
+  private val DUMMY_EXT = ".gdc"
+
+  private val ORDER_EXT = ".ord"
 
   /**
     * Path to the reference-level cache file.
@@ -126,7 +141,22 @@ class CachePathList(val gfaPath: Path)
     */
   val coordinatesIndexPath: Path = APP_DATA.resolve(GFA_NAME + COORDINATES_INDEX_EXT)
 
+  /**
+    * Path to the header file.
+    */
   val headerPath: Path = APP_DATA.resolve(GFA_NAME + HEADER_EXT)
+
+  /**
+    * Path to the dummy cache file.
+    */
+  val dummyPath: Path = APP_DATA.resolve(GFA_NAME + DUMMY_EXT)
+
+  /**
+    * Path to the dummy index file.
+    */
+  val dummyIndexPath: Path = APP_DATA.resolve(GFA_NAME + DUMMY_INDEX_EXT)
+
+  val orderPath: Path = APP_DATA.resolve(GFA_NAME + ORDER_EXT)
 
   /**
     * List of paths used as the underlying structure
@@ -138,7 +168,11 @@ class CachePathList(val gfaPath: Path)
     referenceIndexPath,
     heatMapPath,
     coordinatesPath,
-    coordinatesIndexPath)
+    coordinatesIndexPath,
+    headerPath,
+    dummyPath,
+    dummyIndexPath,
+    orderPath)
 
   override def length: Int = listOfPaths.length
 

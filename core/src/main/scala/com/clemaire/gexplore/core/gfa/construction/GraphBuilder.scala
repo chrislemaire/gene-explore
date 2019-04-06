@@ -1,13 +1,12 @@
 package com.clemaire.gexplore.core.gfa.construction
 
 import com.clemaire.gexplore.core.gfa.CachePathList
-import com.clemaire.gexplore.core.gfa.cache.Cache
+import com.clemaire.gexplore.core.gfa.coordinates.dummy.DummyCacheConstructor
 import com.clemaire.gexplore.core.gfa.data.GraphData
 import com.clemaire.gexplore.core.gfa.parsing.Gfa1Parser
-import com.clemaire.gexplore.core.gfa.reference.data.BuilderReferenceNode
-import com.clemaire.gexplore.core.gfa.reference.writing.ReferenceNodeWriter
-import com.clemaire.gexplore.core.gfa.reference.writing.additional.HeaderWriter
-import com.clemaire.gexplore.core.gfa.reference.writing.io.NioBufferedSRWriter
+import com.clemaire.gexplore.core.gfa.reference.{BuilderReferenceNode, ReferenceCacheBuilder}
+import com.clemaire.gexplore.core.gfa.reference.header.HeaderWriter
+import metal.immutable.HashMap
 
 import scala.collection.mutable
 
@@ -50,11 +49,12 @@ class GraphBuilder(val paths: CachePathList) {
   /**
     * Writer to write the node-reference data to file.
     */
-  private val writer: ReferenceNodeWriter =
-    new NioBufferedSRWriter(this)
+  private var cacheBuilder: ReferenceCacheBuilder = _
 
-  private val headerWriter: HeaderWriter =
-    new HeaderWriter(paths)
+  /**
+    * Writer to write header data to a header file.
+    */
+  private val headerWriter: HeaderWriter = new HeaderWriter(paths)
 
   /**
     * The number of genomes currently counted.
@@ -64,7 +64,7 @@ class GraphBuilder(val paths: CachePathList) {
   /**
     * The number of segments currently counted.
     */
-  private var segmentIndex = -1
+  private var segmentIndex = 0
 
   /**
     * The current node being built by the reference
@@ -86,15 +86,18 @@ class GraphBuilder(val paths: CachePathList) {
     headerWriter.write(options)
 
     options.filter(_._1 == "ORI")
-      .foreach(_._2.split(";")
-        .filterNot(gen => genomeNames.contains(gen))
-        .filterNot(_.isEmpty)
-        .foreach(gen => {
-          genomeIndex += 1
-          genomeNames += gen -> genomeIndex
-          genomes += genomeIndex -> gen
-          genomeCoordinates(genomeIndex) = 0
-        }))
+      .foreach(opt => {
+        opt._2.split(";")
+          .filterNot(gen => genomeNames.contains(gen))
+          .filterNot(_.isEmpty)
+          .foreach(gen => {
+            genomeIndex += 1
+            genomeNames += gen -> genomeIndex
+            genomes += genomeIndex -> gen
+            genomeCoordinates(genomeIndex) = 0
+          })
+        cacheBuilder = new ReferenceCacheBuilder(paths, genomes.size)
+      })
   }
 
   /**
@@ -115,16 +118,10 @@ class GraphBuilder(val paths: CachePathList) {
                          from: String,
                          to: String,
                          options: Traversable[(String, String)]): Unit = {
-    val (fromId, fromLayer) = lookupNode(from)
-    val (toId, toLayer) = if (lookAheadSegments.contains(to)) {
-      val (toId, toLayer) = lookupNode(to)
-      (toId, Math.max(toLayer, fromLayer + 1))
-    } else {
-      segmentIndex += 1
-      (segmentIndex, fromLayer + 1)
-    }
+    val (fromId, fromLayer) = lookupNode(from, 0)
+    val (toId, selectedLayer) = lookupNode(to, fromLayer + 1)
 
-    lookAheadSegments.put(to, (toId, toLayer))
+    lookAheadSegments.put(to, (toId, Math.max(selectedLayer, fromLayer + 1)))
 
     val node: BuilderReferenceNode = currentNode.get
     node.outgoingEdges += toId -> atOffset
@@ -144,19 +141,19 @@ class GraphBuilder(val paths: CachePathList) {
     * @return A tuple containing the node-ID and layer
     *         of the node.
     */
-  private def lookupNode(name: String): (Int, Int) =
+  private def lookupNode(name: String, layer: Int): (Int, Int) =
     if (lookAheadSegments.contains(name)) {
       lookAheadSegments(name)
     } else {
-      lookAheadSegments.put(name, (segmentIndex, 0))
+      lookAheadSegments.put(name, (segmentIndex, layer))
       segmentIndex += 1
-      (segmentIndex, 0)
+      (segmentIndex - 1, layer)
     }
 
   /**
     * Registers a segment that is identified by its position
     * in the source file, its name, its content, and the options
-    * provided to it. The build [[Cache]] should hereafter
+    * provided to it. The built Caches should hereafter
     * recognize the segment provided as such.
     *
     * @param atOffset The position in the file at which the
@@ -169,16 +166,16 @@ class GraphBuilder(val paths: CachePathList) {
                             name: String,
                             content: String,
                             options: Traversable[(String, String)]): Unit = {
-    writeCurrentNode()
+    currentNode.foreach(writeNode)
 
     val nodeGenomes = getGenomes(options)
 
-    val (id, layer) = lookupNode(name)
-    currentNode = Some(BuilderReferenceNode(name,
+    val (id, layer) = lookupNode(name, 0)
+    currentNode = Some(new BuilderReferenceNode(name,
       id, layer, atOffset, content.length,
-      incomingEdges.getOrElse(id, mutable.Buffer()),
-      mutable.Buffer(),
-      nodeGenomes.map(gen => gen -> genomeCoordinates(gen))))
+      incomingEdges.getOrElse(id, mutable.Buffer.empty),
+      mutable.Buffer.empty,
+      HashMap.fromArrays(nodeGenomes, nodeGenomes.map(genomeCoordinates))))
 
     nodeGenomes.foreach(gen => genomeCoordinates(gen) += content.length)
   }
@@ -206,18 +203,18 @@ class GraphBuilder(val paths: CachePathList) {
 
   /**
     * Writes node reference data to file through the
-    * accompanying [[writer]] and clears any auxiliary
+    * accompanying [[cacheBuilder]] and clears any auxiliary
     * data kept on the current node.
     */
-  protected def writeCurrentNode(): Unit =
-    currentNode.foreach(node => {
-      writer.write(node)
+  protected def writeNode(node: BuilderReferenceNode): Unit = {
+    cacheBuilder += node//.withIdAndLayer(segmentIndex, lookAheadSegments(node.name)._2)
+//    segmentIndex += 1
 
-      incomingEdges.remove(node.id)
-      lookAheadSegments.remove(node.name)
+    incomingEdges.remove(node.id)
+    lookAheadSegments.remove(node.name)
 
-      currentNode = None
-    })
+    currentNode = None
+  }
 
   /**
     * Finishes building the graph and closes this
@@ -225,16 +222,16 @@ class GraphBuilder(val paths: CachePathList) {
     */
   final def finish(): GraphData = {
     try {
-      writeCurrentNode()
-      writer.flush()
+      currentNode.foreach(writeNode)
+      cacheBuilder.flush()
 
       headerWriter.write(genomes.toMap)
       headerWriter.writeMaxCoords(genomeCoordinates.toMap)
       headerWriter.flush()
 
-      GraphData(paths,
-        writer.index,
-        writer.coordinatesIndex,
+      new DummyCacheConstructor(paths, headerWriter.data).construct
+
+      new GraphData(paths,
         headerWriter.data)
     } finally {
       close()
@@ -255,7 +252,7 @@ class GraphBuilder(val paths: CachePathList) {
   }
 
   def close(): Unit = {
-    writer.close()
+    cacheBuilder.close()
     headerWriter.close()
   }
 

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.clemaire.gexplore.gui.javafx.common.CollapsablePane?>
+<?import com.clemaire.gexplore.gui.javafx.main.GEXMenuBar?>
+<?import com.clemaire.gexplore.gui.javafx.main.GraphCanvas?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.*?>
+<fx:root xmlns:fx="http://javafx.com/fxml/1" minHeight="300.0" minWidth="400.0" prefHeight="534.0" prefWidth="883.0"
+         type="VBox" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+         AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS"
+         xmlns="http://javafx.com/javafx/8.0.172-ea">
+    <GEXMenuBar/>
+    <SplitPane fx:id="mainSplitPane" dividerPositions="0.2" focusTraversable="true" minWidth="400.0"
+               style="-fx-padding: 0px 0px 0px 0px;" VBox.vgrow="ALWAYS">
+        <items>
+            <CollapsablePane fx:id="leftCollapsable" minWidth="25.0" SplitPane.resizableWithParent="false"
+                             VBox.vgrow="ALWAYS">
+                <content>
+
+                </content>
+            </CollapsablePane>
+            <AnchorPane>
+                <GraphCanvas/>
+            </AnchorPane>
+        </items>
+    </SplitPane>
+    <HBox alignment="CENTER_LEFT" minHeight="20.0" spacing="5.0" VBox.vgrow="NEVER" styleClass="gex-footer">
+        <children>
+            <Pane HBox.hgrow="ALWAYS"/>
+        </children>
+        <padding>
+            <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
+        </padding>
+    </HBox>
+</fx:root>
